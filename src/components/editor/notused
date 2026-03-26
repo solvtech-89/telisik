@@ -1,0 +1,505 @@
+import { Extension } from "@tiptap/core";
+import { Plugin, PluginKey } from "prosemirror-state";
+import StarterKit from "@tiptap/starter-kit";
+import Underline from "@tiptap/extension-underline";
+import Link from "@tiptap/extension-link";
+import TextAlign from "@tiptap/extension-text-align";
+import Subscript from "@tiptap/extension-subscript";
+import Superscript from "@tiptap/extension-superscript";
+import { Mark, mergeAttributes } from "@tiptap/core";
+
+export const Footnote = Mark.create({
+  name: "footnote",
+  addOptions() {
+    return {
+      HTMLAttributes: {},
+    };
+  },
+  addAttributes() {
+    return {
+      id: {
+        default: null,
+        parseHTML: (element) => element.getAttribute("data-footnote-id"),
+        renderHTML: (attributes) => {
+          if (!attributes.id) return {};
+          return { "data-footnote-id": attributes.id };
+        },
+      },
+      number: {
+        default: null,
+        parseHTML: (element) => element.getAttribute("data-footnote-number"),
+        renderHTML: (attributes) => {
+          if (!attributes.number) return {};
+          return { "data-footnote-number": attributes.number };
+        },
+      },
+    };
+  },
+  parseHTML() {
+    return [{ tag: 'span[data-footnote-id]' }];
+  },
+  renderHTML({ HTMLAttributes, mark }) {
+    const number = mark.attrs.number || "?";
+    return [
+      "span", 
+      mergeAttributes(this.options.HTMLAttributes, HTMLAttributes, { 
+        class: "footnote-ref",
+        "data-footnote-number": String(number)
+      }), 
+      0
+    ];
+  },
+});
+
+export const Indent = Extension.create({
+  name: 'indent',
+  addGlobalAttributes() {
+    return [
+      {
+        types: ['paragraph', 'heading'],
+        attributes: {
+          indent: {
+            default: 0,
+            parseHTML: element => {
+              const paddingLeft = element.style.paddingLeft;
+              return paddingLeft ? parseInt(paddingLeft) / 30 : 0;
+            },
+            renderHTML: attributes => {
+              if (!attributes.indent) {
+                return {};
+              }
+              return {
+                style: `padding-left: ${attributes.indent * 30}px`,
+              };
+            },
+          },
+        },
+      },
+    ];
+  },
+  addCommands() {
+    return {
+      indent: () => ({ commands, state }) => {
+        const { selection } = state;
+        const { $from } = selection;
+        const currentIndent = $from.parent.attrs.indent || 0;
+        if (currentIndent >= 10) return false;
+        return commands.updateAttributes($from.parent.type.name, {
+          indent: currentIndent + 1,
+        });
+      },
+      outdent: () => ({ commands, state }) => {
+        const { selection } = state;
+        const { $from } = selection;
+        const currentIndent = $from.parent.attrs.indent || 0;
+        if (currentIndent <= 0) return false;
+        return commands.updateAttributes($from.parent.type.name, {
+          indent: currentIndent - 1,
+        });
+      },
+    };
+  },
+  addKeyboardShortcuts() {
+    return {
+      Tab: () => this.editor.commands.indent(),
+      'Shift-Tab': () => this.editor.commands.outdent(),
+    };
+  },
+});
+
+export const DramaticQuote = Extension.create({
+  name: "dramaticQuote",
+  addOptions() {
+    return {
+      HTMLAttributes: {},
+    };
+  },
+  addCommands() {
+    return {
+      setDramaticQuote: () => ({ commands }) => {
+        return commands.setNode("paragraph", { class: "dramatic-quote" });
+      },
+    };
+  },
+});
+
+export const ParagraphLimiter = Extension.create({
+  name: "paragraphLimiter",
+  addProseMirrorPlugins() {
+    return [
+      new Plugin({
+        key: new PluginKey("paragraphLimiter"),
+        appendTransaction: (transactions, oldState, newState) => {
+          const docChanged = transactions.some(tr => tr.docChanged);
+          if (!docChanged) return null;
+          let tr = null;
+          newState.doc.descendants((node, pos) => {
+            if (node.type.name === "paragraph") {
+              const textContent = node.textContent;
+              const length = textContent.length;
+              if (length > 560) {
+                if (!tr) tr = newState.tr;
+                const splitPoint = 560;
+                const firstPart = textContent.substring(0, splitPoint);
+                const secondPart = textContent.substring(splitPoint);
+                let finalSecondPart = secondPart;
+                if (secondPart.length > 0 && /^\d/.test(secondPart[0])) {
+                  const words = firstPart.trim().split(/\s+/);
+                  const lastWord = words[words.length - 1];
+                  finalSecondPart = `Awali kalimat dengan kata ${lastWord} ${secondPart}`;
+                }
+                const nodeEnd = pos + node.nodeSize;
+                const deleteFrom = pos + 1 + splitPoint;
+                const deleteTo = nodeEnd - 1;
+                if (deleteFrom < deleteTo) {
+                  tr.delete(deleteFrom, deleteTo);
+                  tr.split(deleteFrom);
+                  tr.insertText(finalSecondPart, deleteFrom + 1);
+                }
+              }
+            }
+          });
+          return tr;
+        },
+      }),
+    ];
+  },
+});
+
+export const ParagraphCounter = Extension.create({
+  name: "paragraphCounter",
+  addOptions() {
+    return {
+      maxChars: 560,
+      showCounter: true,
+    };
+  },
+  addProseMirrorPlugins() {
+    const maxChars = this.options.maxChars;
+    const showCounter = this.options.showCounter;
+    
+    if (!showCounter) return [];
+    
+    return [
+      new Plugin({
+        key: new PluginKey("paragraphCounter"),
+        view(editorView) {
+          let updateTimer = null;
+          
+          const updateCounters = () => {
+            // Clear any pending updates
+            if (updateTimer) {
+              clearTimeout(updateTimer);
+            }
+            
+            // Debounce the update
+            updateTimer = setTimeout(() => {
+              try {
+                const paragraphs = editorView.dom.querySelectorAll('p');
+                
+                paragraphs.forEach((p) => {
+                  const charCount = p.textContent.length;
+                  const remaining = maxChars - charCount;
+                  
+                  // Check if counter already exists
+                  let counter = p.querySelector('.paragraph-counter');
+                  
+                  // Remove counter if paragraph is empty
+                  if (charCount === 0) {
+                    if (counter) counter.remove();
+                    return;
+                  }
+                  
+                  // Determine color class
+                  let colorClass = 'counter-normal';
+                  if (remaining < 100) colorClass = 'counter-warning';
+                  if (remaining < 50) colorClass = 'counter-danger';
+                  if (remaining < 0) colorClass = 'counter-over';
+                  
+                  // Update existing counter or create new one
+                  if (counter) {
+                    const box = counter.querySelector('.counter-box');
+                    if (box) {
+                      box.textContent = remaining;
+                      box.className = `counter-box ${colorClass}`;
+                    }
+                  } else {
+                    counter = document.createElement('div');
+                    counter.className = 'paragraph-counter';
+                    counter.contentEditable = 'false';
+                    counter.innerHTML = `<span className="counter-box ${colorClass}">${remaining}</span>`;
+                    p.style.position = 'relative';
+                    p.appendChild(counter);
+                  }
+                });
+              } catch (error) {
+                console.error('Error updating paragraph counters:', error);
+              }
+            }, 100); // 100ms debounce
+          };
+
+          // Initial update
+          setTimeout(updateCounters, 0);
+
+          return {
+            update(view, prevState) {
+              // Only update if document actually changed
+              if (!view.state.doc.eq(prevState.doc)) {
+                updateCounters();
+              }
+            },
+            destroy() {
+              // Clear timer and cleanup
+              if (updateTimer) {
+                clearTimeout(updateTimer);
+              }
+              try {
+                const paragraphs = editorView.dom.querySelectorAll('p .paragraph-counter');
+                paragraphs.forEach((counter) => counter.remove());
+              } catch (error) {
+                // Ignore cleanup errors
+              }
+            },
+          };
+        },
+      }),
+    ];
+  },
+});
+
+export const SentenceStartValidator = Extension.create({
+  name: "sentenceStartValidator",
+  addProseMirrorPlugins() {
+    return [
+      new Plugin({
+        key: new PluginKey("sentenceStartValidator"),
+        props: {
+          handleTextInput(view, from, to, text) {
+            const { state } = view;
+            const { $from } = state.selection;
+            const parent = $from.parent;
+            if (parent.type.name === "listItem" || parent.type.name === "bulletList" || parent.type.name === "orderedList") {
+              return false;
+            }
+            const beforeText = parent.textContent.substring(0, $from.parentOffset);
+            const isStartOfSentence = beforeText.length === 0 || /[.!?]\s*$/.test(beforeText);
+            if (isStartOfSentence && /^\d/.test(text)) {
+              return true;
+            }
+            return false;
+          },
+        },
+      }),
+    ];
+  },
+});
+
+export const PunctuationValidator = Extension.create({
+  name: "punctuationValidator",
+  addProseMirrorPlugins() {
+    return [
+      new Plugin({
+        key: new PluginKey("punctuationValidator"),
+        props: {
+          handleTextInput(view, from, to, text) {
+            if (!/\d/.test(text)) return false;
+            const { state } = view;
+            const { $from } = state.selection;
+            const textBefore = $from.parent.textContent.substring(0, $from.parentOffset);
+            if (textBefore.length < 2) return false;
+            const lastTwoChars = textBefore.slice(-2);
+            const punctuation = lastTwoChars[0];
+            const space = lastTwoChars[1];
+            if (space !== " ") return false;
+            const allowedPunctuation = [",", ";", "-", "–", "—"];
+            if (allowedPunctuation.includes(punctuation)) return false;
+            const otherPunctuation = [".", "!", "?", ":", '"', "'", "(", ")", "[", "]", "{", "}"];
+            if (otherPunctuation.includes(punctuation)) {
+              return true;
+            }
+            return false;
+          },
+        },
+      }),
+    ];
+  },
+});
+
+export const CurrencyFormatter = Extension.create({
+  name: "currencyFormatter",
+  addProseMirrorPlugins() {
+    return [
+      new Plugin({
+        key: new PluginKey("currencyFormatter"),
+        props: {
+          handleTextInput(view, from, to, text) {
+            if (!/^\d/.test(text)) return false;
+            const { state, dispatch } = view;
+            const { $from } = state.selection;
+            const textBefore = $from.parent.textContent.substring(0, $from.parentOffset);
+            const patterns = [
+              { regex: /Rp\s$/i, currency: "Rp" },
+              { regex: /IDR\s$/i, currency: "IDR" },
+              { regex: /USD\s$/i, currency: "USD" },
+            ];
+            for (const pattern of patterns) {
+              if (pattern.regex.test(textBefore)) {
+                const tr = state.tr;
+                tr.delete(from - 1, from);
+                tr.insertText(text, from - 1);
+                dispatch(tr);
+                return true;
+              }
+            }
+            return false;
+          },
+        },
+      }),
+    ];
+  },
+});
+
+export const CustomLink = Link.extend({
+  addAttributes() {
+    return {
+      ...this.parent?.(),
+      class: {
+        default: "custom-link",
+      },
+    };
+  },
+});
+
+export const LimitedOrderedList = Extension.create({
+  name: "limitedOrderedList",
+  addProseMirrorPlugins() {
+    return [
+      new Plugin({
+        key: new PluginKey("limitedOrderedList"),
+        appendTransaction: (transactions, oldState, newState) => {
+          const docChanged = transactions.some(tr => tr.docChanged);
+          if (!docChanged) return null;
+          let tr = null;
+          newState.doc.descendants((node, pos) => {
+            if (node.type.name === "orderedList") {
+              const listType = node.attrs.listType || "decimal";
+              let maxItems = 999;
+              if (listType === "lower-roman" || listType === "upper-roman") {
+                maxItems = 13;
+              } else if (listType === "lower-alpha" || listType === "upper-alpha") {
+                maxItems = 26 * 26;
+              }
+              let itemCount = 0;
+              node.descendants((child) => {
+                if (child.type.name === "listItem") {
+                  itemCount++;
+                }
+              });
+              if (itemCount > maxItems) {
+                if (!tr) tr = newState.tr;
+              }
+            }
+          });
+          return tr;
+        },
+      }),
+    ];
+  },
+});
+
+export const sharedExtensions = [
+  StarterKit.configure({
+    history: true,
+  }),
+  Underline,
+  Subscript,
+  Superscript,
+  CustomLink.configure({
+    openOnClick: false,
+    HTMLAttributes: { class: 'custom-link' },
+  }),
+  TextAlign.configure({
+    types: ['heading', 'paragraph'],
+    alignments: ['left', 'center', 'right', 'justify'],
+  }),
+  Indent,
+  Footnote,
+  DramaticQuote,
+  ParagraphLimiter,
+  ParagraphCounter.configure({
+    maxChars: 560,
+    showCounter: true,
+  }),
+  SentenceStartValidator,
+  PunctuationValidator,
+  CurrencyFormatter,
+  LimitedOrderedList,
+];
+
+export function generateFootnoteId() {
+  return `fn_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+}
+
+export function applyGlobalFootnoteNumbers(editor, footnoteNumberMap) {
+  if (!editor || !footnoteNumberMap) return;
+
+  const { state } = editor;
+  let tr = state.tr;
+
+  state.doc.descendants((node, pos) => {
+    if (!node.marks) return;
+
+    node.marks.forEach(mark => {
+      if (mark.type.name === "footnote") {
+        const globalNumber = footnoteNumberMap[mark.attrs.id];
+        if (!globalNumber) return;
+
+        if (mark.attrs.number === globalNumber) return;
+
+        const newMark = state.schema.marks.footnote.create({
+          ...mark.attrs,
+          number: globalNumber,
+        });
+
+        tr.removeMark(pos, pos + node.nodeSize, mark);
+        tr.addMark(pos, pos + node.nodeSize, newMark);
+      }
+    });
+  });
+
+  if (tr.docChanged) {
+    editor.view.dispatch(tr);
+  }
+}
+
+// Export function to create extensions with custom counter settings
+export function createExtensionsWithCounter(showCounter = true, maxChars = 560) {
+  return [
+    StarterKit.configure({
+      history: true,
+    }),
+    Underline,
+    Subscript,
+    Superscript,
+    CustomLink.configure({
+      openOnClick: false,
+      HTMLAttributes: { class: 'custom-link' },
+    }),
+    TextAlign.configure({
+      types: ['heading', 'paragraph'],
+      alignments: ['left', 'center', 'right', 'justify'],
+    }),
+    Indent,
+    Footnote,
+    DramaticQuote,
+    ParagraphLimiter,
+    ParagraphCounter.configure({
+      maxChars,
+      showCounter,
+    }),
+    SentenceStartValidator,
+    PunctuationValidator,
+    CurrencyFormatter,
+    LimitedOrderedList,
+  ];
+}

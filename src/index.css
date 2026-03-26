@@ -1,0 +1,501 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap");
+@import "tailwindcss";
+
+:root {
+  font-family: "Inter", sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  font-size: 16px;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  --tblr-font-sans-serif: "Inter";
+  --tblr-body-font-size: 1em !important;
+}
+
+/* Tailwind + small global overrides for react-easy-crop and profile modal */
+.reactEasyCrop_Container {
+  background-color: transparent !important;
+}
+
+[data-bs-theme="light"] .reactEasyCrop_CropArea {
+  border: 2px solid rgba(255, 255, 255, 0.5) !important;
+}
+
+[data-bs-theme="dark"] .reactEasyCrop_CropArea {
+  border: 2px solid rgba(255, 255, 255, 0.3) !important;
+}
+
+@media (max-width: 576px) {
+  .avatar-cropper {
+    width: 240px !important;
+    height: 240px !important;
+  }
+
+  .avatar-close {
+    top: -35px !important;
+    font-size: 28px !important;
+  }
+
+  .avatar-uploads,
+  .avatar-primary {
+    font-size: 14px !important;
+    padding: 10px 20px !important;
+  }
+}
+
+/* Light theme (default) */
+:root,
+[data-bs-theme="light"] {
+  color-scheme: light;
+  color: #555333;
+  background-color: #faf6ef;
+}
+
+/* Dark theme */
+[data-bs-theme="dark"] {
+  color-scheme: dark;
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #242424;
+}
+
+a {
+  font-weight: 500;
+  color: inherit;
+  text-decoration: inherit;
+}
+a:hover {
+  color: inherit;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: inherit;
+  color: inherit;
+  display: block !important;
+  place-items: unset !important;
+  overflow-x: hidden;
+}
+
+h1 {
+  font-size: 3.2em;
+  line-height: 1.1;
+}
+
+button {
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  cursor: pointer;
+  transition: border-color 0.25s;
+}
+
+[data-bs-theme="light"] button {
+  background-color: #f9f9f9;
+  color: #213547;
+}
+
+[data-bs-theme="dark"] button {
+  background-color: #1a1a1a;
+  color: rgba(255, 255, 255, 0.87);
+}
+
+button:hover {
+  border-color: #646cff;
+}
+
+button:focus,
+button:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
+}
+
+.btn.btn-telisik {
+  background-color: #fc6736;
+  color: #fff;
+  border-radius: 20px;
+}
+
+.btn.btn-telisik:hover {
+  background-color: #e55a2e;
+  color: #fff;
+}
+
+button.btn.btn-leftnav {
+  color: #555333;
+  font-weight: 400;
+  background: transparent;
+}
+
+[data-bs-theme="dark"] button.btn.btn-leftnav {
+  color: rgba(255, 255, 255, 0.87);
+}
+
+button.btn.btn-leftnav:hover {
+  color: #100f09;
+}
+
+[data-bs-theme="dark"] button.btn.btn-leftnav:hover {
+  color: #ffffff;
+}
+
+/* Theme toggle visibility */
+[data-bs-theme="dark"] .hide-theme-dark {
+  display: none !important;
+}
+
+[data-bs-theme="light"] .hide-theme-light,
+:root:not([data-bs-theme]) .hide-theme-light {
+  display: none !important;
+}
+
+.navbar > .container-telisik {
+  width: 95%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Urun Daya Dropdown Styles */
+.urun-daya-container {
+  position: relative;
+}
+
+.urun-daya-container .btn-telisik {
+  padding: 10px 30px;
+  font-size: 1.05rem;
+  transition: border-radius 0.3s ease;
+}
+
+.urun-daya-dropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background: #fc6736;
+  border-radius: 0 0 16px 16px;
+  overflow: hidden;
+  max-height: 0;
+  opacity: 0;
+  transition:
+    max-height 0.3s ease-in-out,
+    opacity 0.3s ease-in-out;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  min-width: 160px;
+  width: 100%;
+  z-index: 1000;
+}
+
+.urun-daya-dropdown.show {
+  max-height: 300px;
+  opacity: 1;
+}
+
+.urun-daya-item {
+  display: block;
+  padding: 14px 20px;
+  color: white;
+  text-decoration: none !important;
+  font-size: 1rem;
+  font-weight: 500;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  transition: background-color 0.2s ease;
+}
+
+.urun-daya-item:first-child {
+  border-top: none;
+}
+
+.urun-daya-item:hover {
+  background-color: #e55a2e;
+  color: #fff;
+}
+
+.urun-daya-item:last-child {
+  border-radius: 0 0 16px 16px;
+}
+
+/* Make button corners match when dropdown is open */
+.urun-daya-dropdown.show ~ .btn-telisik,
+.urun-daya-container:has(.urun-daya-dropdown.show) .btn-telisik {
+  border-radius: 16px 16px 0 0;
+}
+
+/* Navbar specific utilities to match design */
+:root {
+  --telisik-link-muted: #878672; /* inactive */
+  --telisik-active: #fc6736; /* active / accent */
+}
+
+.nav-link {
+  color: var(--telisik-link-muted);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 8px 12px;
+  border-radius: 8px;
+  transition:
+    background-color 0.18s ease,
+    color 0.18s ease,
+    transform 0.12s ease;
+}
+.nav-link--inactive {
+  color: var(--telisik-link-muted) !important;
+  font-weight: 500;
+}
+.nav-link--active {
+  color: var(--telisik-active) !important;
+  background: rgba(252, 103, 54, 0.08);
+  box-shadow: 0 6px 18px rgba(252, 103, 54, 0.06);
+  transform: translateY(-1px);
+}
+
+/* Logo container adjustments to keep contrast in dark mode */
+.site-logo {
+  display: inline-block;
+  padding: 4px;
+  border-radius: 6px;
+}
+.site-logo svg {
+  display: block;
+}
+.site-logo svg path[fill="#686D76"] {
+  transition: fill 160ms ease;
+}
+:root[data-bs-theme="dark"] .site-logo svg path[fill="#686D76"] {
+  fill: #efece4; /* lighter warm tint for dark bg */
+}
+:root[data-bs-theme="dark"] .site-logo {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+/* Category pill styling for the secondary nav when listing pages */
+.category-pill {
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 8px;
+  background: transparent;
+  border: 1px solid transparent;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
+  font-weight: 500;
+}
+.category-pill:hover {
+  background: rgba(252, 103, 54, 0.04);
+}
+.category-pill--active {
+  background: rgba(252, 103, 54, 0.08);
+  color: var(--telisik-active);
+  border-color: rgba(252, 103, 54, 0.12);
+}
+
+.nav-cta {
+  background: #fff;
+  color: rgba(0, 0, 0, 0.75);
+  border: 1px solid rgba(16, 24, 40, 0.06);
+  padding: 10px 22px;
+  border-radius: 8px;
+  box-shadow: 0 6px 18px rgba(16, 24, 40, 0.04);
+  transition:
+    box-shadow 0.15s ease,
+    transform 0.08s ease;
+}
+.nav-cta:hover {
+  box-shadow: 0 10px 24px rgba(16, 24, 40, 0.06);
+  transform: translateY(-1px);
+}
+
+.theme-switch {
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+  border: 1px solid rgba(16, 24, 40, 0.06);
+}
+
+/* Compact theme toggle used in header */
+.theme-toggle-switch {
+  width: 64px;
+  height: 36px;
+  border-radius: 9999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #f3f4f6;
+  border: 2px solid #878672; /* brown sesuai desain */
+  padding: 4px;
+  position: relative;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(16, 24, 40, 0.04);
+}
+
+.theme-toggle-switch .theme-toggle-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.theme-toggle-switch svg {
+  width: 18px;
+  height: 18px;
+  color: #333;
+}
+
+.theme-toggle-switch:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(16, 24, 40, 0.06);
+}
+
+.theme-toggle-switch:focus {
+  outline: 3px solid rgba(99, 102, 241, 0.12);
+  outline-offset: 2px;
+}
+
+/* Pill indicator inside the switch */
+.theme-toggle-indicator {
+  position: absolute;
+  top: 50%;
+  left: 4px;
+  width: 28px;
+  height: 28px;
+  transform: translateY(-50%);
+  border-radius: 9999px;
+  background: #fff;
+  box-shadow: 0 6px 18px rgba(16, 24, 40, 0.06);
+  border: 2px solid #878672; /* brown sesuai desain */
+  transition:
+    transform 220ms cubic-bezier(0.2, 0.8, 0.2, 1),
+    background 220ms;
+  z-index: 1;
+}
+
+.theme-toggle-switch .theme-toggle-icon {
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  color: #6b7280;
+}
+
+.theme-toggle-switch .icon-sun {
+  margin-left: 6px;
+}
+.theme-toggle-switch .icon-moon {
+  margin-right: 6px;
+}
+
+/* Move indicator to right when dark theme active */
+
+:root[data-bs-theme="dark"] .theme-toggle-switch {
+  background: rgba(255, 255, 255, 0.02);
+  border-color: #878672;
+}
+
+:root[data-bs-theme="dark"] .theme-toggle-indicator {
+  left: auto;
+  right: 4px;
+  transform: translateY(-50%);
+  background: #222426;
+  border-color: #878672;
+  position: relative;
+  z-index: 2;
+  z-index: 2;
+}
+
+:root[data-bs-theme="dark"] .theme-toggle-switch .theme-toggle-icon {
+  color: #d1d5db;
+}
+
+/* Ensure icons stay visible above indicator */
+.theme-toggle-switch .theme-toggle-icon svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* Leaflet map control tweaks to match UI design */
+.leaflet-container .leaflet-control {
+  box-shadow: 0 6px 18px rgba(16, 24, 40, 0.06);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+/* Move default zoom control to top-right and give spacing */
+.leaflet-control-zoom {
+  left: auto !important;
+  right: 8px !important;
+  top: 8px !important;
+}
+
+.leaflet-top.leaflet-right .leaflet-control {
+  margin-top: 8px;
+}
+
+/* Style the individual zoom buttons */
+.leaflet-control-zoom-in,
+.leaflet-control-zoom-out,
+.leaflet-control-fullscreen-button {
+  background: #fff !important;
+  border: 1.5px solid #878672 !important;
+  color: #333 !important;
+  width: 34px !important;
+  height: 34px !important;
+  line-height: 34px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border-radius: 8px !important;
+  margin-right: 4px !important;
+  margin-left: 0 !important;
+  box-shadow: none !important;
+}
+
+/* Slight hover effect */
+.leaflet-control-zoom-in:hover,
+.leaflet-control-zoom-out:hover,
+.leaflet-control-fullscreen-button:hover {
+  background: #f3f4f6 !important;
+}
+
+/* Ensure controls sit above other overlays */
+.leaflet-control {
+  z-index: 1000 !important;
+}
+
+/* Loading Bounce Animation */
+@keyframes bounce-dots {
+  0%,
+  80%,
+  100% {
+    transform: scale(0);
+    opacity: 0.5;
+  }
+  40% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.bounce-dot {
+  animation: bounce-dots 1.4s infinite ease-in-out both;
+}
+
+.bounce-dot-1 {
+  animation-delay: -0.32s;
+}
+
+.bounce-dot-2 {
+  animation-delay: -0.16s;
+}
+
+.bounce-dot-3 {
+  animation-delay: 0s;
+}

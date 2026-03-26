@@ -1,0 +1,13 @@
+.section-display {
+  margin-bottom: 3rem;
+  scroll-margin-top: 80px;
+}
+
+.section-header {
+  padding-bottom: 0.5rem;
+  border: none!important;
+}
+
+.section-paragraphs {
+  margin-top: 0rem;
+}

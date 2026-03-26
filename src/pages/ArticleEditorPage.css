@@ -1,0 +1,72 @@
+.ProseMirror {
+  min-height: 80px;
+  background-color: white!important;
+  border-radius: 4px!important;
+  border: .35px solid #0088FF!important;
+}
+
+.editor-header {
+  padding: 12px 24px;
+  border-bottom: 1px solid #e5e7eb;
+  background: white;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* Desktop */
+.editor-header-left {
+  flex-shrink: 0;
+}
+
+.editor-header-toolbar {
+  flex: 1;
+  overflow: hidden;
+}
+
+.editor-header-actions {
+  display: flex;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.enhanced-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.enhanced-toolbar::-webkit-scrollbar {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .editor-header {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 8px 12px;
+  }
+
+  .editor-header-left,
+  .editor-header-actions {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .editor-header-actions {
+    order: 3;
+  }
+
+  .editor-header-toolbar {
+    order: 2;
+    width: 100%;
+  }
+}
+
+.toolbar-btn {
+  min-width: 40px;
+  min-height: 40px;
+  padding: 6px;
+}

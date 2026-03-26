@@ -1,0 +1,188 @@
+.timeline-entry-wrapper {
+  position: relative;
+}
+
+.timeline-entry {
+  display: flex;
+  gap: 1.5rem;
+  position: relative;
+}
+
+.timeline-marker {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.timeline-dot {
+  width: 16px;
+  height: 16px;
+  background-color: #dc3545;
+  border-radius: 50%;
+  border: 3px solid #fff;
+  box-shadow: 0 0 0 2px #dc3545;
+  z-index: 2;
+}
+
+.timeline-dot-first {
+  background-color: transparent;
+  border: none;
+  box-shadow: none;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.triangle-icon {
+  display: block;
+}
+
+.timeline-dot-last {
+  background-color: transparent;
+  border: 3px solid #dc3545;
+  box-shadow: none;
+}
+
+.timeline-line {
+  width: 2px;
+  flex: 1;
+  background-color: #e0e0e0;
+  margin-top: 4px;
+  min-height: 60px;
+}
+
+.timeline-content {
+  flex: 1;
+  padding-bottom: 1rem;
+}
+
+.timeline-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.timeline-datetime {
+  display: flex;
+  align-items: center;
+  color: #dc3545;
+  font-size: 0.9rem;
+}
+
+.timeline-title {
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+}
+
+.timeline-actions {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  justify-content: end;
+}
+
+.btn-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-riwayat {
+  background-color: #e3f2fd;
+  color: #1976d2;
+}
+
+.btn-riwayat:hover {
+  background-color: #bbdefb;
+}
+
+.btn-sunting {
+  background-color: #f3e5f5;
+  color: #7b1fa2;
+}
+
+.btn-sunting:hover {
+  background-color: #e1bee7;
+}
+
+.btn-tanggapi {
+  background-color: #e8f5e9;
+  color: #388e3c;
+}
+
+.btn-tanggapi:hover {
+  background-color: #c8e6c9;
+}
+
+.btn-hapus-entry {
+  background-color: transparent!important;
+  color: rgba(255, 45, 85, 1)!important;
+  font-style: italic;
+  border: none!important;
+  box-shadow: none!important;
+}
+
+.btn-hapus-entry:hover {
+  border: 0.35px solid rgba(255, 45, 85, 1)!important
+}
+
+.btn-tambah-peristiwa {
+  background-color: transparent!important;
+  color: #ff6b6b!important;
+  font-style: italic;
+  border: none!important;
+  box-shadow: none!important;
+}
+
+.btn-tambah-peristiwa:hover {
+  border: 0.35px solid #ff6b6b!important
+}
+
+.timeline-paragraphs {
+  margin-top: 1rem;
+}
+
+.btn-fragmen-peristiwa {
+  background-color: transparent;
+  border: 2px dashed #ff6b6b;
+  color: #ff6b6b;
+  padding: 0.5rem 1.25rem;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 0.875rem;
+}
+
+.btn-fragmen-peristiwa:hover {
+  background-color: #fff5f5;
+  border-color: #ff5252;
+  color: #ff5252;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .timeline-entry {
+    gap: 1rem;
+  }
+  
+  .timeline-actions {
+    flex-direction: column;
+  }
+  
+  .btn-action {
+    width: 100%;
+    justify-content: center;
+  }
+}

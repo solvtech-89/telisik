@@ -1,0 +1,39 @@
+.btn.btn-temukan {
+    background-color: #555333;
+    border: 3px solid #CDCB9C;
+    color: #FAF6EF;
+    font-weight: 500;
+    font-size: 14px;
+}
+.btn.btn-temukan:hover {
+    background-color: #CDCB9C;
+    border: 3px solid #555333;
+    color: #555333;
+    transition: all 0.3s ease;
+}
+
+input.bordersearch:focus {
+    outline: transparent!important;
+    border-color: #0088FF!important;
+    -webkit-box-shadow: none!important;
+    box-shadow: none!important;
+}
+.input-group-flat.bordersearch:focus-within {
+    outline: none!important;
+    border: none!important;
+    -webkit-box-shadow: none!important;
+    box-shadow: none!important;
+}
+
+.advance-search-box {
+    border: 0px!important;
+    padding: 0px;
+    transition: all 0.3s ease;
+}
+
+.advance-search-box.isactive {
+    border: .5px solid #0088FF!important;
+    padding: 10px;
+    transition: all 0.3s ease;
+    border-radius: 4px;
+}

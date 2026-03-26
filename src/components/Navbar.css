@@ -1,0 +1,150 @@
+.navbar {
+  z-index: 1000;
+  backdrop-filter: blur(6px);
+}
+
+.navbar > .container-telisik {
+  display: flex;
+  flex-wrap: inherit;
+  align-items: center;
+  justify-content: space-between;
+  width: 95%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.navbar-second {
+  background-color: #fff;
+  min-height: auto!important;
+}
+
+[data-bs-theme="dark"] .navbar-second {
+  background-color: rgba(50, 50, 50, 0.6) !important;
+}
+/* Light mode navigation */
+.nav-link {
+  color: #555333 !important;
+  font-weight: 500;
+  font-size: 12px;
+  text-transform: uppercase;
+}
+
+.nav-link:hover,
+.nav-link.active {
+  color: #FC6736 !important;
+}
+
+/* Dark mode navigation */
+[data-bs-theme="dark"] .nav-link {
+  color: rgba(255, 255, 255, 0.87) !important;
+}
+
+[data-bs-theme="dark"] .nav-link:hover,
+[data-bs-theme="dark"] .nav-link.active {
+  color: #FC6736 !important;
+}
+
+.navbar-brand {
+  font-size: 1.2rem;
+}
+
+/* Theme Toggle Switch */
+.theme-toggle-switch {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 70px;
+  height: 36px;
+  background: transparent;
+  border: 2px solid #878672;
+  border-radius: 20px;
+  padding: 4px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  overflow: hidden;
+}
+
+.theme-toggle-switch:hover {
+  border-color: #FC6736;
+}
+
+/* Sliding background circle */
+.theme-toggle-switch::before {
+  content: '';
+  position: absolute;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #878672;
+  left: 4px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 0;
+}
+
+/* Dark mode - slide background to right */
+[data-bs-theme="dark"] .theme-toggle-switch::before {
+  left: calc(100% - 32px);
+  background: #686D76;
+}
+
+/* Icon containers */
+.theme-toggle-icon {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  transition: color 0.3s ease;
+  z-index: 1;
+}
+
+.theme-toggle-icon svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* Sun icon (left side) */
+.theme-toggle-icon-sun {
+  color: #878672;
+}
+
+/* Light mode - sun is active (light icon on dark background) */
+[data-bs-theme="light"] .theme-toggle-icon-sun {
+  color: #faf6ef;
+}
+
+/* Dark mode - sun is inactive */
+[data-bs-theme="dark"] .theme-toggle-icon-sun {
+  color: #878672;
+}
+
+/* Moon icon (right side) */
+.theme-toggle-icon-moon {
+  color: #C5C4BB;
+}
+
+/* Dark mode - moon is active (light icon on dark background) */
+[data-bs-theme="dark"] .theme-toggle-icon-moon {
+  color: #faf6ef;
+}
+
+/* Light mode - moon is inactive */
+[data-bs-theme="light"] .theme-toggle-icon-moon {
+  color: #C5C4BB;
+}
+
+[data-bs-theme="dark"] button.btn-link {
+  background-color: transparent;
+  color: rgba(255, 255, 255, 0.87);
+}
+
+[data-bs-theme="dark"] button.btn-navsecond.text-dark {
+  color: rgba(255, 255, 255, 0.87)!important;
+}
+
+button.btn-navsecond {
+  background: transparent!important;
+}
