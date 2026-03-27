@@ -6,6 +6,13 @@ const allowedHosts = process.env.VITE_ALLOWED_HOSTS
   ? process.env.VITE_ALLOWED_HOSTS.split(",").map((host) => host.trim())
   : ["localhost", "127.0.0.1"];
 
+const backendTarget = "https://api.telisik.org";
+const backendProxy = {
+  target: backendTarget,
+  changeOrigin: true,
+  secure: true,
+};
+
 export default defineConfig({
   plugins: [react(), tailwindcss()],
   server: {
@@ -17,12 +24,12 @@ export default defineConfig({
     },
     allowedHosts: allowedHosts,
     proxy: {
-      // Proxy API calls to production API to avoid CORS during local dev
-      "/api": {
-        target: "https://api.telisik.org",
-        changeOrigin: true,
-        secure: true,
-      },
+      // Keep frontend calls same-origin during development.
+      "/api": backendProxy,
+      "/auth": backendProxy,
+      "/articles": backendProxy,
+      "/static": backendProxy,
+      "/media": backendProxy,
     },
   },
   resolve: {

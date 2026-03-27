@@ -19,3 +19,17 @@ If you are developing a production application, we recommend using TypeScript wi
 ## Backend API Documentation
 
 [https://api.telisik.org/docs/](https://api.telisik.org/docs/)
+
+## Deployment Notes (Vercel + CORS)
+
+- Frontend defaults to same-origin API calls (`VITE_API_BASE` empty), then:
+  - local dev uses Vite `server.proxy`
+  - Vercel uses `vercel.json` rewrites
+- This avoids browser CORS errors because requests are sent to your own domain first.
+
+### Recommended Vercel Environment Variables
+
+- `VITE_API_BASE=` (empty)
+- `VITE_WS_BASE=wss://api.telisik.org` (or your websocket gateway)
+
+If `VITE_API_BASE` is set to `https://api.telisik.org`, browser calls become cross-origin again and can fail due to backend CORS policy.

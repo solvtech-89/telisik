@@ -1,6 +1,6 @@
-export const API_BASE =
-  import.meta.env.VITE_API_BASE ||
-  (import.meta.env.DEV ? "" : "https://api.telisik.org");
+// Use same-origin by default so both local (Vite proxy) and Vercel (rewrites)
+// avoid browser-level CORS issues.
+export const API_BASE = import.meta.env.VITE_API_BASE ?? "";
 export const WS_BASE =
   import.meta.env.VITE_WS_BASE ||
   (import.meta.env.DEV
