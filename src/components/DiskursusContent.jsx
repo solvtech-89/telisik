@@ -9,6 +9,7 @@ import {
   applyGlobalFootnoteNumbers,
 } from "./editor/editorExtension";
 import { buildFootnoteMapFromHTML } from "../utils/footnotes";
+import sanitizeHtml from "../utils/sanitizeHtml";
 import { TOOLBAR_PRESETS } from "./editor/toolbarPresets";
 
 // Extensions for tanggapan (response) editor - no footnotes
@@ -169,7 +170,9 @@ function HistoryModal({ articleSlug, tipe, onClose }) {
                   {selected?.id === r.id && (
                     <div
                       className="mt-2 p-2 bg-white text-gray-800 rounded"
-                      dangerouslySetInnerHTML={{ __html: r.content }}
+                      dangerouslySetInnerHTML={{
+                        __html: sanitizeHtml(r.content),
+                      }}
                     />
                   )}
                 </div>
@@ -381,7 +384,7 @@ export default function DiskursusContent({
           </div>
         ) : (
           <div className="text-base leading-[1.7] text-[#3a3a2a] [&_p]:mb-5 [&_h2]:mb-4 [&_h2]:mt-10 [&_h2]:text-[1.75rem] [&_h2]:font-bold [&_h2]:leading-[1.3] [&_h2]:text-[#f06a2a] [&_h5]:mb-3 [&_h5]:mt-8 [&_h5]:text-[1.1rem] [&_h5]:font-bold [&_h5]:leading-[1.4] [&_h5]:text-[#f06a2a] [&_strong]:font-bold [&_em]:italic [&_u]:underline [&_u]:underline-offset-2 [&_mark]:rounded-sm [&_mark]:bg-[#fff1bf] [&_mark]:px-[0.15em] [&_code]:rounded [&_code]:bg-[#f2f3f5] [&_code]:px-1 [&_code]:py-0.5 [&_code]:font-mono [&_a]:text-[#0088ff] [&_a]:underline [&_a]:underline-offset-2 [&_sup]:ml-0.5 [&_sup]:align-super [&_sup]:text-[0.7em] [&_sup]:text-[#0088ff] [&_sub]:align-sub [&_sub]:text-[0.7em] [&_ul]:my-5 [&_ul]:ml-7 [&_ol]:my-5 [&_ol]:ml-7 [&_li]:mb-2 [&_blockquote]:my-10 [&_blockquote]:border-0 [&_blockquote]:pl-14 [&_blockquote]:not-italic [&_blockquote]:text-[#4a4a34] [&_blockquote_p]:mb-1 [&_blockquote_p]:text-[1.1rem] [&_blockquote_p]:font-semibold [&_blockquote_cite]:block [&_blockquote_cite]:text-sm [&_blockquote_cite]:text-[#7c7a5a]">
-            <div dangerouslySetInnerHTML={{ __html: content }} />
+            <div dangerouslySetInnerHTML={{ __html: sanitizeHtml(content) }} />
           </div>
         )}
       </div>

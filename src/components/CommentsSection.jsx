@@ -182,7 +182,7 @@ export default function CommentsSection({ articleSlug, tipe }) {
       scrollContainer.addEventListener("scroll", handleScroll);
       return () => scrollContainer.removeEventListener("scroll", handleScroll);
     }
-  }, [loadingMore, hasMore, currentPage]);
+  }, [loadingMore, hasMore, currentPage, articleSlug, tipe]);
 
   const fetchComments = async (page = 1, append = false) => {
     if (page === 1) {

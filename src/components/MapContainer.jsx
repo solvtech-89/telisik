@@ -9,6 +9,7 @@ export default function MapContainer({
 }) {
   const mapRef = useRef(null);
   const mapInstance = useRef(null);
+  const observerRef = useRef(null);
   const mapSectionRef = useRef(null);
   const [mapReady, setMapReady] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
@@ -123,6 +124,7 @@ export default function MapContainer({
             attributes: true,
             attributeFilter: ["transform"],
           });
+          observerRef.current = observer;
         }
       }
 
@@ -147,6 +149,13 @@ export default function MapContainer({
         } catch (e) {}
       });
       customMarkersRef.current = [];
+
+      if (observerRef.current) {
+        try {
+          observerRef.current.disconnect();
+        } catch (e) {}
+        observerRef.current = null;
+      }
 
       if (mapInstance.current) {
         mapInstance.current = null;
@@ -361,7 +370,7 @@ export default function MapContainer({
       </div>
 
       {/* Category Legend */}
-      <div className="home-map-legend border-t border-[#dfddd4] bg-white px-6 py-4">
+      <div className="home-map-legend border-t border-[#dfddd4] px-6 py-4">
         <div className="flex flex-wrap items-center gap-x-7 gap-y-2">
           {[
             { key: "AGRARIA", label: "Agraria", color: "bg-red-500" },

@@ -14,6 +14,7 @@ import {
   applyGlobalFootnoteNumbers,
 } from "./editor/editorExtension";
 import { TOOLBAR_PRESETS } from "./editor/toolbarPresets";
+import sanitizeHtml from "../utils/sanitizeHtml";
 
 export default function ParagraphEditor({
   paragraph,
@@ -616,7 +617,9 @@ function HistoryModal({ paragraphId, onClose }) {
                   {selected?.id === r.id && (
                     <div
                       className="mt-2 rounded bg-gray-100 p-2 text-gray-800"
-                      dangerouslySetInnerHTML={{ __html: r.content }}
+                      dangerouslySetInnerHTML={{
+                        __html: sanitizeHtml(r.content),
+                      }}
                     />
                   )}
                 </div>

@@ -69,9 +69,7 @@ export default function SectionEditor({
   function ensureWS() {
     if (wsRef.current && wsRef.current.readyState === WebSocket.OPEN) return;
     const ws = new WebSocket(`${WS_BASE}/ws/article/${articleSlug}/`);
-    ws.onopen = () => {
-      //console.log("Section WS open for", section.section_key);
-    };
+    ws.onopen = () => {};
     ws.onmessage = (ev) => {
       try {
         const wrapper = JSON.parse(ev.data);
@@ -88,8 +86,7 @@ export default function SectionEditor({
         console.error("ws parse", e);
       }
     };
-    ws.onclose = () =>
-      console.log("Section WS closed for", section.section_key);
+    ws.onclose = () => {};
     wsRef.current = ws;
   }
 
@@ -230,6 +227,14 @@ export default function SectionEditor({
     return () => {
       try {
         if (hbRef.current) clearInterval(hbRef.current);
+      } catch (e) {}
+      try {
+        // attempt to unlock on unmount to release server-side locks
+        // do not await; best-effort
+        unlockSection();
+      } catch (e) {}
+      try {
+        wsRef.current?.close();
       } catch (e) {}
     };
   }, []);

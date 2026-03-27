@@ -174,7 +174,7 @@ export default function RightSidebar({ currentType = null, isDetail = false }) {
         </div>
 
         <div
-          className={`right-find-advanced ${showAdvancedSearch ? "rounded border border-[#ddd9ce] px-3 py-2" : ""}`}
+          className={`right-find-advanced ${showAdvancedSearch ? "right-find-advanced-panel rounded border px-3 py-2" : ""}`}
         >
           <label className="right-find-toggle-label flex items-center space-x-2">
             <input
@@ -183,7 +183,9 @@ export default function RightSidebar({ currentType = null, isDetail = false }) {
               checked={showAdvancedSearch}
               onChange={(e) => setShowAdvancedSearch(e.target.checked)}
             />
-            <span className="text-gray-500 italic">Perinci pencarian</span>
+            <span className="right-find-label-text italic">
+              Perinci pencarian
+            </span>
           </label>
 
           {showAdvancedSearch && (
@@ -201,7 +203,7 @@ export default function RightSidebar({ currentType = null, isDetail = false }) {
                       })
                     }
                   />
-                  <span className="text-gray-500">Lokasi</span>
+                  <span className="right-find-label-text">Lokasi</span>
                 </label>
 
                 <label className="right-find-option flex items-center space-x-2">
@@ -216,18 +218,18 @@ export default function RightSidebar({ currentType = null, isDetail = false }) {
                       })
                     }
                   />
-                  <span className="text-gray-500">Jenis Konflik</span>
+                  <span className="right-find-label-text">Jenis Konflik</span>
                 </label>
               </div>
 
               <hr className="mb-3" />
 
               <div className="mt-0">
-                <div className="right-find-area-title text-gray-500 italic mb-2">
+                <div className="right-find-area-title italic mb-2">
                   Area pencarian:
                 </div>
-                <div className="right-find-area-grid pl-4 grid grid-cols-2 gap-3">
-                  <label className="right-find-option flex items-center space-x-2">
+                <div className="right-find-area-grid right-find-area-grid--home">
+                  <label className="right-find-option right-find-area-option">
                     <input
                       type="checkbox"
                       className="right-find-checkbox"
@@ -239,9 +241,9 @@ export default function RightSidebar({ currentType = null, isDetail = false }) {
                         })
                       }
                     />
-                    <span>Kronik</span>
+                    <span className="right-find-area-text">Kronik</span>
                   </label>
-                  <label className="right-find-option flex items-center space-x-2">
+                  <label className="right-find-option right-find-area-option">
                     <input
                       type="checkbox"
                       className="right-find-checkbox"
@@ -253,9 +255,9 @@ export default function RightSidebar({ currentType = null, isDetail = false }) {
                         })
                       }
                     />
-                    <span>Tilik</span>
+                    <span className="right-find-area-text">Tilik</span>
                   </label>
-                  <label className="right-find-option flex items-center space-x-2">
+                  <label className="right-find-option right-find-area-option">
                     <input
                       type="checkbox"
                       className="right-find-checkbox"
@@ -267,9 +269,9 @@ export default function RightSidebar({ currentType = null, isDetail = false }) {
                         })
                       }
                     />
-                    <span>Diskursus</span>
+                    <span className="right-find-area-text">Diskursus</span>
                   </label>
-                  <label className="right-find-option flex items-center space-x-2">
+                  <label className="right-find-option right-find-area-option">
                     <input
                       type="checkbox"
                       className="right-find-checkbox"
@@ -281,7 +283,7 @@ export default function RightSidebar({ currentType = null, isDetail = false }) {
                         })
                       }
                     />
-                    <span>Tanggapan</span>
+                    <span className="right-find-area-text">Tanggapan</span>
                   </label>
                 </div>
               </div>
@@ -289,7 +291,7 @@ export default function RightSidebar({ currentType = null, isDetail = false }) {
               <div className="right-find-submit-row flex mt-3 justify-end">
                 <button
                   onClick={handleSearch}
-                  className="right-find-submit bg-gray-700 border-2 border-amber-200 text-white font-medium text-sm rounded-full px-4 py-2 hover:bg-amber-200 hover:text-gray-800 transition"
+                  className="right-find-submit font-medium text-sm transition"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"

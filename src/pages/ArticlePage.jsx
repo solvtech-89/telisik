@@ -149,9 +149,7 @@ export default function ArticlePage() {
 
     if (!isDiskursus) {
       const ws = new WebSocket(`${WS_BASE}/ws/article/${tipe}/${slug}/`);
-      ws.onopen = () => {
-        console.log("WS connected for article", slug);
-      };
+      ws.onopen = () => {};
       ws.onerror = (err) => {
         console.error("WS error for article", slug, err);
         setAlert({
@@ -172,7 +170,7 @@ export default function ArticlePage() {
           console.error("WS parse", e);
         }
       };
-      ws.onclose = () => console.log("WS closed for article", slug);
+      ws.onclose = () => {};
       wsRef.current = ws;
 
       return () => {

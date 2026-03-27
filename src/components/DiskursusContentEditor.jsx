@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { EditorContent, useEditor } from "@tiptap/react";
 import Placeholder from "@tiptap/extension-placeholder";
 import { sharedExtensions } from "./editor/editorExtension";
+import sanitizeHtml from "../utils/sanitizeHtml";
 
 function applyFootnoteNumbers(editor, footnoteNumberMap) {
   if (!editor || !footnoteNumberMap) return;
@@ -129,7 +130,11 @@ export default function DiskursusContentEditor({
 
         return (
           <div key={`p-${index}`} className="relative mb-4">
-            <p dangerouslySetInnerHTML={{ __html: element.innerHTML }} />
+            <p
+              dangerouslySetInnerHTML={{
+                __html: sanitizeHtml(element.innerHTML),
+              }}
+            />
             <span
               className={`pointer-events-none absolute right-2 top-1 rounded border border-gray-200 bg-white/95 px-1.5 py-0.5 text-xs font-semibold ${colorClass}`}
             >
@@ -144,7 +149,9 @@ export default function DiskursusContentEditor({
         return (
           <HeadingTag
             key={`${tagName}-${index}`}
-            dangerouslySetInnerHTML={{ __html: element.innerHTML }}
+            dangerouslySetInnerHTML={{
+              __html: sanitizeHtml(element.innerHTML),
+            }}
             className="mb-2 mt-4"
           />
         );
@@ -154,7 +161,9 @@ export default function DiskursusContentEditor({
         return (
           <ol
             key={`ol-${index}`}
-            dangerouslySetInnerHTML={{ __html: element.innerHTML }}
+            dangerouslySetInnerHTML={{
+              __html: sanitizeHtml(element.innerHTML),
+            }}
             className="mb-4 pl-8"
           />
         );
@@ -164,7 +173,9 @@ export default function DiskursusContentEditor({
         return (
           <ul
             key={`ul-${index}`}
-            dangerouslySetInnerHTML={{ __html: element.innerHTML }}
+            dangerouslySetInnerHTML={{
+              __html: sanitizeHtml(element.innerHTML),
+            }}
             className="mb-4 pl-8"
           />
         );
@@ -174,7 +185,9 @@ export default function DiskursusContentEditor({
         return (
           <blockquote
             key={`blockquote-${index}`}
-            dangerouslySetInnerHTML={{ __html: element.innerHTML }}
+            dangerouslySetInnerHTML={{
+              __html: sanitizeHtml(element.innerHTML),
+            }}
             className="mb-4 border-l-4 border-gray-200 pl-4 italic text-gray-500"
           />
         );
@@ -193,7 +206,9 @@ export default function DiskursusContentEditor({
         return (
           <pre
             key={`pre-${index}`}
-            dangerouslySetInnerHTML={{ __html: element.innerHTML }}
+            dangerouslySetInnerHTML={{
+              __html: sanitizeHtml(element.innerHTML),
+            }}
             className="mb-4 overflow-auto rounded bg-gray-100 p-4"
           />
         );
@@ -202,7 +217,7 @@ export default function DiskursusContentEditor({
       return (
         <div
           key={`other-${index}`}
-          dangerouslySetInnerHTML={{ __html: element.outerHTML }}
+          dangerouslySetInnerHTML={{ __html: sanitizeHtml(element.outerHTML) }}
           className="mb-4"
         />
       );

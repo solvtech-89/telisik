@@ -27,7 +27,7 @@ export default function ArticleImageGallery({
 
       // Handle error response for diskursus
       if (data.error) {
-        console.log("Images endpoint returned error:", data.error);
+        console.warn("Images endpoint returned error:", data.error);
         setImages([]);
         return;
       }

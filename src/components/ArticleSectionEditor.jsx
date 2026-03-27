@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import sanitizeHtml from "../utils/sanitizeHtml";
 import { EditorContent, useEditor } from "@tiptap/react";
 import Placeholder from "@tiptap/extension-placeholder";
 import { sharedExtensions } from "./editor/editorExtension";
@@ -126,7 +127,11 @@ export default function ArticleSectionEditor({
 
           return (
             <div key={idx} className="relative mb-4">
-              <p dangerouslySetInnerHTML={{ __html: paragraph.innerHTML }} />
+              <p
+                dangerouslySetInnerHTML={{
+                  __html: sanitizeHtml(paragraph.innerHTML),
+                }}
+              />
               <span
                 className={`pointer-events-none absolute right-2 top-1 rounded border border-gray-200 bg-white/95 px-1.5 py-0.5 text-xs font-semibold ${colorClass}`}
               >

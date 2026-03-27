@@ -14,6 +14,7 @@
   --tblr-body-font-size: 1em !important;
   --telisik-link-muted: #7f7d6f;
   --telisik-active: #fc6736;
+  --telisik-success: #35c759;
   --feed-card-bg: #f9efdf;
   --feed-card-border: #e4d3b6;
   --feed-card-border-hover: #d7bf99;
@@ -257,19 +258,22 @@ button:focus-visible {
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   min-width: 210px;
   width: 100%;
-  z-index: 1000;
-}
-
-.urun-daya-dropdown.show {
-  max-height: 300px;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  color: #8f8b75;
   opacity: 1;
+  transition:
+    color 180ms ease,
+    transform 180ms ease;
+  margin: 0;
 }
-
-.urun-daya-item {
-  display: block;
-  padding: 14px 20px;
-  color: white;
-  text-decoration: none !important;
+.theme-toggle-switch .theme-toggle-icon svg {
+  width: 16px;
+  height: 16px;
   font-size: 1rem;
   font-weight: 500;
   border-top: 1px solid rgba(255, 255, 255, 0.2);
@@ -323,12 +327,17 @@ button:focus-visible {
   display: inline-flex;
   align-items: center;
   justify-content: space-between;
-  background: #f3f1e7;
-  border: 2px solid #96937f;
+  background: transparent;
+  border: 2px solid var(--telisik-active);
   padding: 4px;
   position: relative;
   cursor: pointer;
-  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.06);
+  box-shadow: none;
+}
+
+/* Light mode: make the toggle border neutral so the whole control reads gray */
+:root:not([data-bs-theme="dark"]) .theme-toggle-switch {
+  border-color: #cfcabf;
 }
 
 .theme-toggle-switch .theme-toggle-icon {
@@ -336,16 +345,30 @@ button:focus-visible {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 28px;
-  height: 28px;
+  /* match the indicator size so the icon is perfectly centered */
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  box-sizing: border-box;
   color: #8f8b75;
   opacity: 1;
   transition: color 180ms ease;
 }
 
 .theme-toggle-switch .theme-toggle-icon svg {
-  width: 17px;
-  height: 17px;
+  display: block;
+  margin: 0 auto;
+  width: 16px;
+  height: 16px;
+}
+
+/* small nudge to perfectly center icons inside the circular indicator */
+:root:not([data-bs-theme="dark"]) .theme-toggle-switch .icon-sun {
+  transform: translateX(3px);
+}
+
+:root[data-bs-theme="dark"] .theme-toggle-switch .icon-moon {
+  transform: translateX(-3px);
 }
 
 .theme-toggle-switch:hover {
@@ -365,24 +388,22 @@ button:focus-visible {
   left: 4px;
   width: 30px;
   height: 30px;
-  transform: translateY(-50%);
+  transform: translateY(-50%) translateX(0);
   border-radius: 9999px;
-  background: #8f8c76;
-  box-shadow: 0 3px 10px rgba(16, 24, 40, 0.14);
+  /* neutral thumb color in light mode (was orange) */
+  background: #e7e5dd;
+  box-shadow: 0 6px 14px rgba(12, 18, 28, 0.12);
   border: 0;
   transition:
-    left 220ms cubic-bezier(0.2, 0.8, 0.2, 1),
-    right 220ms cubic-bezier(0.2, 0.8, 0.2, 1),
-    background 220ms;
+    transform 260ms cubic-bezier(0.2, 0.8, 0.2, 1),
+    background 220ms,
+    box-shadow 220ms;
   z-index: 1;
 }
 
-.theme-toggle-switch .icon-sun {
-  margin-left: 6px;
-}
-
+.theme-toggle-switch .icon-sun,
 .theme-toggle-switch .icon-moon {
-  margin-right: 6px;
+  margin: 0;
 }
 
 :root[data-bs-theme="light"] .theme-toggle-switch .icon-sun,
@@ -396,49 +417,55 @@ button:focus-visible {
 }
 
 :root[data-bs-theme="dark"] .theme-toggle-switch {
-  background: #30343c;
-  border-color: #5a5f69;
+  background: transparent;
+  border-color: var(--telisik-active);
 }
 
 :root[data-bs-theme="dark"] .theme-toggle-indicator {
-  left: auto;
-  right: 4px;
-  background: #f4f3ee;
-  box-shadow: 0 2px 8px rgba(8, 15, 28, 0.35);
+  /* move indicator to the right using translateX and switch to light thumb */
+  transform: translateY(-50%) translateX(44px);
+  background: #ffffff;
+  box-shadow: 0 6px 14px rgba(12, 18, 28, 0.12);
 }
 
 :root[data-bs-theme="dark"] .theme-toggle-switch .theme-toggle-icon {
   color: #cdd2dc;
 }
 
-:root[data-bs-theme="dark"] .theme-toggle-switch .icon-sun {
-  color: #8e93a0;
-}
-
-:root[data-bs-theme="dark"] .theme-toggle-switch .icon-moon {
+/* Light mode: sun white, moon muted */
+:root:not([data-bs-theme="dark"]) .theme-toggle-switch .icon-sun {
+  /* darker sun so it contrasts on the neutral thumb */
   color: #3c4250;
-  margin-right: 0;
-  margin-left: 6px;
 }
 
+:root:not([data-bs-theme="dark"]) .theme-toggle-switch .icon-moon {
+  color: rgba(0, 0, 0, 0.35);
+}
+
+/* Dark mode: ensure sun is visible when thumb is light (white) by using dark stroke */
 :root[data-bs-theme="dark"] .theme-toggle-switch .icon-sun {
-  margin-left: 0;
+  color: #3c4250;
+}
+
+/* Dark mode: moon icon placed on white thumb should be slightly darker for contrast */
+:root[data-bs-theme="dark"] .theme-toggle-switch .icon-moon {
+  color: #1f2329;
 }
 
 /* Home dark mode alignment with design reference */
 :root[data-bs-theme="dark"] .home-shell {
-  background: #24262c;
+  background: #1f2227;
 }
 
 :root[data-bs-theme="dark"] .home-left-rail,
 :root[data-bs-theme="dark"] .home-right-rail {
-  background: #272a31;
-  border-color: #3a3e49;
+  background: #23262c;
+  border-color: #363a43;
 }
 
 :root[data-bs-theme="dark"] .home-main-panel {
-  background: #23262d;
-  border-color: #3a3e49;
+  background: #22252b;
+  border-color: #363a43;
 }
 
 :root[data-bs-theme="dark"] .home-map-title,
@@ -451,18 +478,18 @@ button:focus-visible {
 }
 
 :root[data-bs-theme="dark"] .home-map-shell {
-  background: #252932;
-  border-color: #3a4050;
-  box-shadow: 0 4px 18px rgba(3, 7, 18, 0.38);
+  background: #23262c;
+  border-color: #353a43;
+  box-shadow: 0 6px 18px rgba(3, 7, 18, 0.36);
 }
 
 :root[data-bs-theme="dark"] .home-map-stage {
-  background: #22262e;
+  background: #202329;
 }
 
 :root[data-bs-theme="dark"] .home-map-legend {
-  background: #252932;
-  border-color: #3a4050;
+  background: #23262c;
+  border-color: #353a43;
 }
 
 :root[data-bs-theme="dark"] .home-map-legend p,
@@ -482,12 +509,12 @@ button:focus-visible {
 }
 
 :root[data-bs-theme="dark"] .home-map-info {
-  color: #b5bdcb !important;
+  color: #b8bec8 !important;
 }
 
 :root[data-bs-theme="dark"] .sidebar-nav-shell,
 :root[data-bs-theme="dark"] .right-sidebar-shell {
-  color: #d9dde7;
+  color: #d8dde5;
 }
 
 :root[data-bs-theme="dark"] .sidebar-login-title {
@@ -495,7 +522,7 @@ button:focus-visible {
 }
 
 :root[data-bs-theme="dark"] .sidebar-login-subtitle {
-  color: #b8c1d3 !important;
+  color: #bac0c9 !important;
 }
 
 :root[data-bs-theme="dark"] .sidebar-nav-shell hr {
@@ -504,7 +531,7 @@ button:focus-visible {
 
 :root[data-bs-theme="dark"] .sidebar-nav-shell .text-gray-500,
 :root[data-bs-theme="dark"] .right-sidebar-shell .text-gray-500 {
-  color: #b5bdcb !important;
+  color: #b7bdc6 !important;
 }
 
 :root[data-bs-theme="dark"] .sidebar-nav-shell .font-semibold,
@@ -513,13 +540,206 @@ button:focus-visible {
 }
 
 :root[data-bs-theme="dark"] .right-sidebar-shell input {
-  background: #0b1a38 !important;
-  border-color: #2a467d !important;
-  color: #d8e2ff !important;
+  background: #081a39 !important;
+  border-color: #224071 !important;
+  color: #dbe4ff !important;
 }
 
 :root[data-bs-theme="dark"] .right-sidebar-shell input::placeholder {
-  color: #9fb0d8;
+  color: #8fa3d1;
+}
+
+/* Homepage right sidebar - advanced search controls */
+:where(.right-sidebar-shell) .right-find-master-toggle,
+:where(.right-sidebar-shell) .right-find-switch {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 40px;
+  height: 24px;
+  border-radius: 999px;
+  border: 1px solid #b7becd;
+  background: #d5dae4;
+  position: relative;
+  cursor: pointer;
+  display: inline-block;
+  vertical-align: middle;
+  transition:
+    background 160ms ease,
+    border-color 160ms ease,
+    box-shadow 160ms ease;
+}
+
+:where(.right-sidebar-shell) .right-find-master-toggle::after,
+:where(.right-sidebar-shell) .right-find-switch::after {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #f8fbff;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
+  transition:
+    transform 160ms ease,
+    background 160ms ease;
+}
+
+:where(.right-sidebar-shell) .right-find-master-toggle:checked,
+:where(.right-sidebar-shell) .right-find-switch:checked {
+  background: var(--telisik-success);
+  border-color: var(--telisik-success);
+}
+
+:where(.right-sidebar-shell) .right-find-master-toggle:checked::after,
+:where(.right-sidebar-shell) .right-find-switch:checked::after {
+  transform: translateX(16px);
+  background: #ffffff;
+}
+
+:where(.right-sidebar-shell) .right-find-master-toggle:focus-visible,
+:where(.right-sidebar-shell) .right-find-switch:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(53, 199, 89, 0.18);
+}
+
+:root[data-bs-theme="dark"] .home-right-rail .right-find-label-text {
+  color: #b7bdc6 !important;
+}
+
+:root[data-bs-theme="dark"] .home-right-rail .right-find-advanced-panel {
+  border-color: #1f7ae0 !important;
+  background: transparent;
+}
+
+:root[data-bs-theme="dark"] .home-right-rail .right-find-advanced-panel hr {
+  border: 0;
+  border-top: 1px solid #aaa57c;
+  opacity: 0.9;
+}
+
+:root[data-bs-theme="dark"] .home-right-rail .right-find-area-title {
+  color: #c5cad3 !important;
+  font-size: 2.2rem;
+  line-height: 1.22;
+  letter-spacing: -0.01em;
+  margin-bottom: 0.95rem;
+}
+
+:root[data-bs-theme="dark"] .home-right-rail .right-find-area-grid--home {
+  padding-left: 1.05rem;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.95rem 1.8rem;
+  align-items: center;
+}
+
+:root[data-bs-theme="dark"] .home-right-rail .right-find-area-option {
+  display: flex;
+  align-items: center;
+  gap: 0.72rem;
+  min-width: 0;
+}
+
+:root[data-bs-theme="dark"] .home-right-rail .right-find-area-text {
+  color: #f1f4fb;
+  font-size: 2rem;
+  font-weight: 500;
+  line-height: 1.16;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+}
+
+:root[data-bs-theme="dark"] .home-right-rail .right-find-master-toggle,
+:root[data-bs-theme="dark"] .home-right-rail .right-find-switch {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 40px;
+  height: 24px;
+  border-radius: 999px;
+  border: 1px solid #0f2b59;
+  background: #0a1d3e;
+  position: relative;
+  cursor: pointer;
+  transition:
+    background 160ms ease,
+    border-color 160ms ease;
+}
+
+:root[data-bs-theme="dark"] .home-right-rail .right-find-master-toggle::after,
+:root[data-bs-theme="dark"] .home-right-rail .right-find-switch::after {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #6d7787;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
+  transition:
+    transform 160ms ease,
+    background 160ms ease;
+}
+
+:root[data-bs-theme="dark"] .home-right-rail .right-find-master-toggle:checked,
+:root[data-bs-theme="dark"] .home-right-rail .right-find-switch:checked {
+  background: var(--telisik-success);
+  border-color: var(--telisik-success);
+}
+
+:root[data-bs-theme="dark"]
+  .home-right-rail
+  .right-find-master-toggle:checked::after,
+:root[data-bs-theme="dark"] .home-right-rail .right-find-switch:checked::after {
+  transform: translateX(16px);
+  background: #ffffff;
+}
+
+:root[data-bs-theme="dark"] .home-right-rail .right-find-checkbox {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  border: 1px solid #2a3f64;
+  background: #0d1b34;
+  position: relative;
+  cursor: pointer;
+}
+
+:root[data-bs-theme="dark"] .home-right-rail .right-find-checkbox:checked {
+  background: var(--telisik-success);
+  border-color: var(--telisik-success);
+}
+
+:root[data-bs-theme="dark"]
+  .home-right-rail
+  .right-find-checkbox:checked::after {
+  content: "";
+  position: absolute;
+  left: 10px;
+  top: 5px;
+  width: 6px;
+  height: 12px;
+  border: solid #ffffff;
+  border-width: 0 3px 3px 0;
+  transform: rotate(45deg);
+}
+
+:root[data-bs-theme="dark"] .home-right-rail .right-find-submit {
+  background: #6b6a42;
+  border: 3px solid #c9c391;
+  color: #f7f6e5;
+  border-radius: 999px;
+  min-width: 156px;
+  padding: 0.55rem 1.2rem;
+}
+
+:root[data-bs-theme="dark"] .home-right-rail .right-find-submit:hover {
+  background: #77754a;
+  border-color: #d6cf9b;
+  color: #ffffff;
 }
 
 /* Article list dark background alignment */
@@ -574,7 +794,7 @@ button:focus-visible {
 }
 
 .article-list-title {
-  color: #2b3850;
+  color: var(--telisik-active);
   font-size: clamp(1.9rem, 1.45rem + 0.65vw, 2.35rem);
   line-height: 1.12;
   letter-spacing: -0.015em;
@@ -649,7 +869,7 @@ button:focus-visible {
 
 .article-feed-title,
 .article-feed-title a {
-  color: #f06731;
+  color: var(--telisik-active);
   font-size: clamp(1.03rem, 0.95rem + 0.18vw, 1.14rem);
   line-height: 1.32;
   word-break: break-word;
@@ -688,7 +908,7 @@ button:focus-visible {
 }
 
 .article-list-right .right-find-title {
-  color: #2b3850;
+  color: var(--telisik-active);
   font-size: clamp(1.9rem, 1.65rem + 0.35vw, 2.18rem);
   line-height: 1.06;
   letter-spacing: -0.014em;
@@ -759,18 +979,19 @@ button:focus-visible {
 }
 
 .article-list-right .right-find-master-toggle:checked {
-  background: #1e74cf;
-  border-color: #1e74cf;
+  background: var(--telisik-success);
+  border-color: var(--telisik-success);
 }
 
 .article-list-right .right-find-master-toggle:checked::after,
 .article-list-right .right-find-switch:checked::after {
   transform: translateX(16px);
+  background: #ffffff;
 }
 
 .article-list-right .right-find-switch:checked {
-  background: #b8ad97;
-  border-color: #aca086;
+  background: var(--telisik-success);
+  border-color: var(--telisik-success);
 }
 
 .article-list-right .right-find-checkbox {
@@ -954,20 +1175,26 @@ button:focus-visible {
 :root[data-bs-theme="dark"]
   .article-list-right
   .right-find-master-toggle:checked {
-  background: #1d6cc2;
-  border-color: #1d6cc2;
+  background: var(--telisik-success);
+  border-color: var(--telisik-success);
 }
 
-:root[data-bs-theme="dark"] .article-list-right .right-find-switch:checked {
-  background: #707a8f;
-  border-color: #707a8f;
+.article-list-right .right-find-checkbox:checked {
+  background: var(--telisik-success);
+  border-color: var(--telisik-success);
 }
 
-:root[data-bs-theme="dark"] .article-list-right .right-find-checkbox {
-  border-color: #6c7b95;
-  background: #253146;
+.article-list-right .right-find-checkbox:checked::after {
+  content: "";
+  position: absolute;
+  left: 9px;
+  top: 4px;
+  width: 7px;
+  height: 13px;
+  border: solid #ffffff;
+  border-width: 0 3px 3px 0;
+  transform: rotate(45deg);
 }
-
 :root[data-bs-theme="dark"] .article-list-right .right-find-checkbox:checked {
   background: #1d6cc2;
   border-color: #1d6cc2;

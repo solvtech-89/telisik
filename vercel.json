@@ -2,16 +2,7 @@
   "version": 2,
   "routes": [
     {
-      "src": "^/api/(.*)$",
-      "dest": "https://api.telisik.org/api/$1"
-    },
-    {
-      "src": "^/auth/(.*)$",
-      "dest": "https://api.telisik.org/auth/$1"
-    },
-    {
-      "src": "^/articles/(.*)$",
-      "dest": "https://api.telisik.org/articles/$1"
+      "handle": "filesystem"
     },
     {
       "src": "^/static/(.*)$",
@@ -20,9 +11,6 @@
     {
       "src": "^/media/(.*)$",
       "dest": "https://api.telisik.org/media/$1"
-    },
-    {
-      "handle": "filesystem"
     },
     {
       "src": "^(?!/api/|/auth/|/articles/|/static/|/media/).*$",
