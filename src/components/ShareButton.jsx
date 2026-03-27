@@ -65,10 +65,11 @@ export const ShareButton = ({
   };
 
   return (
-    <div className="share-button-container" style={{ position: "relative" }}>
+    <div className="share-button-container relative">
       <button
-        className={`btn btn-outline-secondary ${className}`}
+        className={`inline-flex items-center gap-1 rounded border border-gray-300 bg-white px-3 py-1.5 text-sm text-gray-700 transition-colors hover:bg-gray-50 ${className}`}
         onClick={() => setShowShareMenu(!showShareMenu)}
+        type="button"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -86,53 +87,43 @@ export const ShareButton = ({
           <line x1="15.41" y1="6.51" x2="8.59" y2="10.49" />
         </svg>{" "}
         Bagikan
-        {copied && <span className="ml-2 text-success">✓ Disalin</span>}
+        {copied && <span className="ml-2 text-emerald-600">✓ Disalin</span>}
       </button>
 
       {showShareMenu && (
-        <div
-          className="share-menu"
-          style={{
-            position: "absolute",
-            top: "100%",
-            right: 0,
-            marginTop: "0.5rem",
-            backgroundColor: "white",
-            border: "1px solid #ddd",
-            borderRadius: "8px",
-            boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
-            padding: "0.5rem",
-            zIndex: 1000,
-            minWidth: "200px",
-          }}
-        >
+        <div className="share-menu absolute right-0 top-full z-30 mt-2 min-w-[200px] rounded-lg border border-gray-200 bg-white p-2 shadow-lg">
           <button
-            className="btn btn-sm btn-light w-100 text-start mb-1"
+            className="mb-1 block w-full rounded px-2 py-1.5 text-left text-sm text-gray-700 hover:bg-gray-100"
             onClick={() => handleShare("copy")}
+            type="button"
           >
             🔗 Salin Link
           </button>
           <button
-            className="btn btn-sm btn-light w-100 text-start mb-1"
+            className="mb-1 block w-full rounded px-2 py-1.5 text-left text-sm text-gray-700 hover:bg-gray-100"
             onClick={() => handleShare("whatsapp")}
+            type="button"
           >
             💬 WhatsApp
           </button>
           <button
-            className="btn btn-sm btn-light w-100 text-start mb-1"
+            className="mb-1 block w-full rounded px-2 py-1.5 text-left text-sm text-gray-700 hover:bg-gray-100"
             onClick={() => handleShare("twitter")}
+            type="button"
           >
             🐦 Twitter
           </button>
           <button
-            className="btn btn-sm btn-light w-100 text-start mb-1"
+            className="mb-1 block w-full rounded px-2 py-1.5 text-left text-sm text-gray-700 hover:bg-gray-100"
             onClick={() => handleShare("facebook")}
+            type="button"
           >
             📘 Facebook
           </button>
           <button
-            className="btn btn-sm btn-light w-100 text-start"
+            className="block w-full rounded px-2 py-1.5 text-left text-sm text-gray-700 hover:bg-gray-100"
             onClick={() => handleShare("telegram")}
+            type="button"
           >
             ✈️ Telegram
           </button>

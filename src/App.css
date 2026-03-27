@@ -17,14 +17,6 @@
   .logo.react:hover {
     filter: drop-shadow(0 0 2em #61dafbaa);
   }
-
-  .card {
-    @apply p-8;
-  }
-
-  .read-the-docs {
-    @apply text-gray-500;
-  }
 }
 
 @keyframes logo-spin {

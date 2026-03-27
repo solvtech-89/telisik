@@ -21,6 +21,9 @@ export default function MapContainer({
     SUMBER_DAYA_ALAM: "#388E3C",
   };
 
+  const mapInfoText =
+    "Konflik sosial, yang selanjutnya disebut Konflik, adalah perseteruan dan/atau benturan fisik dengan kekerasan antara dua kelompok masyarakat atau lebih yang berlangsung dalam waktu tertentu dan berdampak luas yang mengakibatkan ketidakamanan dan disintegrasi sosial sehingga mengganggu stabilitas nasional dan menghambat pembangunan nasional. (UU No. 7/2012 tentang Penanganan Konflik Sosial)";
+
   const updateCustomMarkers = useCallback(() => {
     const map = mapInstance.current;
     if (!map || !mapReady) return;
@@ -62,7 +65,10 @@ export default function MapContainer({
       circle.setAttribute("fill", categoryColors[m.category] || "#666");
       circle.setAttribute("stroke", "white");
       circle.setAttribute("strokeWidth", "1.5");
-      circle.setAttribute("class", "custom-marker cursor-pointer hover:opacity-80 transition-opacity");
+      circle.setAttribute(
+        "class",
+        "custom-marker cursor-pointer hover:opacity-80 transition-opacity",
+      );
       circle.setAttribute("data-lat", coords[0]);
       circle.setAttribute("data-lng", coords[1]);
 
@@ -168,8 +174,7 @@ export default function MapContainer({
   // Render markers when active categories change
   useEffect(() => {
     if (mapReady && mapInstance.current) {
-      const targetColor =
-        activeCategories.size > 0 ? "#878672" : "#E2E8F0";
+      const targetColor = activeCategories.size > 0 ? "#c8c4b7" : "#D8D4C9";
       if (mapInstance.current.regions) {
         Object.keys(mapInstance.current.regions).forEach((code) => {
           const region = mapInstance.current.regions[code];
@@ -241,23 +246,23 @@ export default function MapContainer({
     <div
       ref={mapSectionRef}
       className={`
-        rounded-lg overflow-hidden border border-gray-200 shadow-sm
+        home-map-shell overflow-hidden rounded-xl border border-[#ddd9ce] bg-[#F0FDFF] shadow-[0_2px_8px_rgba(30,41,59,0.06)]
         ${isFullscreen ? "fixed inset-0 rounded-none border-none z-50" : ""}
       `}
     >
       {/* Map Container */}
-      <div className="w-full h-96 md:h-full relative bg-gradient-to-br from-gray-50 to-gray-100">
+      <div className="home-map-stage relative h-[320px] w-full bg-[#F0FDFF] sm:h-[360px] lg:h-[430px]">
         <div ref={mapRef} className="w-full h-full" />
 
         {/* Map Controls */}
-        <div className="absolute top-4 right-4 flex gap-2 z-10">
+        <div className="home-map-controls absolute right-4 top-4 z-10 inline-flex overflow-hidden rounded-[2px] border border-[#d3cfbf] bg-[#f8f8f7] shadow-[0_1px_2px_rgba(15,23,42,0.08)]">
           <button
             onClick={handleZoom(false)}
-            className="p-2 bg-white hover:bg-gray-50 rounded-lg shadow-md border border-gray-200 transition-colors"
+            className="home-map-control-btn grid h-12 w-12 place-items-center text-[#7b828f] transition hover:bg-[#f2f3f4]"
             title="Zoom out"
           >
             <svg
-              className="w-5 h-5 text-neutral-600"
+              className="h-5 w-5"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -266,18 +271,25 @@ export default function MapContainer({
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 strokeWidth={2}
-                d="M20 12H4"
+                d="M21 21l-4.35-4.35"
+              />
+              <circle cx="11" cy="11" r="6.5" strokeWidth={2} />
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M8.5 11h5"
               />
             </svg>
           </button>
 
           <button
             onClick={handleZoom(true)}
-            className="p-2 bg-white hover:bg-gray-50 rounded-lg shadow-md border border-gray-200 transition-colors"
+            className="home-map-control-btn grid h-12 w-12 place-items-center border-l border-[#d3cfbf] text-[#7b828f] transition hover:bg-[#f2f3f4]"
             title="Zoom in"
           >
             <svg
-              className="w-5 h-5 text-neutral-600"
+              className="h-5 w-5"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -286,19 +298,32 @@ export default function MapContainer({
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 strokeWidth={2}
-                d="M12 4v16m8-8H4"
+                d="M21 21l-4.35-4.35"
+              />
+              <circle cx="11" cy="11" r="6.5" strokeWidth={2} />
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M11 8.5v5"
+              />
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M8.5 11h5"
               />
             </svg>
           </button>
 
           <button
             onClick={handleFullscreen}
-            className="p-2 bg-white hover:bg-gray-50 rounded-lg shadow-md border border-gray-200 transition-colors"
+            className="home-map-control-btn grid h-12 w-12 place-items-center border-l border-[#d3cfbf] text-[#7b828f] transition hover:bg-[#f2f3f4]"
             title={isFullscreen ? "Exit fullscreen" : "Fullscreen"}
           >
             {isFullscreen ? (
               <svg
-                className="w-5 h-5 text-neutral-600"
+                className="h-5 w-5"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -312,7 +337,7 @@ export default function MapContainer({
               </svg>
             ) : (
               <svg
-                className="w-5 h-5 text-neutral-600"
+                className="h-5 w-5"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -321,7 +346,13 @@ export default function MapContainer({
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   strokeWidth={2}
-                  d="M10 6H6v4m12 0h4v-4m0 12h-4v4m-12 0v-4H6"
+                  d="M8 5h11v11"
+                />
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M8 16L19 5"
                 />
               </svg>
             )}
@@ -330,11 +361,8 @@ export default function MapContainer({
       </div>
 
       {/* Category Legend */}
-      <div className="bg-white p-4 border-t border-gray-200">
-        <p className="text-xs text-neutral-600 mb-3 font-medium">
-          KATEGORI PETA
-        </p>
-        <div className="grid grid-cols-3 gap-2">
+      <div className="home-map-legend border-t border-[#dfddd4] bg-white px-6 py-4">
+        <div className="flex flex-wrap items-center gap-x-7 gap-y-2">
           {[
             { key: "AGRARIA", label: "Agraria", color: "bg-red-500" },
             { key: "EKOSOSPOL", label: "Ekosospol", color: "bg-blue-500" },
@@ -348,20 +376,64 @@ export default function MapContainer({
               key={cat.key}
               onClick={() => onCategoryToggle(cat.key)}
               className={`
-                flex items-center gap-2 px-2 py-1.5 rounded text-xs font-medium
-                transition-colors
+                flex items-center gap-2 rounded-md px-1 py-1 text-sm leading-none transition-colors
                 ${
                   activeCategories.has(cat.key)
-                    ? "bg-gray-100 text-neutral-900"
-                    : "text-neutral-600 hover:bg-gray-50"
+                    ? "text-[#2f3a4f]"
+                    : "text-[#8f8b79] hover:text-[#565e6f]"
                 }
               `}
             >
-              <div className={`w-3 h-3 rounded-full ${cat.color}`} />
-              <span>{cat.label}</span>
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 16 16"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                className={
+                  activeCategories.has(cat.key) ? "opacity-100" : "opacity-80"
+                }
+                style={{
+                  color: activeCategories.has(cat.key)
+                    ? categoryColors[cat.key]
+                    : "#8f8b79",
+                }}
+              >
+                <path
+                  d="M1.1 1.2L14.8 14.9"
+                  stroke="currentColor"
+                  strokeWidth="1.2"
+                  strokeLinecap="round"
+                />
+                <path
+                  d="M3.6 6.6C4.2 5.7 5.6 4 8 4C10.4 4 11.8 5.7 12.4 6.6"
+                  stroke="currentColor"
+                  strokeWidth="1.2"
+                  strokeLinecap="round"
+                />
+                <path
+                  d="M6.2 9.3C6.6 9.7 7.2 10 8 10C9.7 10 11 8.7 11 7"
+                  stroke="currentColor"
+                  strokeWidth="1.2"
+                  strokeLinecap="round"
+                />
+                <path
+                  d="M3.1 9.4C3.9 10.4 5.4 12 8 12C9.3 12 10.4 11.6 11.2 11"
+                  stroke="currentColor"
+                  strokeWidth="1.2"
+                  strokeLinecap="round"
+                />
+              </svg>
+              <span className="text-[0.62rem] font-medium uppercase tracking-[0.03em] sm:text-[0.7rem]">
+                {cat.label}
+              </span>
             </button>
           ))}
         </div>
+
+        <p className="home-map-info mt-3 text-[0.78rem] italic leading-[1.45] text-[#5f6980] sm:text-[0.84rem]">
+          {mapInfoText}
+        </p>
       </div>
     </div>
   );

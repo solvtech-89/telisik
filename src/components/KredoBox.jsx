@@ -4,26 +4,30 @@ export default function KredoBox({ heading = "", lead = "", body = "" }) {
   if (!heading && !lead) return null;
 
   return (
-    <div className="bg-gradient-to-br from-telisik/5 to-telisik/10 border-2 border-telisik/20 rounded-lg p-6 my-6">
+    <section className="kredo-shell my-3 rounded-2xl bg-transparent px-1 py-2 md:my-4">
       {heading && (
-        <h2 className="text-2xl md:text-3xl font-bold text-telisik mb-3">
+        <h2 className="kredo-heading mb-5 max-w-5xl text-[2.35rem] font-extrabold leading-[1.15] tracking-[-0.02em] text-[#2f3a4f] md:text-[3rem] lg:text-[4rem]">
           {heading}
         </h2>
       )}
 
       {lead && (
-        <p className="text-lg text-neutral-800 mb-4 leading-relaxed">
+        <p className="kredo-lead mb-6 max-w-6xl text-[1.95rem] font-semibold leading-[1.34] text-[#f26532] md:text-[2.2rem]">
           {lead}
         </p>
       )}
 
-      {body && <div className="text-neutral-700 space-y-3">{body}</div>}
+      {body && (
+        <div className="kredo-body max-w-6xl space-y-3 text-neutral-700">
+          {body}
+        </div>
+      )}
 
       {!heading && !lead ? (
         <div className="text-center py-4 text-neutral-500">
           <p className="text-sm italic">Kredo section not available</p>
         </div>
       ) : null}
-    </div>
+    </section>
   );
 }

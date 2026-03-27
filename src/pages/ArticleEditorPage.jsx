@@ -11,9 +11,7 @@ import { useArticleEditorFootnotes } from "../hooks/useArticleEditorFootnotes";
 import { useArticleEditorState } from "../hooks/useArticleEditorState";
 import { useIsMobile } from "../hooks/useIsMobile";
 import { isTimelineSection } from "../utils/articleEditorSections";
-import {
-  buildArticlePayload,
-} from "../utils/articleEditorPayload";
+import { buildArticlePayload } from "../utils/articleEditorPayload";
 import "./ArticleEditorPage.css";
 
 export default function KronikTilikEditor() {
@@ -133,7 +131,7 @@ export default function KronikTilikEditor() {
   });
 
   return (
-    <div className="flex h-screen flex-col">
+    <div className="editor-page-shell flex h-[calc(100vh-60px)] min-h-0 flex-col overflow-hidden">
       <ArticleEditorHeader
         currentEditor={currentEditor}
         onAddFootnote={handleAddFootnote}
@@ -141,14 +139,14 @@ export default function KronikTilikEditor() {
         onPublish={handlePublishClick}
       />
 
-      <div className="h-[calc(100vh-80px)] flex-1">
-        <div className="h-full">
-          <div className="grid grid-cols-1 md:grid-cols-12 h-full">
+      <div className="editor-body-shell min-h-0 flex-1 overflow-hidden">
+        <div className="h-full min-h-0">
+          <div className="grid h-full min-h-0 grid-cols-1 md:grid-cols-12">
             <div
               className={
                 collapsed
-                  ? "hidden md:block md:col-auto md:w-[52px] border-r h-full"
-                  : "hidden md:block md:col-span-2 border-r h-full pb-5"
+                  ? "editor-left-rail hidden h-full overflow-y-scroll overflow-x-hidden border-r md:col-auto md:block md:w-[52px]"
+                  : "editor-left-rail hidden h-full overflow-y-scroll overflow-x-hidden border-r pb-5 md:col-span-2 md:block"
               }
             >
               <SidebarNav

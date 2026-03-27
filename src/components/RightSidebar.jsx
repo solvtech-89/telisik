@@ -9,6 +9,7 @@ const truncateTitleText = (title, maxLength = 60) => {
 };
 
 export default function RightSidebar({ currentType = null, isDetail = false }) {
+  const mediaBase = API_BASE || "https://api.telisik.org";
   const [showAdvancedSearch, setShowAdvancedSearch] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [loading, setLoading] = useState(true);
@@ -92,32 +93,37 @@ export default function RightSidebar({ currentType = null, isDetail = false }) {
   const bannerTop = getBannerByPosition("rightsidebar_top");
   const bannerMiddle = getBannerByPosition("rightsidebar_middle");
   const bannerBottom = getBannerByPosition("rightsidebar_bottom");
+  const hideBrokenImage = (event) => {
+    event.currentTarget.style.display = "none";
+  };
 
   return (
-    <div>
+    <div className="right-sidebar-shell px-4 py-3">
       {/* SEARCH BOX WITH ADVANCED FILTER */}
-      <div className="mb-4">
+      <div className="right-find-shell mb-4">
         <div className="mb-3">
-          <h3 className="font-semibold text-gray-500 text-2xl mb-0">Temukan</h3>
+          <h3 className="right-find-title mb-0 text-[2rem] font-bold text-[#2f3a4f]">
+            Temukan
+          </h3>
         </div>
 
-        <div className="mb-3 flex items-center space-x-2">
+        <div className="right-find-input-row mb-3 flex items-center space-x-2">
           <input
             type="text"
-            className="flex-1 px-4 py-2 rounded-full border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="right-find-input flex-1 rounded-full border border-[#ddd9ce] bg-[#f9f7f0] px-4 py-2 text-[0.95rem] text-[#555333] focus:outline-none focus:ring-2 focus:ring-[#9ab1d3]"
             placeholder="Temukan..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             onKeyPress={(e) => e.key === "Enter" && handleSearch()}
           />
 
-          <div className="flex items-center space-x-2">
+          <div className="right-find-actions flex items-center space-x-2">
             {searchQuery && (
               <button
                 type="button"
                 onClick={() => setSearchQuery("")}
                 aria-label="Clear search"
-                className="text-gray-500"
+                className="right-find-icon-btn text-gray-500"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -138,7 +144,7 @@ export default function RightSidebar({ currentType = null, isDetail = false }) {
 
             <button
               onClick={handleSearch}
-              className="text-gray-600"
+              className="right-find-icon-btn text-gray-600"
               aria-label="Search"
             >
               <svg
@@ -168,12 +174,12 @@ export default function RightSidebar({ currentType = null, isDetail = false }) {
         </div>
 
         <div
-          className={`${showAdvancedSearch ? "border px-3 py-2 rounded" : ""}`}
+          className={`right-find-advanced ${showAdvancedSearch ? "rounded border border-[#ddd9ce] px-3 py-2" : ""}`}
         >
-          <label className="flex items-center space-x-2">
+          <label className="right-find-toggle-label flex items-center space-x-2">
             <input
               type="checkbox"
-              className="form-checkbox h-4 w-4"
+              className="right-find-master-toggle"
               checked={showAdvancedSearch}
               onChange={(e) => setShowAdvancedSearch(e.target.checked)}
             />
@@ -183,10 +189,10 @@ export default function RightSidebar({ currentType = null, isDetail = false }) {
           {showAdvancedSearch && (
             <div className="mt-3">
               <div className="mb-3 pl-4 space-y-3">
-                <label className="flex items-center space-x-2">
+                <label className="right-find-option flex items-center space-x-2">
                   <input
                     type="checkbox"
-                    className="form-checkbox h-4 w-4"
+                    className="right-find-switch"
                     checked={searchFilters.lokasi}
                     onChange={(e) =>
                       setSearchFilters({
@@ -198,10 +204,10 @@ export default function RightSidebar({ currentType = null, isDetail = false }) {
                   <span className="text-gray-500">Lokasi</span>
                 </label>
 
-                <label className="flex items-center space-x-2">
+                <label className="right-find-option flex items-center space-x-2">
                   <input
                     type="checkbox"
-                    className="form-checkbox h-4 w-4"
+                    className="right-find-switch"
                     checked={searchFilters.jenisKonflik}
                     onChange={(e) =>
                       setSearchFilters({
@@ -217,12 +223,14 @@ export default function RightSidebar({ currentType = null, isDetail = false }) {
               <hr className="mb-3" />
 
               <div className="mt-0">
-                <div className="text-gray-500 italic mb-2">Area pencarian:</div>
-                <div className="pl-4 grid grid-cols-2 gap-2">
-                  <label className="flex items-center space-x-2">
+                <div className="right-find-area-title text-gray-500 italic mb-2">
+                  Area pencarian:
+                </div>
+                <div className="right-find-area-grid pl-4 grid grid-cols-2 gap-3">
+                  <label className="right-find-option flex items-center space-x-2">
                     <input
                       type="checkbox"
-                      className="form-checkbox h-4 w-4"
+                      className="right-find-checkbox"
                       checked={searchFilters.kronik}
                       onChange={(e) =>
                         setSearchFilters({
@@ -233,10 +241,10 @@ export default function RightSidebar({ currentType = null, isDetail = false }) {
                     />
                     <span>Kronik</span>
                   </label>
-                  <label className="flex items-center space-x-2">
+                  <label className="right-find-option flex items-center space-x-2">
                     <input
                       type="checkbox"
-                      className="form-checkbox h-4 w-4"
+                      className="right-find-checkbox"
                       checked={searchFilters.tilik}
                       onChange={(e) =>
                         setSearchFilters({
@@ -247,10 +255,10 @@ export default function RightSidebar({ currentType = null, isDetail = false }) {
                     />
                     <span>Tilik</span>
                   </label>
-                  <label className="flex items-center space-x-2">
+                  <label className="right-find-option flex items-center space-x-2">
                     <input
                       type="checkbox"
-                      className="form-checkbox h-4 w-4"
+                      className="right-find-checkbox"
                       checked={searchFilters.diskursus}
                       onChange={(e) =>
                         setSearchFilters({
@@ -261,10 +269,10 @@ export default function RightSidebar({ currentType = null, isDetail = false }) {
                     />
                     <span>Diskursus</span>
                   </label>
-                  <label className="flex items-center space-x-2">
+                  <label className="right-find-option flex items-center space-x-2">
                     <input
                       type="checkbox"
-                      className="form-checkbox h-4 w-4"
+                      className="right-find-checkbox"
                       checked={searchFilters.tanggapan}
                       onChange={(e) =>
                         setSearchFilters({
@@ -278,10 +286,10 @@ export default function RightSidebar({ currentType = null, isDetail = false }) {
                 </div>
               </div>
 
-              <div className="flex mt-3 justify-end">
+              <div className="right-find-submit-row flex mt-3 justify-end">
                 <button
                   onClick={handleSearch}
-                  className="bg-gray-700 border-2 border-amber-200 text-white font-medium text-sm rounded-full px-4 py-2 hover:bg-amber-200 hover:text-gray-800 transition"
+                  className="right-find-submit bg-gray-700 border-2 border-amber-200 text-white font-medium text-sm rounded-full px-4 py-2 hover:bg-amber-200 hover:text-gray-800 transition"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -313,12 +321,13 @@ export default function RightSidebar({ currentType = null, isDetail = false }) {
             <img
               src={
                 bannerTop.image.startsWith("/static/")
-                  ? `${API_BASE}${bannerTop.image}`
+                  ? `${mediaBase}${bannerTop.image}`
                   : bannerTop.image
               }
               alt={bannerTop.title}
-              className="w-full rounded-none shadow-sm object-cover"
+              className="right-banner-image w-full rounded-none shadow-sm object-cover"
               style={{ aspectRatio: "2/1" }}
+              onError={hideBrokenImage}
             />
           </a>
         </div>
@@ -328,7 +337,7 @@ export default function RightSidebar({ currentType = null, isDetail = false }) {
       {currentType !== "kronik" && (
         <div className="mb-4">
           <div className="flex justify-between items-center mb-3">
-            <h3 className="font-semibold text-gray-500 text-2xl mb-0">
+            <h3 className="right-feed-heading font-semibold text-gray-500 text-2xl mb-0">
               Kronik
             </h3>
           </div>
@@ -361,18 +370,19 @@ export default function RightSidebar({ currentType = null, isDetail = false }) {
               {kronik.map((item, index) => (
                 <div key={item.id}>
                   {index === 0 ? (
-                    <div className="mb-3 bg-transparent">
+                    <div className="right-feed-lead-card mb-3 bg-transparent">
                       {item.featured_image && (
                         <a href={`/article/kronik/${item.slug}`}>
                           <img
                             src={
                               item.featured_image.startsWith("/static/")
-                                ? `${API_BASE}${item.featured_image}`
+                                ? `${mediaBase}${item.featured_image}`
                                 : item.featured_image
                             }
                             alt={item.title}
-                            className="w-full"
+                            className="right-feed-lead-image w-full"
                             style={{ aspectRatio: "2/1", objectFit: "cover" }}
+                            onError={hideBrokenImage}
                           />
                         </a>
                       )}
@@ -380,20 +390,20 @@ export default function RightSidebar({ currentType = null, isDetail = false }) {
                         <h4 className="font-bold text-lg">
                           <a
                             href={`/article/kronik/${item.slug}`}
-                            className="font-bold text-amber-500 no-underline"
+                            className="right-feed-lead-link font-bold text-amber-500 no-underline"
                           >
                             {truncateTitleText(item.title, 60)}
                           </a>
                         </h4>
                         {item.lead_excerpt && (
-                          <p className="text-gray-500">
+                          <p className="right-feed-lead-excerpt text-gray-500">
                             {truncateTitleText(item.lead_excerpt, 100)}
                           </p>
                         )}
                       </div>
                     </div>
                   ) : (
-                    <div className="mb-3">
+                    <div className="right-feed-item-row mb-3">
                       <div className="flex gap-2">
                         <div className="w-1/6">
                           {item.featured_image && (
@@ -401,12 +411,13 @@ export default function RightSidebar({ currentType = null, isDetail = false }) {
                               <img
                                 src={
                                   item.featured_image.startsWith("/static/")
-                                    ? `${API_BASE}${item.featured_image}`
+                                    ? `${mediaBase}${item.featured_image}`
                                     : item.featured_image
                                 }
                                 alt={item.title}
-                                className="w-full object-cover"
+                                className="right-feed-item-thumb w-full object-cover"
                                 style={{ aspectRatio: "1 / 1" }}
+                                onError={hideBrokenImage}
                               />
                             </a>
                           )}
@@ -416,7 +427,7 @@ export default function RightSidebar({ currentType = null, isDetail = false }) {
                             <h6 className="mb-0 text-sm">
                               <a
                                 href={`/article/kronik/${item.slug}`}
-                                className="text-gray-800 no-underline dark:text-gray-100"
+                                className="right-feed-item-link text-gray-800 no-underline dark:text-gray-100"
                               >
                                 {truncateTitleText(item.title, 60)}
                               </a>
@@ -442,12 +453,13 @@ export default function RightSidebar({ currentType = null, isDetail = false }) {
             <img
               src={
                 bannerMiddle.image.startsWith("/static/")
-                  ? `${API_BASE}${bannerMiddle.image}`
+                  ? `${mediaBase}${bannerMiddle.image}`
                   : bannerMiddle.image
               }
               alt={bannerMiddle.title}
-              className="w-full rounded-none shadow-sm object-cover"
+              className="right-banner-image w-full rounded-none shadow-sm object-cover"
               style={{ aspectRatio: "2/1" }}
+              onError={hideBrokenImage}
             />
           </a>
         </div>
@@ -457,7 +469,9 @@ export default function RightSidebar({ currentType = null, isDetail = false }) {
       {currentType !== "tilik" && (
         <div className="mb-4">
           <div className="flex justify-between items-center mb-3">
-            <h3 className="font-semibold text-gray-500 text-2xl mb-0">Tilik</h3>
+            <h3 className="right-feed-heading font-semibold text-gray-500 text-2xl mb-0">
+              Tilik
+            </h3>
           </div>
 
           {loading ? (
@@ -488,18 +502,19 @@ export default function RightSidebar({ currentType = null, isDetail = false }) {
               {tilik.map((item, index) => (
                 <div key={item.id}>
                   {index === 0 ? (
-                    <div className="mb-3 bg-transparent">
+                    <div className="right-feed-lead-card mb-3 bg-transparent">
                       {item.featured_image && (
                         <a href={`/article/tilik/${item.slug}`}>
                           <img
                             src={
                               item.featured_image.startsWith("/static/")
-                                ? `${API_BASE}${item.featured_image}`
+                                ? `${mediaBase}${item.featured_image}`
                                 : item.featured_image
                             }
                             alt={item.title}
-                            className="w-full"
+                            className="right-feed-lead-image w-full"
                             style={{ aspectRatio: "2/1", objectFit: "cover" }}
+                            onError={hideBrokenImage}
                           />
                         </a>
                       )}
@@ -507,20 +522,20 @@ export default function RightSidebar({ currentType = null, isDetail = false }) {
                         <h4 className="font-bold text-lg">
                           <a
                             href={`/article/tilik/${item.slug}`}
-                            className="font-bold text-amber-500 no-underline"
+                            className="right-feed-lead-link font-bold text-amber-500 no-underline"
                           >
                             {truncateTitleText(item.title, 60)}
                           </a>
                         </h4>
                         {item.lead_excerpt && (
-                          <p className="text-gray-500">
+                          <p className="right-feed-lead-excerpt text-gray-500">
                             {truncateTitleText(item.lead_excerpt, 100)}
                           </p>
                         )}
                       </div>
                     </div>
                   ) : (
-                    <div className="mb-3">
+                    <div className="right-feed-item-row mb-3">
                       <div className="flex gap-2">
                         <div className="w-1/6">
                           {item.featured_image && (
@@ -528,12 +543,13 @@ export default function RightSidebar({ currentType = null, isDetail = false }) {
                               <img
                                 src={
                                   item.featured_image.startsWith("/static/")
-                                    ? `${API_BASE}${item.featured_image}`
+                                    ? `${mediaBase}${item.featured_image}`
                                     : item.featured_image
                                 }
                                 alt={item.title}
-                                className="w-full object-cover"
+                                className="right-feed-item-thumb w-full object-cover"
                                 style={{ aspectRatio: "1 / 1" }}
+                                onError={hideBrokenImage}
                               />
                             </a>
                           )}
@@ -543,7 +559,7 @@ export default function RightSidebar({ currentType = null, isDetail = false }) {
                             <h6 className="mb-0 text-sm">
                               <a
                                 href={`/article/tilik/${item.slug}`}
-                                className="no-underline text-gray-800 dark:text-gray-100"
+                                className="right-feed-item-link no-underline text-gray-800 dark:text-gray-100"
                               >
                                 {truncateTitleText(item.title, 60)}
                               </a>
@@ -569,12 +585,13 @@ export default function RightSidebar({ currentType = null, isDetail = false }) {
             <img
               src={
                 bannerBottom.image.startsWith("/static/")
-                  ? `${API_BASE}${bannerBottom.image}`
+                  ? `${mediaBase}${bannerBottom.image}`
                   : bannerBottom.image
               }
               alt={bannerBottom.title}
-              className="w-full rounded-none shadow-sm object-cover"
+              className="right-banner-image w-full rounded-none shadow-sm object-cover"
               style={{ aspectRatio: "2/1" }}
+              onError={hideBrokenImage}
             />
           </a>
         </div>

@@ -9,8 +9,7 @@ import {
   applyGlobalFootnoteNumbers,
 } from "./editor/editorExtension";
 import { buildFootnoteMapFromHTML } from "../utils/footnotes";
-import { TOOLBAR_PRESETS, createToolbarConfig } from "./editor/toolbarPresets";
-import "./DiskursusContent.css";
+import { TOOLBAR_PRESETS } from "./editor/toolbarPresets";
 
 // Extensions for tanggapan (response) editor - no footnotes
 const tanggapanExtensions = sharedExtensions.filter(
@@ -339,11 +338,11 @@ export default function DiskursusContent({
 
   return (
     <div
-      className={`diskursus-content-wrapper ${isEditMode && !isEditing ? "editable" : ""}`}
+      className={`max-w-full [&_.ProseMirror]:outline-none [&_.ProseMirror]:text-[1.05rem] [&_.ProseMirror]:leading-[1.8] [&_.ProseMirror_h1]:mb-4 [&_.ProseMirror_h1]:mt-6 [&_.ProseMirror_h1]:text-[2rem] [&_.ProseMirror_h1]:font-bold [&_.ProseMirror_h2]:mb-3 [&_.ProseMirror_h2]:mt-6 [&_.ProseMirror_h2]:text-[1.6rem] [&_.ProseMirror_h2]:font-bold [&_.ProseMirror_h3]:mb-2 [&_.ProseMirror_h3]:mt-5 [&_.ProseMirror_h3]:text-[1.3rem] [&_.ProseMirror_h3]:font-semibold [&_.ProseMirror_p]:mb-4 [&_.ProseMirror_ul]:mb-4 [&_.ProseMirror_ul]:ml-8 [&_.ProseMirror_ol]:mb-4 [&_.ProseMirror_ol]:ml-8 [&_.ProseMirror_blockquote]:my-6 [&_.ProseMirror_blockquote]:border-l-4 [&_.ProseMirror_blockquote]:border-l-[#FC6736] [&_.ProseMirror_blockquote]:pl-6 [&_.ProseMirror_blockquote]:italic [&_.ProseMirror_blockquote]:text-gray-600 [&_.ProseMirror_a]:text-blue-500 [&_.ProseMirror_a]:underline ${isEditMode && !isEditing ? "group" : ""}`}
     >
-      <div className="diskursus-content">
+      <div className="relative transition-all duration-200">
         {isEditing ? (
-          <div className="editor-container">
+          <div className="overflow-hidden rounded-lg border border-gray-300 bg-white">
             <Toolbar
               editor={editor}
               config={TOOLBAR_PRESETS.FULL}
@@ -353,12 +352,12 @@ export default function DiskursusContent({
               onSaveDraft={handleSave}
               onPublish={handleSave}
             />
-            <div className="editor-content-wrapper">
+            <div className="overflow-y-auto bg-white px-2 py-1">
               <EditorContent editor={editor} />
             </div>
             {orderedFootnotes.length > 0 && (
               <div
-                className="footnotes-section mt-3 pt-3"
+                className="mt-3 pt-3"
                 style={{ borderTop: "1px solid #dee2e6" }}
               >
                 <h6
@@ -370,7 +369,7 @@ export default function DiskursusContent({
                 {orderedFootnotes.map((footnote) => (
                   <div
                     key={footnote.id}
-                    className="footnote-item mb-1"
+                    className="mb-1"
                     style={{ fontSize: "14px" }}
                   >
                     <span style={{ fontWeight: 600 }}>[{footnote.number}]</span>{" "}
@@ -381,7 +380,7 @@ export default function DiskursusContent({
             )}
           </div>
         ) : (
-          <div className="content-display">
+          <div className="text-base leading-[1.7] text-[#3a3a2a] [&_p]:mb-5 [&_h2]:mb-4 [&_h2]:mt-10 [&_h2]:text-[1.75rem] [&_h2]:font-bold [&_h2]:leading-[1.3] [&_h2]:text-[#f06a2a] [&_h5]:mb-3 [&_h5]:mt-8 [&_h5]:text-[1.1rem] [&_h5]:font-bold [&_h5]:leading-[1.4] [&_h5]:text-[#f06a2a] [&_strong]:font-bold [&_em]:italic [&_u]:underline [&_u]:underline-offset-2 [&_mark]:rounded-sm [&_mark]:bg-[#fff1bf] [&_mark]:px-[0.15em] [&_code]:rounded [&_code]:bg-[#f2f3f5] [&_code]:px-1 [&_code]:py-0.5 [&_code]:font-mono [&_a]:text-[#0088ff] [&_a]:underline [&_a]:underline-offset-2 [&_sup]:ml-0.5 [&_sup]:align-super [&_sup]:text-[0.7em] [&_sup]:text-[#0088ff] [&_sub]:align-sub [&_sub]:text-[0.7em] [&_ul]:my-5 [&_ul]:ml-7 [&_ol]:my-5 [&_ol]:ml-7 [&_li]:mb-2 [&_blockquote]:my-10 [&_blockquote]:border-0 [&_blockquote]:pl-14 [&_blockquote]:not-italic [&_blockquote]:text-[#4a4a34] [&_blockquote_p]:mb-1 [&_blockquote_p]:text-[1.1rem] [&_blockquote_p]:font-semibold [&_blockquote_cite]:block [&_blockquote_cite]:text-sm [&_blockquote_cite]:text-[#7c7a5a]">
             <div dangerouslySetInnerHTML={{ __html: content }} />
           </div>
         )}
@@ -390,21 +389,21 @@ export default function DiskursusContent({
       {isEditMode && canEdit && !isEditing && (
         <div className="content-actions flex gap-2 mt-3 justify-end">
           <button
-            className="text-sm text-gray-600 hover:text-gray-800 flex items-center gap-1"
+            className="admin-content-action-btn admin-content-action-history text-sm text-gray-600 hover:text-gray-800 flex items-center gap-1"
             onClick={() => setShowHistoryModal(true)}
           >
             <IconHistory size={16} />
             <span>Riwayat</span>
           </button>
           <button
-            className="text-sm text-gray-600 hover:text-gray-800 flex items-center gap-1"
+            className="admin-content-action-btn admin-content-action-edit text-sm text-gray-600 hover:text-gray-800 flex items-center gap-1"
             onClick={() => setIsEditing(true)}
           >
             <IconEdit size={16} />
             <span>Sunting</span>
           </button>
           <button
-            className="text-sm text-gray-600 hover:text-gray-800 flex items-center gap-1"
+            className="admin-content-action-btn admin-content-action-comment text-sm text-gray-600 hover:text-gray-800 flex items-center gap-1"
             onClick={() => setShowCommentModal(true)}
           >
             <IconMessage size={16} />
@@ -413,11 +412,11 @@ export default function DiskursusContent({
         </div>
       )}
 
-      <div className="boxtanggapi mt-5 mb-5">
+      <div className="mb-5 mt-5 rounded border border-[#CECB9C] bg-[#FFF8E5] px-4 pb-4 pt-3">
         <h2 className="text-orange-600">Tanggapi</h2>
-        <div className="tanggapan-container">
+        <div className="overflow-hidden rounded-lg border border-gray-300 bg-white">
           <Toolbar editor={tanggapan} config={TOOLBAR_PRESETS.COMMENT} />
-          <div className="tanggapan-content-wrapper">
+          <div className="max-h-[100px] min-h-[80px] overflow-y-auto p-2">
             <EditorContent editor={tanggapan} />
           </div>
         </div>

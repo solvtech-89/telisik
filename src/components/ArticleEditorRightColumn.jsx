@@ -29,7 +29,7 @@ export default function ArticleEditorRightColumn({
 
   return (
     <div
-      className={`${collapsed ? "md:col-span-3 h-full pt-5" : "col h-full pt-5"} overflow-y-auto max-h-[calc(100vh-120px)]`}
+      className={`editor-right-rail col-span-1 ${collapsed ? "md:col-span-4" : "md:col-span-3"} h-full min-h-0 overflow-y-scroll bg-white px-4 pt-5`}
     >
       {isDiskursus ? (
         <>
@@ -38,7 +38,7 @@ export default function ArticleEditorRightColumn({
               Tipe Konten
             </h3>
             <select
-              className="border rounded px-2 py-1 w-full text-sm"
+              className="editor-side-select h-10 w-full rounded-md border border-gray-300 bg-white px-3 text-sm text-gray-700 focus:border-[#0088ff] focus:outline-none focus:ring-2 focus:ring-[#0088ff]/15"
               value={contentType}
               onChange={(e) => setContentType(e.target.value)}
             >
@@ -67,14 +67,12 @@ export default function ArticleEditorRightColumn({
               Kategori
             </h3>
             <select
-              className="border rounded px-2 py-1 w-full text-sm"
+              className="editor-side-select h-10 w-full rounded-md border border-gray-300 bg-white px-3 text-sm text-gray-700 focus:border-[#0088ff] focus:outline-none focus:ring-2 focus:ring-[#0088ff]/15"
               value={category}
               onChange={(e) => setCategory(e.target.value)}
             >
               <option value="agraria">Agraria</option>
-              <option value="ekosospol">
-                Ekonomi & Sosial Politik
-              </option>
+              <option value="ekosospol">Ekonomi & Sosial Politik</option>
               <option value="sumber-daya-alam">Sumber Daya Alam</option>
             </select>
           </div>

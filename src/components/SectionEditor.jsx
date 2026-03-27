@@ -20,7 +20,6 @@ import {
 } from "@tabler/icons-react";
 
 import { API_BASE, WS_BASE } from "../config";
-import "./SectionEditor.css";
 
 export default function SectionEditor({
   section,
@@ -267,10 +266,7 @@ export default function SectionEditor({
     if (!editor) return null;
 
     return (
-      <div
-        className="d-flex gap-1 border-bottom py-1 mb-2 bg-white sticky-top"
-        style={{ top: 0, zIndex: 10 }}
-      >
+      <div className="sticky top-0 z-10 mb-2 flex gap-1 border-b border-gray-200 bg-white py-1">
         {[1, 2, 3, 4, 5, 6].map((L) => {
           const Icon = headingIcons[L];
           return (
@@ -280,7 +276,7 @@ export default function SectionEditor({
               onClick={() =>
                 editor.chain().focus().toggleHeading({ level: L }).run()
               }
-              className={`btn btn-sm ${editor.isActive("heading", { level: L }) ? "btn-primary" : "btn-light"}`}
+              className={`inline-flex h-8 w-8 items-center justify-center rounded-md border text-gray-700 transition-colors ${editor.isActive("heading", { level: L }) ? "border-blue-500 bg-blue-500 text-white" : "border-gray-300 bg-white hover:bg-gray-50"}`}
             >
               <Icon size={18} />
             </button>
@@ -291,7 +287,7 @@ export default function SectionEditor({
         <button
           type="button"
           onClick={() => editor.chain().focus().toggleBold().run()}
-          className={`btn btn-sm ${editor.isActive("bold") ? "btn-primary" : "btn-light"}`}
+          className={`inline-flex h-8 w-8 items-center justify-center rounded-md border text-gray-700 transition-colors ${editor.isActive("bold") ? "border-blue-500 bg-blue-500 text-white" : "border-gray-300 bg-white hover:bg-gray-50"}`}
         >
           <IconBold size={18} />
         </button>
@@ -300,7 +296,7 @@ export default function SectionEditor({
         <button
           type="button"
           onClick={() => editor.chain().focus().toggleItalic().run()}
-          className={`btn btn-sm ${editor.isActive("italic") ? "btn-primary" : "btn-light"}`}
+          className={`inline-flex h-8 w-8 items-center justify-center rounded-md border text-gray-700 transition-colors ${editor.isActive("italic") ? "border-blue-500 bg-blue-500 text-white" : "border-gray-300 bg-white hover:bg-gray-50"}`}
         >
           <IconItalic size={18} />
         </button>
@@ -309,7 +305,7 @@ export default function SectionEditor({
         <button
           type="button"
           onClick={() => editor.chain().focus().toggleUnderline().run()}
-          className={`btn btn-sm ${editor.isActive("underline") ? "btn-primary" : "btn-light"}`}
+          className={`inline-flex h-8 w-8 items-center justify-center rounded-md border text-gray-700 transition-colors ${editor.isActive("underline") ? "border-blue-500 bg-blue-500 text-white" : "border-gray-300 bg-white hover:bg-gray-50"}`}
         >
           <IconUnderline size={18} />
         </button>
@@ -318,7 +314,7 @@ export default function SectionEditor({
         <button
           type="button"
           onClick={() => editor.chain().focus().toggleStrike().run()}
-          className={`btn btn-sm ${editor.isActive("strike") ? "btn-primary" : "btn-light"}`}
+          className={`inline-flex h-8 w-8 items-center justify-center rounded-md border text-gray-700 transition-colors ${editor.isActive("strike") ? "border-blue-500 bg-blue-500 text-white" : "border-gray-300 bg-white hover:bg-gray-50"}`}
         >
           <IconStrikethrough size={18} />
         </button>
@@ -327,7 +323,7 @@ export default function SectionEditor({
         <button
           type="button"
           onClick={() => editor.chain().focus().toggleBulletList().run()}
-          className={`btn btn-sm ${editor.isActive("bulletList") ? "btn-primary" : "btn-light"}`}
+          className={`inline-flex h-8 w-8 items-center justify-center rounded-md border text-gray-700 transition-colors ${editor.isActive("bulletList") ? "border-blue-500 bg-blue-500 text-white" : "border-gray-300 bg-white hover:bg-gray-50"}`}
         >
           <IconList size={18} />
         </button>
@@ -336,7 +332,7 @@ export default function SectionEditor({
         <button
           type="button"
           onClick={() => editor.chain().focus().toggleBlockquote().run()}
-          className={`btn btn-sm ${editor.isActive("blockquote") ? "btn-primary" : "btn-light"}`}
+          className={`inline-flex h-8 w-8 items-center justify-center rounded-md border text-gray-700 transition-colors ${editor.isActive("blockquote") ? "border-blue-500 bg-blue-500 text-white" : "border-gray-300 bg-white hover:bg-gray-50"}`}
         >
           <IconQuote size={18} />
         </button>
@@ -344,7 +340,7 @@ export default function SectionEditor({
         {/* link */}
         <button
           type="button"
-          className="btn btn-sm btn-light"
+          className="inline-flex h-8 w-8 items-center justify-center rounded-md border border-gray-300 bg-white text-gray-700 transition-colors hover:bg-gray-50"
           onClick={() => {
             const url = prompt("URL?");
             if (url) editor.chain().focus().setLink({ href: url }).run();
@@ -356,7 +352,7 @@ export default function SectionEditor({
         {/* unlink */}
         <button
           type="button"
-          className="btn btn-sm btn-light"
+          className="inline-flex h-8 w-8 items-center justify-center rounded-md border border-gray-300 bg-white text-gray-700 transition-colors hover:bg-gray-50"
           onClick={() => editor.chain().focus().unsetLink().run()}
         >
           <IconUnlink size={18} />
@@ -367,19 +363,19 @@ export default function SectionEditor({
 
   return (
     <>
-      <div className="d-flex justify-content-between align-items-center mb-2">
-        <h2 className="h2 font-semibold p-0">
+      <div className="mb-2 flex items-center justify-between gap-3">
+        <h2 className="m-0 text-2xl font-semibold">
           {section.section_title ?? section.section_key}
         </h2>
-        <div>
+        <div className="flex items-center gap-2">
           {lockedBy && (
-            <span className="text-danger small mr-2">
+            <span className="mr-2 text-xs text-red-500">
               🔒 editing by {lockedBy}
             </span>
           )}
           {!isEditing ? (
             <button
-              className="btn btn-sm btn-outline-primary"
+              className="rounded-md border border-blue-500 px-3 py-1.5 text-sm font-medium text-blue-600 hover:bg-blue-50 disabled:cursor-not-allowed disabled:opacity-50"
               onClick={handleStartEdit}
               disabled={!canEdit}
             >
@@ -388,13 +384,13 @@ export default function SectionEditor({
           ) : (
             <>
               <button
-                className="btn btn-sm btn-success mr-2"
+                className="rounded-md bg-emerald-500 px-3 py-1.5 text-sm font-medium text-white hover:bg-emerald-600"
                 onClick={handleSave}
               >
                 Save
               </button>
               <button
-                className="btn btn-sm btn-secondary"
+                className="rounded-md border border-gray-300 bg-white px-3 py-1.5 text-sm font-medium text-gray-700 hover:bg-gray-50"
                 onClick={handleCancelEdit}
               >
                 Cancel
@@ -403,7 +399,7 @@ export default function SectionEditor({
           )}
         </div>
       </div>
-      <div className="section-editor card bg-transparent border-0 py-3">
+      <div className="card border-0 bg-transparent py-3 [&_.ProseMirror]:min-h-40 [&_.ProseMirror]:rounded-md [&_.ProseMirror]:border [&_.ProseMirror]:border-gray-200 [&_.ProseMirror]:bg-transparent [&_.ProseMirror]:p-3 [&_.bubble-menu]:flex [&_.bubble-menu]:gap-1.5 [&_.bubble-menu]:rounded-md [&_.bubble-menu]:border [&_.bubble-menu]:border-gray-200 [&_.bubble-menu]:bg-white/95 [&_.bubble-menu]:p-1.5">
         <div>
           {!isEditing && renderStaticView()}
 

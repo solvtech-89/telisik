@@ -30,8 +30,14 @@ export default function ArticleCard({ article }) {
     article.location_geojson?.properties?.name ||
     "";
 
+  const typeColors = {
+    TILIK: "bg-[#ff6b35]",
+    KRONIK: "bg-[#0068d6]",
+    DISKURSUS: "bg-[#0f766e]",
+  };
+
   return (
-    <div className="mb-4 shadow-sm border rounded overflow-hidden">
+    <article className="mb-4 overflow-hidden rounded-md border border-gray-200 bg-white shadow-sm transition-shadow hover:shadow-md">
       <div
         className={`grid grid-cols-1 ${article.featured_image ? "md:grid-cols-3" : "md:grid-cols-1"}`}
       >
@@ -45,10 +51,7 @@ export default function ArticleCard({ article }) {
                     : article.featured_image
                 }
                 alt={article.title}
-                className="w-full h-48 object-cover"
-                style={{
-                  width: "100%",
-                }}
+                className="h-48 w-full object-cover"
               />
             </Link>
           </div>
@@ -58,67 +61,55 @@ export default function ArticleCard({ article }) {
           <div>
             <div className="mb-2 flex items-center gap-2">
               <span
-                className="px-2 py-1 text-xs rounded"
-                style={{
-                  backgroundColor:
-                    article.type === "TILIK" ? "#FF6B35" : "#4ECDC4",
-                  color: "white",
-                }}
+                className={`rounded px-2 py-1 text-[11px] font-semibold uppercase tracking-wide text-white ${typeColors[article.type] || "bg-gray-600"}`}
               >
                 {article.type}
               </span>
               {locationName && (
-                <span className="ml-2 text-gray-500 text-xs">
-                  📍 {locationName}
+                <span className="ml-2 text-xs text-gray-500">
+                  {locationName}
                 </span>
               )}
             </div>
 
-            <h5 className="text-lg font-semibold">
+            <h3 className="text-lg font-semibold leading-tight text-telisik">
               <Link
                 to={articleUrl}
-                className="no-underline text-gray-900 block"
-                style={{
-                  display: "-webkit-box",
-                  WebkitLineClamp: 2,
-                  WebkitBoxOrient: "vertical",
-                  overflow: "hidden",
-                }}
+                className="block line-clamp-2 text-gray-900 no-underline transition-colors hover:text-[#0068d6]"
               >
                 {article.title}
               </Link>
-            </h5>
+            </h3>
 
             {article.lead_excerpt && (
-              <p className="text-gray-500 text-xs mb-2">
+              <p className="mb-2 text-sm leading-relaxed text-gray-600">
                 {truncateText(article.lead_excerpt, 150)}
               </p>
             )}
 
-            <div className="flex justify-between items-center mt-3">
-              <div className="text-gray-500 text-xs">
+            <div className="mt-3 flex flex-wrap items-center justify-between gap-2 text-xs text-gray-500">
+              <div>
                 {article.created_at && (
-                  <span>📅 {formatDate(article.created_at)}</span>
+                  <span>{formatDate(article.created_at)}</span>
                 )}
               </div>
 
-              <div className="text-gray-500 text-xs flex gap-3">
+              <div className="flex gap-3">
                 {article.views !== undefined && (
-                  <span>👁️ {formatCount(article.views)}</span>
+                  <span>{formatCount(article.views)} dilihat</span>
                 )}
                 {article.comments_count !== undefined && (
-                  <span>💬 {formatCount(article.comments_count)}</span>
+                  <span>{formatCount(article.comments_count)} komentar</span>
                 )}
               </div>
             </div>
 
             {article.metadata?.tags && article.metadata.tags.length > 0 && (
-              <div className="mt-2">
+              <div className="mt-2 flex flex-wrap gap-1.5">
                 {article.metadata.tags.slice(0, 3).map((tag, idx) => (
                   <span
                     key={idx}
-                    className="bg-gray-100 text-gray-800 mr-1 px-2 py-0.5 rounded text-sm"
-                    style={{ fontSize: "0.75rem" }}
+                    className="rounded bg-gray-100 px-2 py-0.5 text-[11px] text-gray-700"
                   >
                     #{tag}
                   </span>
@@ -128,6 +119,6 @@ export default function ArticleCard({ article }) {
           </div>
         </div>
       </div>
-    </div>
+    </article>
   );
 }

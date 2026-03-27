@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef, useCallback } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useParams, useSearchParams } from "react-router-dom";
 import SidebarNav from "../components/SidebarNav";
 import ArticleCardGrid from "../components/ArticleCardGrid";
@@ -104,20 +104,20 @@ export default function ArticleListPage() {
   }
 
   return (
-    <div className="min-h-screen bg-neutral-50">
-      <div className="w-[98%] mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-3">
+    <div className="article-list-shell min-h-screen bg-neutral-50 xl:h-[calc(100vh-104px)] xl:min-h-0 xl:overflow-hidden">
+      <div className="article-list-wrap mx-auto max-w-7xl w-full px-3 xl:h-full xl:min-h-0">
+        <div className="article-list-grid grid grid-cols-1 gap-6 xl:h-full xl:grid-cols-[260px_minmax(0,1fr)_350px] xl:gap-6 xl:overflow-hidden">
           {/* Left Sidebar Navigation */}
-          <div className="hidden md:block md:col-span-2 overflow-y-auto max-h-[calc(100vh-60px)]">
+          <div className="article-list-left hidden xl:block xl:h-full xl:overflow-y-scroll xl:overflow-x-hidden xl:overscroll-contain">
             <SidebarNav />
           </div>
 
           {/* Main Content */}
-          <div className="md:col-span-7 px-3 md:px-2 pt-3 overflow-y-auto max-h-[calc(100vh-60px)]">
-            <h1 className="text-2xl font-semibold text-neutral-900 mb-2">
+          <div className="article-list-main relative z-0 min-w-0 overflow-x-hidden px-5 pt-5 xl:h-full xl:overflow-y-scroll xl:overscroll-contain xl:px-6 xl:pt-6">
+            <h1 className="article-list-title mb-4 text-2xl font-semibold text-neutral-900">
               {capitalize(tipe)}
             </h1>
-            <p className="text-sm text-neutral-600 mb-4 italic">
+            <p className="article-list-subtitle mb-4 text-sm italic text-neutral-600">
               {tipe === "kronik"
                 ? "Dokumentasi konflik yang sedang berlangsung."
                 : "Dokumentasi potensi konflik yang bisa terjadi."}
@@ -139,7 +139,7 @@ export default function ArticleListPage() {
 
             {/* Loading State */}
             {loading ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+              <div className="grid grid-cols-1 gap-7 items-start sm:grid-cols-2 xl:grid-cols-3">
                 {Array(6)
                   .fill(0)
                   .map((_, i) => (
@@ -151,7 +151,7 @@ export default function ArticleListPage() {
               </div>
             ) : articles.length > 0 ? (
               <>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+                <div className="grid grid-cols-1 gap-7 items-start sm:grid-cols-2 xl:grid-cols-3">
                   {articles.map((a) => (
                     <div key={a.id} className="col-span-1">
                       <ArticleCardGrid article={a} />
@@ -160,7 +160,7 @@ export default function ArticleListPage() {
                 </div>
 
                 {/* Infinite Scroll Observer Target */}
-                <div ref={observerTarget} className="mt-4 mb-4">
+                <div ref={observerTarget} className="mt-6 mb-6">
                   {/* Loading More Indicator */}
                   {loadingMore && (
                     <div className="flex flex-col items-center py-8">
@@ -184,7 +184,7 @@ export default function ArticleListPage() {
                 </div>
               </>
             ) : (
-              <div className="text-center py-12 bg-white rounded-lg border border-gray-200">
+              <div className="article-list-empty rounded-lg border border-gray-200 bg-white py-12 text-center">
                 <p className="text-neutral-600">
                   {category && category !== "semua"
                     ? `Tidak ada artikel dalam kategori ${getCategoryLabel()}`
@@ -195,7 +195,7 @@ export default function ArticleListPage() {
           </div>
 
           {/* Right Sidebar */}
-          <div className="hidden md:block md:col-span-3 overflow-y-auto max-h-[calc(100vh-60px)]">
+          <div className="article-list-right article-list-right-panel relative z-10 min-w-0 hidden xl:block xl:h-full xl:overflow-y-scroll xl:overflow-x-hidden xl:overscroll-contain">
             <RightSidebar currentType={tipe} />
           </div>
         </div>

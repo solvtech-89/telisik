@@ -263,7 +263,7 @@ export default function ArticlePage() {
   }
 
   return (
-    <div className="flex min-h-screen flex-col bg-neutral-50">
+    <div className="article-page-shell flex min-h-screen flex-col bg-neutral-50 xl:h-[calc(100vh-60px)] xl:min-h-0 xl:overflow-hidden">
       <ArticleEditModeModal
         show={showModal}
         onConfirm={handleConfirmEditMode}
@@ -279,14 +279,14 @@ export default function ArticlePage() {
         />
       </div>
 
-      <div className="flex-1">
-        <div className="h-full">
-          <div className="grid grid-cols-1 md:grid-cols-12 h-full">
+      <div className="flex-1 min-h-0">
+        <div className="h-full min-h-0">
+          <div className="grid h-full min-h-0 grid-cols-1 md:grid-cols-12">
             <div
               className={
                 collapsed
-                  ? "hidden h-full overflow-y-auto border-r border-neutral-200 transition-[width] duration-200 md:col-auto md:block md:w-[52px]"
-                  : "hidden h-full overflow-y-auto border-r border-neutral-200 pb-5 transition-[width] duration-200 md:col-span-2 md:block"
+                  ? "article-left-rail hidden h-full overflow-y-scroll overflow-x-hidden border-r border-neutral-200 transition-[width] duration-200 md:col-auto md:block md:w-[52px]"
+                  : "article-left-rail hidden h-full overflow-y-scroll overflow-x-hidden border-r border-neutral-200 pb-5 transition-[width] duration-200 md:col-span-2 md:block"
               }
             >
               <SidebarNav
@@ -298,7 +298,7 @@ export default function ArticlePage() {
 
             <div
               id="middle-col-scroll"
-              className="h-full overflow-y-auto border-r border-neutral-200 pb-5 transition-[width] duration-200 md:col-span-7 md:max-h-[calc(100vh-120px)]"
+              className="article-main-panel h-full min-h-0 overflow-y-auto border-r border-neutral-200 pb-5 transition-[width] duration-200 md:col-span-7 md:overflow-y-scroll md:max-h-none"
             >
               <div className="p-3">
                 <nav
@@ -307,18 +307,26 @@ export default function ArticlePage() {
                 >
                   <ol className="flex items-center gap-2">
                     <li>
-                      <a href="/" className="text-telisik hover:text-telisik-dark">
+                      <a
+                        href="/"
+                        className="text-telisik hover:text-telisik-dark"
+                      >
                         Beranda
                       </a>
                     </li>
                     <li className="text-neutral-400">/</li>
                     <li>
-                      <Link className="text-telisik hover:text-telisik-dark" to={`/${tipe}`}>
+                      <Link
+                        className="text-telisik hover:text-telisik-dark"
+                        to={`/${tipe}`}
+                      >
                         {articleType}
                       </Link>
                     </li>
                     <li className="text-neutral-400">/</li>
-                    <li className="line-clamp-1 text-neutral-700">{article.title}</li>
+                    <li className="line-clamp-1 text-neutral-700">
+                      {article.title}
+                    </li>
                   </ol>
                 </nav>
               </div>
@@ -362,20 +370,18 @@ export default function ArticlePage() {
               </div>
             </div>
 
-            <div
-              className="h-full overflow-y-auto px-3 pb-5 md:col-span-3 md:max-h-[calc(100vh-120px)]"
-            >
-              <div className="mb-4 rounded-2xl border border-neutral-200 bg-white p-4 shadow-sm">
+            <div className="article-right-rail h-full min-h-0 overflow-y-auto px-3 pb-5 md:col-span-3 md:overflow-y-scroll md:max-h-none">
+              <div className="article-search-shell mb-4 rounded-2xl border border-neutral-200 bg-white p-4 shadow-sm">
                 <div className="mb-3">
                   <h3 className="mb-0 text-2xl font-semibold text-telisik">
                     Temukan
                   </h3>
                 </div>
-                <div className="mb-3 rounded-2xl border border-neutral-200 bg-neutral-50 p-2">
+                <div className="article-search-input-shell mb-3 rounded-2xl border border-neutral-200 bg-neutral-50 p-2">
                   <div className="relative flex items-center">
                     <input
                       type="text"
-                      className="w-full rounded-full border border-neutral-300 bg-white px-3 py-2 pr-20 text-sm text-neutral-800 outline-none transition-colors focus:border-telisik"
+                      className="article-search-input w-full rounded-full border border-neutral-300 bg-white px-3 py-2 pr-20 text-sm text-neutral-800 outline-none transition-colors focus:border-telisik"
                       placeholder="Lorem ipsum search"
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
@@ -384,7 +390,7 @@ export default function ArticlePage() {
                       {searchQuery && (
                         <button
                           onClick={() => setSearchQuery("")}
-                          className="text-neutral-500 hover:text-neutral-700"
+                          className="article-search-icon-btn text-neutral-500 hover:text-neutral-700"
                           aria-label="Clear search"
                         >
                           <svg
@@ -406,7 +412,7 @@ export default function ArticlePage() {
                       )}
                       <button
                         onClick={handleSearch}
-                        className="ml-2 text-neutral-500 hover:text-neutral-700"
+                        className="article-search-icon-btn ml-2 text-neutral-500 hover:text-neutral-700"
                         aria-label="Cari"
                       >
                         <svg
@@ -436,12 +442,12 @@ export default function ArticlePage() {
                   </div>
                 </div>
 
-                <div className="rounded-2xl border border-neutral-200 bg-neutral-50 p-3">
+                <div className="article-advanced-shell rounded-2xl border border-neutral-200 bg-neutral-50 p-3">
                   <div>
-                    <label className="flex items-center gap-2">
+                    <label className="article-advanced-toggle-label flex items-center gap-2">
                       <input
                         type="checkbox"
-                        className="h-4 w-4 rounded border-neutral-300 text-telisik focus:ring-telisik"
+                        className="article-advanced-toggle h-4 w-4 rounded border-neutral-300 text-telisik focus:ring-telisik"
                         checked={showAdvancedSearch}
                         onChange={(e) =>
                           setShowAdvancedSearch(e.target.checked)
@@ -473,7 +479,9 @@ export default function ArticlePage() {
                             checked={searchFilters.jenisKonflik}
                             onChange={handleSearchFilterChange("jenisKonflik")}
                           />
-                          <span className="text-neutral-600">Jenis Konflik</span>
+                          <span className="text-neutral-600">
+                            Jenis Konflik
+                          </span>
                         </label>
                       </div>
 
@@ -483,7 +491,10 @@ export default function ArticlePage() {
                         </div>
                         <div className="ml-2 grid grid-cols-2 gap-2 text-sm text-neutral-700">
                           {searchAreaOptions.map((option) => (
-                            <label key={option.key} className="flex items-center">
+                            <label
+                              key={option.key}
+                              className="flex items-center"
+                            >
                               <input
                                 type="checkbox"
                                 className="mr-2 h-4 w-4 rounded border-neutral-300 text-telisik focus:ring-telisik"
@@ -525,23 +536,34 @@ export default function ArticlePage() {
               </div>
 
               {canEdit && (
-                <div className="mb-4 rounded-2xl border-2 border-blue-300 bg-blue-50 p-4 shadow-sm shadow-blue-100">
+                <div
+                  className={`admin-edit-panel mb-4 rounded-2xl border-2 border-blue-300 bg-blue-50 p-4 shadow-sm shadow-blue-100 ${
+                    isEditMode ? "admin-edit-panel-active" : ""
+                  }`}
+                >
                   <div className="flex items-center gap-3 mb-3">
                     <label className="flex items-center mb-0">
                       <input
-                        className="mr-2 h-4 w-4 rounded border-neutral-300 text-green-600 focus:ring-green-200"
+                        className="admin-edit-toggle mr-2 h-4 w-4 rounded border-neutral-300 text-green-600 focus:ring-green-200"
                         type="checkbox"
                         id="editModeToggle"
                         checked={isEditMode}
                         onChange={handleEditModeToggle}
                       />
                     </label>
-                    <h3 className="mb-0 text-xl font-bold text-neutral-700">
+                    <h3 className="admin-edit-title mb-0 text-xl font-bold text-neutral-700">
                       Tanggapi/Sunting Sekarang
                     </h3>
+                    <span
+                      className={`admin-edit-status ml-auto rounded-full px-3 py-1 text-xs font-semibold ${
+                        isEditMode ? "admin-edit-status-active" : ""
+                      }`}
+                    >
+                      {isEditMode ? "Mode Aktif" : "Mode Nonaktif"}
+                    </span>
                   </div>
 
-                  <div className="mb-3 flex items-center gap-3 text-[0.95rem] text-neutral-600">
+                  <div className="admin-edit-actions mb-3 flex items-center gap-3 text-[0.95rem] text-neutral-600">
                     <span className="flex items-center gap-2">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -577,13 +599,13 @@ export default function ArticlePage() {
                     </span>
                   </div>
 
-                  <p className="mb-0 text-sm leading-6 text-neutral-600">
-                    <span className="font-medium text-blue-600">
+                  <p className="admin-edit-description mb-0 text-sm leading-6 text-neutral-600">
+                    <span className="admin-edit-highlight font-medium text-blue-600">
                       {isDiskursus
                         ? 'Klik tombol "Tanggapi" atau "Sunting" di bawah konten.'
                         : 'Klik tombol "Tanggapi" atau "Sunting" di bawah paragraf sasaran.'}
                     </span>{" "}
-                    <span className="italic text-neutral-500">
+                    <span className="admin-edit-subtext italic text-neutral-500">
                       {isDiskursus
                         ? "Jadikan Diskursus ini makin bermutu."
                         : "Jadikan Kronik ini makin perinci terdokumentasi."}

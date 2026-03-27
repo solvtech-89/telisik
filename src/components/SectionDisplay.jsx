@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import ParagraphEditor from "./ParagraphEditor";
 import TimelineEntryEditor from "./TimelineEntryEditor";
-import "./SectionDisplay.css";
 
 export default function SectionDisplay({
   section,
@@ -29,10 +28,10 @@ export default function SectionDisplay({
   if (isTimeline) {
     return (
       <div
-        className="section-display timeline-section"
+        className="mb-12 scroll-mt-20"
         id={`section-${section.section_type.key}`}
       >
-        <div className="section-header mb-4">
+        <div className="mb-4 border-none pb-2">
           <h2 className="text-2xl font-semibold text-orange-600">
             <a name={`section-${section.section_type.key}`}></a>
             {section.section_label ||
@@ -41,7 +40,7 @@ export default function SectionDisplay({
           </h2>
         </div>
 
-        <div className="timeline-container">
+        <div>
           {timelineEntries.length === 0 && (
             <p className="text-gray-500 italic">
               Belum ada entri lini masa di bagian ini
@@ -73,8 +72,11 @@ export default function SectionDisplay({
 
   // Regular section (non-timeline)
   return (
-    <div className="section-display" id={`section-${section.section_type.key}`}>
-      <div className="section-header mb-0">
+    <div
+      className="mb-12 scroll-mt-20"
+      id={`section-${section.section_type.key}`}
+    >
+      <div className="mb-0 border-none pb-2">
         <h2 className="text-2xl font-semibold text-orange-600">
           <a name={`section-${section.section_type.key}`}></a>
           {section.section_label ||
@@ -84,7 +86,7 @@ export default function SectionDisplay({
         {section.title && <h3 className="text-gray-500">{section.title}</h3>}
       </div>
 
-      <div className="section-paragraphs">
+      <div className="mt-0">
         {paragraphs.length === 0 && (
           <p className="text-gray-500 italic">Belum ada konten di bagian ini</p>
         )}

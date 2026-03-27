@@ -1,16 +1,17 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { Calendar, Trash2 } from 'lucide-react';
-import { EditorContent, useEditor } from '@tiptap/react';
-import Placeholder from '@tiptap/extension-placeholder';
-import flatpickr from 'flatpickr';
-import 'flatpickr/dist/flatpickr.min.css';
-import { sharedExtensions } from './editor/editorExtension';
+import React, { useState, useRef, useEffect } from "react";
+import { Calendar, Trash2 } from "lucide-react";
+import { EditorContent, useEditor } from "@tiptap/react";
+import Placeholder from "@tiptap/extension-placeholder";
+import flatpickr from "flatpickr";
+import "flatpickr/dist/flatpickr.min.css";
+import { sharedExtensions } from "./editor/editorExtension";
 
 function TitleEditor({ value, onChange, maxLength = 60 }) {
   const editorRef = useRef(null);
   const [isFocused, setIsFocused] = useState(false);
   const currentLength = value ? value.length : 0;
-  const placeholderText = "Judul fragmen: Tulis rangkuman kejadian maksimal 60 karakter.";
+  const placeholderText =
+    "Judul fragmen: Tulis rangkuman kejadian maksimal 60 karakter.";
 
   useEffect(() => {
     if (editorRef.current) {
@@ -24,26 +25,29 @@ function TitleEditor({ value, onChange, maxLength = 60 }) {
 
   const handleFocus = () => {
     setIsFocused(true);
-    if (editorRef.current && editorRef.current.textContent === placeholderText) {
-      editorRef.current.textContent = '';
+    if (
+      editorRef.current &&
+      editorRef.current.textContent === placeholderText
+    ) {
+      editorRef.current.textContent = "";
     }
   };
 
   const handleBlur = () => {
     setIsFocused(false);
-    const text = editorRef.current ? editorRef.current.textContent || '' : '';
+    const text = editorRef.current ? editorRef.current.textContent || "" : "";
     if (!text.trim()) {
       if (editorRef.current) {
         editorRef.current.textContent = placeholderText;
       }
-      onChange('');
+      onChange("");
     }
   };
 
   const handleInput = (e) => {
-    const text = e.currentTarget.textContent || '';
+    const text = e.currentTarget.textContent || "";
     if (text === placeholderText) return;
-    
+
     if (text.length <= maxLength) {
       onChange(text);
     } else {
@@ -59,22 +63,22 @@ function TitleEditor({ value, onChange, maxLength = 60 }) {
 
   const handlePaste = (e) => {
     e.preventDefault();
-    const text = e.clipboardData.getData('text/plain');
-    const currentText = value || '';
+    const text = e.clipboardData.getData("text/plain");
+    const currentText = value || "";
     const newText = currentText + text;
-    
+
     if (newText.length <= maxLength) {
-      document.execCommand('insertText', false, text);
+      document.execCommand("insertText", false, text);
     } else {
       const allowedText = text.substring(0, maxLength - currentText.length);
       if (allowedText) {
-        document.execCommand('insertText', false, allowedText);
+        document.execCommand("insertText", false, allowedText);
       }
     }
   };
 
   const handleKeyDown = (e) => {
-    if (e.key === 'Enter') {
+    if (e.key === "Enter") {
       e.preventDefault();
     }
   };
@@ -82,59 +86,45 @@ function TitleEditor({ value, onChange, maxLength = 60 }) {
   const isPlaceholder = !value && !isFocused;
 
   return (
-    <div style={{ marginBottom: '8px', position: 'relative' }}>
+    <div className="relative mb-2">
       <div
         ref={editorRef}
         contentEditable
-        suppressContentEditableWarning={true} 
+        suppressContentEditableWarning={true}
         onInput={handleInput}
         onPaste={handlePaste}
         onKeyDown={handleKeyDown}
         onFocus={handleFocus}
         onBlur={handleBlur}
-        style={{
-          width: '100%',
-          padding: '8px 0',
-          fontSize: '16px',
-          fontFamily: 'Inter',
-          fontStyle: isPlaceholder ? 'italic' : 'normal',
-          fontWeight: '600',
-          lineHeight: '24px',
-          outline: 'none',
-          color: isPlaceholder ? '#878672' : '#555533',
-          backgroundColor: 'transparent',
-          margin: 0,
-          minHeight: '24px',
-          wordWrap: 'break-word',
-          overflowWrap: 'break-word',
-          borderRadius: '4px'
-        }}
+        className={`m-0 min-h-6 w-full rounded bg-transparent py-2 text-base font-semibold leading-6 outline-none [overflow-wrap:anywhere] ${isPlaceholder ? "italic text-[#878672]" : "not-italic text-[#555533]"}`}
       >
         {placeholderText}
       </div>
-      <div style={{
-        fontSize: '12px',
-        color: currentLength > 50 ? '#ef4444' : '#9ca3af',
-        textAlign: 'right',
-        top: '0px',
-        position: 'absolute',
-        right: '0px'
-      }}>
+      <div
+        className={`absolute right-0 top-0 text-right text-xs ${currentLength > 50 ? "text-red-500" : "text-gray-400"}`}
+      >
         {currentLength}/{maxLength}
       </div>
     </div>
   );
 }
 
-function ParagraphEditor({ editorId, content, activeEditorId, setActiveEditorId, onEditorChange, onUpdate }) {
+function ParagraphEditor({
+  editorId,
+  content,
+  activeEditorId,
+  setActiveEditorId,
+  onEditorChange,
+  onUpdate,
+}) {
   const editor = useEditor({
     extensions: [
       ...sharedExtensions,
       Placeholder.configure({
-        placeholder: 'Perincikan kejadiannya'
-      })
+        placeholder: "Perincikan kejadiannya",
+      }),
     ],
-    content: content || '',
+    content: content || "",
     editable: activeEditorId === editorId,
     onUpdate: ({ editor }) => {
       if (onUpdate) {
@@ -147,24 +137,25 @@ function ParagraphEditor({ editorId, content, activeEditorId, setActiveEditorId,
     onBlur: ({ editor, event }) => {
       setTimeout(() => {
         const relatedTarget = event?.relatedTarget;
-        const isToolbarClick = relatedTarget?.closest?.('.enhanced-toolbar') || 
-                               relatedTarget?.closest?.('.toolbar-btn') ||
-                               relatedTarget?.closest?.('.dropdown-menu') ||
-                               relatedTarget?.closest?.('[role="menu"]');
-        
+        const isToolbarClick =
+          relatedTarget?.closest?.(".enhanced-toolbar") ||
+          relatedTarget?.closest?.(".toolbar-btn") ||
+          relatedTarget?.closest?.(".dropdown-menu") ||
+          relatedTarget?.closest?.('[role="menu"]');
+
         if (isToolbarClick) {
           return;
         }
 
         if (editor.isEmpty) {
-          if (activeEditorId === section.id) {
+          if (activeEditorId === editorId) {
             setActiveEditorId(null);
           }
         } else {
           setActiveEditorId(null);
         }
       }, 150);
-    }
+    },
   });
 
   useEffect(() => {
@@ -178,38 +169,32 @@ function ParagraphEditor({ editorId, content, activeEditorId, setActiveEditorId,
 
   const renderUnfocusedContent = () => {
     if (!content) return null;
-    
-    const tempDiv = document.createElement('div');
+
+    const tempDiv = document.createElement("div");
     tempDiv.innerHTML = content;
-    const paragraphs = tempDiv.querySelectorAll('p');
+    const paragraphs = tempDiv.querySelectorAll("p");
 
     return (
-      <div style={{ minHeight: '100px', cursor: 'pointer' }} className="prose prose-sm max-w-none">
+      <div className="prose prose-sm max-w-none min-h-[100px] cursor-pointer">
         {Array.from(paragraphs).map((p, idx) => {
           const charCount = p.textContent.length;
           const remaining = 560 - charCount;
-          
-          let color = '#3b82f6';
-          if (remaining < 100) color = '#f59e0b';
-          if (remaining < 50) color = '#ef4444';
-          if (remaining < 0) color = '#dc2626';
+
+          const colorClass =
+            remaining < 0
+              ? "text-red-600"
+              : remaining < 50
+                ? "text-red-500"
+                : remaining < 100
+                  ? "text-amber-500"
+                  : "text-blue-500";
 
           return (
-            <div key={idx} style={{ position: 'relative', marginBottom: '1em' }}>
+            <div key={idx} className="relative mb-4">
               <p dangerouslySetInnerHTML={{ __html: p.innerHTML }} />
-              <span style={{
-                position: 'absolute',
-                right: '8px',
-                top: '4px',
-                fontSize: '12px',
-                fontWeight: '600',
-                color: color,
-                padding: '2px 6px',
-                borderRadius: '4px',
-                backgroundColor: 'rgba(255, 255, 255, 0.95)',
-                border: '1px solid #e5e7eb',
-                pointerEvents: 'none'
-              }}>
+              <span
+                className={`pointer-events-none absolute right-2 top-1 rounded border border-gray-200 bg-white/95 px-1.5 py-0.5 text-xs font-semibold ${colorClass}`}
+              >
                 {remaining}
               </span>
             </div>
@@ -220,7 +205,7 @@ function ParagraphEditor({ editorId, content, activeEditorId, setActiveEditorId,
   };
 
   return (
-    <div 
+    <div
       className="paragraph-wrapper mb-3"
       onClick={() => {
         if (activeEditorId !== editorId) {
@@ -234,14 +219,12 @@ function ParagraphEditor({ editorId, content, activeEditorId, setActiveEditorId,
       <div className="paragraph-content">
         {activeEditorId === editorId ? (
           <EditorContent editor={editor} />
+        ) : editor && !editor.isEmpty ? (
+          renderUnfocusedContent()
         ) : (
-          editor && !editor.isEmpty ? (
-            renderUnfocusedContent()
-          ) : (
-            <p style={{minHeight: '60px', color: '#9ca3af', cursor: 'pointer'}}>
-              Perincikan kejadiannya
-            </p>
-          )
+          <p className="min-h-[60px] cursor-pointer text-gray-400">
+            Perincikan kejadiannya
+          </p>
         )}
       </div>
     </div>
@@ -256,22 +239,22 @@ function DateTimePicker({ value, onChange, selectedTimezone }) {
     if (inputRef.current && !pickerRef.current) {
       pickerRef.current = flatpickr(inputRef.current, {
         enableTime: true,
-        dateFormat: 'd/m/Y H:i',
+        dateFormat: "d/m/Y H:i",
         time_24hr: true,
         onChange: (selectedDates) => {
           if (selectedDates.length > 0) {
             const date = selectedDates[0];
             const year = date.getFullYear();
-            const month = String(date.getMonth() + 1).padStart(2, '0');
-            const day = String(date.getDate()).padStart(2, '0');
-            const hours = String(date.getHours()).padStart(2, '0');
-            const minutes = String(date.getMinutes()).padStart(2, '0');
-            
+            const month = String(date.getMonth() + 1).padStart(2, "0");
+            const day = String(date.getDate()).padStart(2, "0");
+            const hours = String(date.getHours()).padStart(2, "0");
+            const minutes = String(date.getMinutes()).padStart(2, "0");
+
             const dateStr = `${year}-${month}-${day}`;
             const timeStr = `${hours}:${minutes}`;
             onChange(dateStr, timeStr);
           }
-        }
+        },
       });
     }
 
@@ -292,23 +275,23 @@ function DateTimePicker({ value, onChange, selectedTimezone }) {
 
   return (
     <div className="timeline-datetime">
-      <Calendar className="me-2" size={32} />
+      <Calendar className="mr-2 text-gray-500" size={22} />
       <input
         ref={inputRef}
         type="text"
         placeholder="Pilih tanggal dan waktu"
-        className="form-control datetime-input"
+        className="datetime-input h-10 w-full min-w-[220px] rounded-md border border-gray-300 bg-white px-3 text-sm text-gray-700 focus:border-[#0088ff] focus:outline-none focus:ring-2 focus:ring-[#0088ff]/15"
       />
-      <span className="timezone-badge ms-2">{selectedTimezone}</span>
+      <span className="timezone-badge ml-2">{selectedTimezone}</span>
     </div>
   );
 }
 
-function TimelineEntry({ 
-  entry, 
-  index, 
-  isFirst, 
-  isLast, 
+function TimelineEntry({
+  entry,
+  index,
+  isFirst,
+  isLast,
   selectedTimezone,
   activeEditorId,
   setActiveEditorId,
@@ -319,17 +302,17 @@ function TimelineEntry({
   onRemoveEntry,
   onEditorChange,
   doAddEntry,
-  totalEntries
+  totalEntries,
 }) {
   const formatDateTime = (date, time) => {
-    if (!date || !time) return '';
-    const [year, month, day] = date.split('-');
+    if (!date || !time) return "";
+    const [year, month, day] = date.split("-");
     return `${day}/${month}/${year} ${time}`;
   };
 
   const handleDateTimeChange = (date, time) => {
-    onUpdateEntry(entry.id, 'date', date);
-    onUpdateEntry(entry.id, 'time', time);
+    onUpdateEntry(entry.id, "date", date);
+    onUpdateEntry(entry.id, "time", time);
   };
 
   return (
@@ -337,10 +320,24 @@ function TimelineEntry({
       <div className="timeline-entry">
         {/* Timeline Marker */}
         <div className="timeline-marker">
-          <div className={`timeline-dot ${isFirst ? 'timeline-dot-first' : ''} ${isLast ? 'timeline-dot-last' : ''}`}>
+          <div
+            className={`timeline-dot ${isFirst ? "timeline-dot-first" : ""} ${isLast ? "timeline-dot-last" : ""}`}
+          >
             {isFirst && (
-              <svg className="triangle-icon" width="18" height="16" viewBox="0 0 18 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M9 16L0.339746 1L17.6603 1L9 16Z" stroke="#dc3545" strokeWidth="2" fill="none"/>
+              <svg
+                className="triangle-icon"
+                width="18"
+                height="16"
+                viewBox="0 0 18 16"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M9 16L0.339746 1L17.6603 1L9 16Z"
+                  stroke="#dc3545"
+                  strokeWidth="2"
+                  fill="none"
+                />
               </svg>
             )}
           </div>
@@ -360,7 +357,7 @@ function TimelineEntry({
 
           {/* Title Input */}
           <h3 className="timeline-title mb-3">
-            <TitleEditor 
+            <TitleEditor
               value={entry.title}
               onChange={(value) => onUpdateTitle(entry.id, value)}
               maxLength={60}
@@ -377,7 +374,9 @@ function TimelineEntry({
                 activeEditorId={activeEditorId}
                 setActiveEditorId={setActiveEditorId}
                 onEditorChange={onEditorChange}
-                onUpdate={(editorId, html) => onUpdateParagraph(entry.id, editorId, html)}
+                onUpdate={(editorId, html) =>
+                  onUpdateParagraph(entry.id, editorId, html)
+                }
               />
             ))}
           </div>
@@ -385,19 +384,19 @@ function TimelineEntry({
           {/* Add Fragment & Delete Entry Buttons */}
           <div className="mt-3 timeline-actions">
             {isLast && (
-            <button
+              <button
                 onClick={doAddEntry}
-                className="btn btn-sm rounded-pill btn-tambah-peristiwa"
-            >
+                className="btn-tambah-peristiwa rounded-full px-3 py-1 text-sm"
+              >
                 + Fragmen
-            </button>
+              </button>
             )}
             {totalEntries > 1 && (
               <button
                 onClick={() => onRemoveEntry(entry.id)}
-                className="btn-hapus-entry rounded-pill btn-sm btn"
+                className="btn-hapus-entry inline-flex items-center rounded-full px-3 py-1 text-sm"
               >
-                <Trash2 size={14} className='me-2' />
+                <Trash2 size={14} className="mr-2" />
                 Hapus
               </button>
             )}
@@ -408,41 +407,49 @@ function TimelineEntry({
   );
 }
 
-function TimelineEditor({ onEditorFocus, activeEditorId, setActiveEditorId, onEditorChange, sectiontitle, sectionKey, onTimelineDataChange }) {
-  const [selectedTimezone, setSelectedTimezone] = useState('WIB');
-  const [introContent, setIntroContent] = useState('');
+function TimelineEditor({
+  onEditorFocus,
+  activeEditorId,
+  setActiveEditorId,
+  onEditorChange,
+  sectiontitle,
+  sectionKey,
+  onTimelineDataChange,
+}) {
+  const [selectedTimezone, setSelectedTimezone] = useState("WIB");
+  const [introContent, setIntroContent] = useState("");
   const [entries, setEntries] = useState([
     {
       id: 1,
-      date: '',
-      time: '',
-      timezone: 'WIB',
-      title: '',
-      paragraphs: [{ id: 1, editorId: 'timeline-1-p-1', content: '' }]
-    }
+      date: "",
+      time: "",
+      timezone: "WIB",
+      title: "",
+      paragraphs: [{ id: 1, editorId: "timeline-1-p-1", content: "" }],
+    },
   ]);
-  
+
   const introEditor = useEditor({
     extensions: [
       ...sharedExtensions,
       Placeholder.configure({
-        placeholder: 'Tulis pengantar kronologi, 1 paragraf saja'
-      })
+        placeholder: "Tulis pengantar kronologi, 1 paragraf saja",
+      }),
     ],
-    content: introContent || '',
-    editable: activeEditorId === 'timeline-intro',
+    content: introContent || "",
+    editable: activeEditorId === "timeline-intro",
     onUpdate: ({ editor }) => {
       setIntroContent(editor.getHTML());
     },
     onFocus: () => {
-      setActiveEditorId('timeline-intro');
-    }
+      setActiveEditorId("timeline-intro");
+    },
   });
 
   useEffect(() => {
     if (introEditor) {
-      introEditor.setEditable(activeEditorId === 'timeline-intro');
-      if (activeEditorId === 'timeline-intro' && onEditorChange) {
+      introEditor.setEditable(activeEditorId === "timeline-intro");
+      if (activeEditorId === "timeline-intro" && onEditorChange) {
         onEditorChange(introEditor);
       }
     }
@@ -450,38 +457,32 @@ function TimelineEditor({ onEditorFocus, activeEditorId, setActiveEditorId, onEd
 
   const renderIntroUnfocused = () => {
     if (!introContent) return null;
-    
-    const tempDiv = document.createElement('div');
+
+    const tempDiv = document.createElement("div");
     tempDiv.innerHTML = introContent;
-    const paragraphs = tempDiv.querySelectorAll('p');
+    const paragraphs = tempDiv.querySelectorAll("p");
 
     return (
-      <div style={{ minHeight: '100px', cursor: 'pointer' }} className="prose prose-sm max-w-none">
+      <div className="prose prose-sm max-w-none min-h-[100px] cursor-pointer">
         {Array.from(paragraphs).map((p, idx) => {
           const charCount = p.textContent.length;
           const remaining = 560 - charCount;
-          
-          let color = '#3b82f6';
-          if (remaining < 100) color = '#f59e0b';
-          if (remaining < 50) color = '#ef4444';
-          if (remaining < 0) color = '#dc2626';
+
+          const colorClass =
+            remaining < 0
+              ? "text-red-600"
+              : remaining < 50
+                ? "text-red-500"
+                : remaining < 100
+                  ? "text-amber-500"
+                  : "text-blue-500";
 
           return (
-            <div key={idx} style={{ position: 'relative', marginBottom: '1em' }}>
+            <div key={idx} className="relative mb-4">
               <p dangerouslySetInnerHTML={{ __html: p.innerHTML }} />
-              <span style={{
-                position: 'absolute',
-                right: '8px',
-                top: '4px',
-                fontSize: '12px',
-                fontWeight: '600',
-                color: color,
-                padding: '2px 6px',
-                borderRadius: '4px',
-                backgroundColor: 'rgba(255, 255, 255, 0.95)',
-                border: '1px solid #e5e7eb',
-                pointerEvents: 'none'
-              }}>
+              <span
+                className={`pointer-events-none absolute right-2 top-1 rounded border border-gray-200 bg-white/95 px-1.5 py-0.5 text-xs font-semibold ${colorClass}`}
+              >
                 {remaining}
               </span>
             </div>
@@ -495,148 +496,157 @@ function TimelineEditor({ onEditorFocus, activeEditorId, setActiveEditorId, onEd
     const newEntryId = Date.now();
     const newEntry = {
       id: newEntryId,
-      date: '',
-      time: '',
+      date: "",
+      time: "",
       timezone: selectedTimezone,
-      title: '',
-      paragraphs: [{ id: 1, editorId: `timeline-${newEntryId}-p-1`, content: '' }]
+      title: "",
+      paragraphs: [
+        { id: 1, editorId: `timeline-${newEntryId}-p-1`, content: "" },
+      ],
     };
     setEntries([...entries, newEntry]);
   };
 
   const removeEntry = (entryId) => {
     if (entries.length > 1) {
-      setEntries(entries.filter(e => e.id !== entryId));
+      setEntries(entries.filter((e) => e.id !== entryId));
     }
   };
 
   const addParagraph = (entryId) => {
-    setEntries(entries.map(entry => {
-      if (entry.id === entryId) {
-        const newParagraphId = Date.now();
-        return {
-          ...entry,
-          paragraphs: [
-            ...entry.paragraphs,
-            { id: newParagraphId, editorId: `timeline-${entryId}-p-${newParagraphId}`, content: '' }
-          ]
-        };
-      }
-      return entry;
-    }));
+    setEntries(
+      entries.map((entry) => {
+        if (entry.id === entryId) {
+          const newParagraphId = Date.now();
+          return {
+            ...entry,
+            paragraphs: [
+              ...entry.paragraphs,
+              {
+                id: newParagraphId,
+                editorId: `timeline-${entryId}-p-${newParagraphId}`,
+                content: "",
+              },
+            ],
+          };
+        }
+        return entry;
+      }),
+    );
   };
 
   const updateParagraph = (entryId, editorId, content) => {
-    setEntries(entries.map(entry => {
-      if (entry.id === entryId) {
-        return {
-          ...entry,
-          paragraphs: entry.paragraphs.map(p => 
-            p.editorId === editorId ? { ...p, content } : p
-          )
-        };
-      }
-      return entry;
-    }));
+    setEntries(
+      entries.map((entry) => {
+        if (entry.id === entryId) {
+          return {
+            ...entry,
+            paragraphs: entry.paragraphs.map((p) =>
+              p.editorId === editorId ? { ...p, content } : p,
+            ),
+          };
+        }
+        return entry;
+      }),
+    );
   };
 
   const updateEntry = (entryId, field, value) => {
-    setEntries(entries.map(entry => 
-      entry.id === entryId ? { ...entry, [field]: value } : entry
-    ));
+    setEntries(
+      entries.map((entry) =>
+        entry.id === entryId ? { ...entry, [field]: value } : entry,
+      ),
+    );
   };
 
   const updateEntryTitle = (entryId, value) => {
-    setEntries(entries.map(entry => 
-      entry.id === entryId ? { ...entry, title: value } : entry
-    ));
+    setEntries(
+      entries.map((entry) =>
+        entry.id === entryId ? { ...entry, title: value } : entry,
+      ),
+    );
   };
 
   useEffect(() => {
     if (onTimelineDataChange) {
-        onTimelineDataChange({
+      onTimelineDataChange({
         introContent,
         selectedTimezone,
-        entries
-        });
+        entries,
+      });
     }
   }, [introContent, selectedTimezone, entries, onTimelineDataChange]);
 
   return (
     <div className="timeline-editor-container">
       <div className="timeline-intro-section" id={`section-${sectionKey}`}>
-        <h2 className="timeline-section-title" style={{
-                  fontSize: '24px',
-                  fontWeight: '600',
-                  color: '#FC6736',
-                  marginBottom: '8px',
-                  marginTop: '24px'
-                }}>
-                  {sectiontitle}
-                </h2><a name={`section-${sectionKey}`}></a>
-        <div 
+        <h2 className="timeline-section-title mb-2 mt-6 text-2xl font-semibold text-[#FC6736]">
+          {sectiontitle}
+        </h2>
+        <a name={`section-${sectionKey}`}></a>
+        <div
           className="timeline-intro-editor"
           onClick={() => {
-            if (activeEditorId !== 'timeline-intro') {
-              setActiveEditorId('timeline-intro');
+            if (activeEditorId !== "timeline-intro") {
+              setActiveEditorId("timeline-intro");
               setTimeout(() => {
                 introEditor?.commands.focus();
               }, 0);
             }
           }}
         >
-          {activeEditorId === 'timeline-intro' ? (
+          {activeEditorId === "timeline-intro" ? (
             <EditorContent editor={introEditor} />
+          ) : introEditor && !introEditor.isEmpty ? (
+            renderIntroUnfocused()
           ) : (
-            introEditor && !introEditor.isEmpty ? (
-              renderIntroUnfocused()
-            ) : (
-              <p style={{minHeight: '100px', color: '#9ca3af', cursor: 'pointer'}}>
-                Tulis pengantar kronologi, 1 paragraf saja
-              </p>
-            )
+            <p className="min-h-[100px] cursor-pointer text-gray-400">
+              Tulis pengantar kronologi, 1 paragraf saja
+            </p>
           )}
         </div>
-        
-        <div className="timezone-selector d-flex mb-3">
-            <div className="timezone-label me-3">Zona Waktu:</div>
-            <div>
-                <div>
-                    <label className="timezone-option form-check form-switch form-check-inline">
-                        <input 
-                        type="radio" 
-                        name="timezone" 
-                        value="WIB"
-                        className="form-check-input"
-                        checked={selectedTimezone === 'WIB'}
-                        onChange={(e) => setSelectedTimezone(e.target.value)}
-                        />
-                        <span className="form-check-label">WIB</span>
-                    </label>
-                    <label className="timezone-option form-check form-switch form-check-inline">
-                        <input 
-                        type="radio" 
-                        name="timezone" 
-                        value="WITA"
-                        className="form-check-input"
-                        checked={selectedTimezone === 'WITA'}
-                        onChange={(e) => setSelectedTimezone(e.target.value)}
-                        />
-                        <span className="form-check-label">WITA</span>
-                    </label>
-                    <label className="timezone-option form-check form-switch form-check-inline">
-                        <input 
-                        type="radio" 
-                        name="timezone" 
-                        value="WIT"
-                        className="form-check-input"
-                        checked={selectedTimezone === 'WIT'}
-                        onChange={(e) => setSelectedTimezone(e.target.value)}
-                        />
-                        <span className="form-check-label">WIT</span>
-                    </label>
-                </div>                
-            </div> 
+
+        <div className="timezone-selector mb-3 flex items-center gap-3">
+          <div className="timezone-label text-sm font-medium text-gray-600">
+            Zona Waktu:
+          </div>
+          <div>
+            <div className="flex flex-wrap items-center gap-3">
+              <label className="timezone-option inline-flex cursor-pointer items-center gap-2 text-sm text-gray-700">
+                <input
+                  type="radio"
+                  name="timezone"
+                  value="WIB"
+                  className="h-4 w-4 accent-[#fc6736]"
+                  checked={selectedTimezone === "WIB"}
+                  onChange={(e) => setSelectedTimezone(e.target.value)}
+                />
+                <span>WIB</span>
+              </label>
+              <label className="timezone-option inline-flex cursor-pointer items-center gap-2 text-sm text-gray-700">
+                <input
+                  type="radio"
+                  name="timezone"
+                  value="WITA"
+                  className="h-4 w-4 accent-[#fc6736]"
+                  checked={selectedTimezone === "WITA"}
+                  onChange={(e) => setSelectedTimezone(e.target.value)}
+                />
+                <span>WITA</span>
+              </label>
+              <label className="timezone-option inline-flex cursor-pointer items-center gap-2 text-sm text-gray-700">
+                <input
+                  type="radio"
+                  name="timezone"
+                  value="WIT"
+                  className="h-4 w-4 accent-[#fc6736]"
+                  checked={selectedTimezone === "WIT"}
+                  onChange={(e) => setSelectedTimezone(e.target.value)}
+                />
+                <span>WIT</span>
+              </label>
+            </div>
+          </div>
         </div>
       </div>
 

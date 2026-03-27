@@ -15,6 +15,9 @@ export default function ArticleImageGallery({
 
   const isDiskursus = tipe === "diskursus";
 
+  const resolveAvatarUrl = (avatarUrl) =>
+    avatarUrl?.startsWith("/static/") ? `${API_BASE}${avatarUrl}` : avatarUrl;
+
   async function fetchImages() {
     try {
       const resp = await fetch(
@@ -134,7 +137,7 @@ export default function ArticleImageGallery({
 
   return (
     <div className="mb-3">
-      <div className="flex items-center justify-between mb-2">
+      <div className="mb-2 flex items-center justify-between">
         <div className="flex items-center gap-2">
           <div className="avatar-list avatar-list-stacked mr-3">
             {contributors &&
@@ -143,16 +146,15 @@ export default function ArticleImageGallery({
                   key={s.id}
                   className="avatar avatar-sm"
                   style={{
-                    backgroundImage: `url(${s.avatar_url.startsWith("/static/") ? `${API_BASE}${s.avatar_url}` : s.avatar_url})`,
+                    backgroundImage: `url(${resolveAvatarUrl(s.avatar_url)})`,
                   }}
                 ></span>
               ))}
           </div>
           <div className="relative" ref={dropdownRef}>
             <button
-              className="flex items-center text-blue-600 p-0 text-sm hover:underline"
+              className="flex items-center p-0 text-[0.95rem] text-blue-600 hover:underline"
               onClick={() => setShowContributors(!showContributors)}
-              style={{ fontSize: "0.95rem" }}
             >
               Kontributor
               <svg
@@ -172,32 +174,21 @@ export default function ArticleImageGallery({
             </button>
 
             {showContributors && contributors && (
-              <div
-                className="absolute bg-white border rounded shadow-sm mt-1 py-2"
-                style={{
-                  minWidth: "200px",
-                  zIndex: 1000,
-                  left: 0,
-                }}
-              >
+              <div className="absolute left-0 z-50 mt-1 min-w-[200px] rounded border bg-white py-2 shadow-sm">
                 {contributors.map((contributor) => (
                   <a
                     key={contributor.id}
                     href={`/contribution/${contributor.username}`}
                     className="flex items-center gap-2 px-3 py-2 text-gray-700 hover:bg-gray-100"
-                    style={{ transition: "background-color 0.2s" }}
                   >
                     <span
                       className="avatar avatar-xs rounded-full"
                       style={{
-                        backgroundImage: `url(${contributor.avatar_url.startsWith("/static/") ? `${API_BASE}${contributor.avatar_url}` : contributor.avatar_url})`,
-                        width: "24px",
-                        height: "24px",
+                        backgroundImage: `url(${resolveAvatarUrl(contributor.avatar_url)})`,
                       }}
+                      aria-hidden="true"
                     ></span>
-                    <span style={{ fontSize: "0.875rem" }}>
-                      {contributor.username}
-                    </span>
+                    <span className="text-sm">{contributor.username}</span>
                   </a>
                 ))}
               </div>
@@ -205,9 +196,7 @@ export default function ArticleImageGallery({
           </div>
         </div>
         <div className="flex items-center gap-2">
-          <span className="text-gray-500" style={{ fontSize: "0.9rem" }}>
-            Sebarkan
-          </span>
+          <span className="text-[0.9rem] text-gray-500">Sebarkan</span>
           <button
             className="p-1 text-gray-600 hover:text-gray-800"
             onClick={() => handleShare("facebook")}
@@ -312,17 +301,12 @@ export default function ArticleImageGallery({
       {(images.length > 0 || (canEdit && !isDiskursus)) && (
         <>
           <div
-            className="flex gap-3 overflow-auto p-2 border rounded-none"
-            style={{ whiteSpace: "nowrap" }}
+            className="flex gap-3 overflow-auto whitespace-nowrap rounded-none border p-2"
             onDragOver={(e) => e.preventDefault()}
             onDrop={handleDrop}
           >
             {images.map((img) => (
-              <div
-                key={img.id}
-                className="position-relative"
-                style={{ flex: "0 0 auto" }}
-              >
+              <div key={img.id} className="relative shrink-0">
                 <img
                   src={
                     img.file || img.url
@@ -332,19 +316,11 @@ export default function ArticleImageGallery({
                       : ""
                   }
                   alt={img.caption || ""}
-                  className="rounded-none shadow-sm"
-                  style={{
-                    height: 160,
-                    width: "auto",
-                    border: img.featured
-                      ? "3px solid #10b981"
-                      : "1px solid #ddd",
-                  }}
+                  className={`h-40 w-auto rounded-none shadow-sm ${img.featured ? "border-2 border-emerald-500" : "border border-gray-300"}`}
                 />
                 {canEdit && !isDiskursus && (
                   <div
-                    className="absolute left-0 right-0 bottom-0 text-center bg-black bg-opacity-50 text-white text-sm py-1"
-                    style={{ cursor: "pointer" }}
+                    className="absolute bottom-0 left-0 right-0 cursor-pointer bg-black/50 py-1 text-center text-sm text-white"
                     onClick={() => setFeatured(img.id)}
                   >
                     {img.featured ? "⭐ Featured" : "Set Featured"}
@@ -356,13 +332,7 @@ export default function ArticleImageGallery({
             {canEdit && !isDiskursus && (
               <div
                 onClick={() => fileInputRef.current.click()}
-                className="flex justify-center items-center border rounded text-gray-500"
-                style={{
-                  width: 160,
-                  height: 160,
-                  cursor: "pointer",
-                  flex: "0 0 auto",
-                }}
+                className="flex h-40 w-40 shrink-0 cursor-pointer items-center justify-center rounded border text-gray-500"
               >
                 + Add
               </div>

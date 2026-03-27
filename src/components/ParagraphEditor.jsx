@@ -13,8 +13,7 @@ import {
   generateFootnoteId,
   applyGlobalFootnoteNumbers,
 } from "./editor/editorExtension";
-import { TOOLBAR_PRESETS, createToolbarConfig } from "./editor/toolbarPresets";
-import "./ParagraphEditor.css";
+import { TOOLBAR_PRESETS } from "./editor/toolbarPresets";
 
 export default function ParagraphEditor({
   paragraph,
@@ -261,11 +260,11 @@ export default function ParagraphEditor({
 
   return (
     <div
-      className={`paragraph-wrapper mb-3 ${isEditMode && !isEditing ? "editable" : ""}`}
+      className={`mb-3 rounded transition-all ${isEditMode && !isEditing ? "hover:bg-gray-50/60 dark:hover:bg-gray-700/30" : ""} [&_.ProseMirror]:min-h-[200px] [&_.ProseMirror]:p-5 [&_.ProseMirror]:text-base [&_.ProseMirror]:leading-[1.7] [&_.ProseMirror]:outline-none [&_.ProseMirror]:text-gray-900 [&_.ProseMirror_p]:mb-2 [&_.ProseMirror_p:last-child]:mb-0 [&_.ProseMirror_h1]:mb-3 [&_.ProseMirror_h1]:mt-6 [&_.ProseMirror_h1]:text-[2rem] [&_.ProseMirror_h2]:mb-3 [&_.ProseMirror_h2]:mt-6 [&_.ProseMirror_h2]:text-[1.75rem] [&_.ProseMirror_h3]:mb-3 [&_.ProseMirror_h3]:mt-6 [&_.ProseMirror_h3]:text-[1.5rem] [&_.ProseMirror_h4]:mb-3 [&_.ProseMirror_h4]:mt-6 [&_.ProseMirror_h4]:text-[1.25rem] [&_.ProseMirror_ul]:mb-3 [&_.ProseMirror_ul]:ml-6 [&_.ProseMirror_ol]:mb-3 [&_.ProseMirror_ol]:ml-6 [&_.ProseMirror_blockquote]:my-4 [&_.ProseMirror_blockquote]:border-l-4 [&_.ProseMirror_blockquote]:border-l-blue-600 [&_.ProseMirror_blockquote]:pl-4 [&_.ProseMirror_blockquote]:italic [&_.ProseMirror_code]:rounded [&_.ProseMirror_code]:border [&_.ProseMirror_code]:border-gray-200 [&_.ProseMirror_code]:bg-gray-50 [&_.ProseMirror_code]:px-1.5 [&_.ProseMirror_code]:py-0.5 [&_.ProseMirror_a]:text-blue-600 [&_.ProseMirror_a]:underline`}
     >
-      <div className="paragraph-content">
+      <div>
         {isEditing ? (
-          <div className="editor-container">
+          <div className="overflow-hidden rounded-lg border border-gray-300 bg-white dark:border-gray-700 dark:bg-[#1a1d21]">
             <Toolbar
               editor={editor}
               config={TOOLBAR_PRESETS.FULL}
@@ -275,7 +274,7 @@ export default function ParagraphEditor({
               onPublish={handleSave}
               onSaveDraft={handleSave}
             />
-            <div className="editor-content-wrapper">
+            <div className="max-h-[70vh] overflow-y-auto border-t border-gray-200 bg-white dark:border-gray-700 dark:bg-[#1a1d21]">
               <div
                 className="bg-yellow-50 border border-yellow-200 p-3 rounded text-yellow-800 flex items-start w-full"
                 role="alert"
@@ -311,17 +310,13 @@ export default function ParagraphEditor({
               <EditorContent editor={editor} />
             </div>
             {orderedFootnotes.length > 0 && (
-              <div
-                className="footnotes-section editor-actions mt-2 d-flex gap-2 pt-3"
-                style={{ borderTop: "2px solid #e5e7eb" }}
-              >
+              <div className="mt-2 flex flex-col gap-2 border-t-2 border-gray-200 bg-gray-50 p-3">
                 {orderedFootnotes.map((footnote) => (
                   <div
                     key={footnote.id}
-                    className="footnote-item d-flex gap-2 mb-2 p-2"
-                    style={{ backgroundColor: "#f9fafb", borderRadius: "4px" }}
+                    className="mb-2 flex gap-2 rounded bg-gray-50 p-2 last:mb-0"
                   >
-                    <div style={{ fontWeight: 600, minWidth: "24px" }}>
+                    <div className="min-w-6 font-semibold">
                       [{footnote.number}]
                     </div>
                     <div className="flex-1">{footnote.content}</div>
@@ -329,16 +324,14 @@ export default function ParagraphEditor({
                       <button
                         type="button"
                         onClick={() => handleEditFootnote(footnote)}
-                        className="text-sm px-2 py-1 border border-gray-300 rounded text-gray-700"
-                        style={{ fontSize: "12px" }}
+                        className="rounded border border-gray-300 px-2 py-1 text-xs text-gray-700 hover:bg-gray-100"
                       >
                         Edit
                       </button>
                       <button
                         type="button"
                         onClick={() => handleDeleteFootnote(footnote.id)}
-                        className="text-sm px-2 py-1 border border-red-300 rounded text-red-600"
-                        style={{ fontSize: "12px" }}
+                        className="rounded border border-red-300 px-2 py-1 text-xs text-red-600 hover:bg-red-50"
                       >
                         <IconTrash size={14} />
                       </button>
@@ -351,29 +344,17 @@ export default function ParagraphEditor({
         ) : (
           <div>
             <div
-              className="paragraph-text"
+              className="leading-[1.8] text-[#333] [&_p]:mb-2 [&_p:last-child]:mb-0"
               dangerouslySetInnerHTML={{
                 __html: paragraph.content_json.content[0].content[0].text,
               }}
             />
             {orderedFootnotes.length > 0 && (
-              <div
-                className="footnotes-section mt-3 pt-3"
-                style={{ borderTop: "1px solid #dee2e6" }}
-              >
-                <h6
-                  className="mb-2"
-                  style={{ fontSize: "14px", color: "#6c757d" }}
-                >
-                  Catatan Kaki
-                </h6>
+              <div className="mt-3 border-t border-gray-200 pt-3">
+                <h6 className="mb-2 text-sm text-gray-500">Catatan Kaki</h6>
                 {orderedFootnotes.map((footnote) => (
-                  <div
-                    key={footnote.id}
-                    className="footnote-item mb-1"
-                    style={{ fontSize: "14px" }}
-                  >
-                    <span style={{ fontWeight: 600 }}>[{footnote.number}]</span>{" "}
+                  <div key={footnote.id} className="mb-1 text-sm">
+                    <span className="font-semibold">[{footnote.number}]</span>{" "}
                     {footnote.content}
                   </div>
                 ))}
@@ -384,23 +365,23 @@ export default function ParagraphEditor({
       </div>
 
       {isEditMode && canEdit && !isEditing && (
-        <div className="paragraph-actions d-flex gap-2 mt-2 justify-content-end">
+        <div className="mt-2 flex max-h-[50px] justify-end gap-2 border-t border-gray-200 pt-2 md:max-h-none md:gap-1 md:pt-1.5">
           <button
-            className="btn btn-sm btn-link d-flex align-items-center gap-1"
+            className="admin-content-action-btn admin-content-action-history inline-flex items-center gap-1 rounded px-2 py-1 text-sm text-gray-600 hover:bg-gray-100 hover:text-gray-900"
             onClick={() => setShowHistoryModal(true)}
           >
             <IconHistory size={16} />
             <span>Riwayat</span>
           </button>
           <button
-            className="btn btn-sm btn-link d-flex align-items-center gap-1"
+            className="admin-content-action-btn admin-content-action-edit inline-flex items-center gap-1 rounded px-2 py-1 text-sm text-gray-600 hover:bg-gray-100 hover:text-gray-900"
             onClick={() => setIsEditing(true)}
           >
             <IconEdit size={16} />
             <span>Sunting</span>
           </button>
           <button
-            className="btn btn-sm btn-link d-flex align-items-center gap-1"
+            className="admin-content-action-btn admin-content-action-comment inline-flex items-center gap-1 rounded px-2 py-1 text-sm text-gray-600 hover:bg-gray-100 hover:text-gray-900"
             onClick={() => setShowCommentModal(true)}
           >
             <IconMessage size={16} />
@@ -411,61 +392,65 @@ export default function ParagraphEditor({
 
       {showFootnoteModal && (
         <>
-          <div className="modal show d-block" tabIndex="-1">
-            <div className="modal-dialog">
-              <div className="modal-content">
-                <div className="modal-header">
-                  <h5 className="modal-title">
-                    {currentFootnoteId
-                      ? "Edit Catatan Kaki"
-                      : "Tambah Catatan Kaki"}
-                  </h5>
-                  <button
-                    className="btn-close"
-                    onClick={() => {
-                      setShowFootnoteModal(false);
-                      setFootnoteText("");
-                      setCurrentFootnoteId(null);
-                    }}
-                  ></button>
-                </div>
-                <div className="modal-body">
-                  <textarea
-                    className="form-control"
-                    rows={4}
-                    value={footnoteText}
-                    onChange={(e) => setFootnoteText(e.target.value)}
-                    placeholder="Masukkan isi catatan kaki..."
-                    autoFocus
-                  />
-                </div>
-                <div className="modal-footer">
-                  <button
-                    className="px-3 py-1 border rounded text-gray-700"
-                    onClick={() => {
-                      setShowFootnoteModal(false);
-                      setFootnoteText("");
-                      setCurrentFootnoteId(null);
-                    }}
-                  >
-                    Batal
-                  </button>
-                  <button
-                    className="px-3 py-1 bg-blue-600 text-white rounded"
-                    onClick={
-                      currentFootnoteId
-                        ? handleFootnoteUpdate
-                        : handleFootnoteSubmit
-                    }
-                  >
-                    {currentFootnoteId ? "Update" : "Tambah"}
-                  </button>
-                </div>
+          <div
+            className="fixed inset-0 z-50 flex items-center justify-center p-4"
+            tabIndex="-1"
+          >
+            <div className="w-full max-w-lg rounded-md bg-white shadow-xl">
+              <div className="flex items-center justify-between border-b border-gray-200 px-4 py-3">
+                <h5 className="text-lg font-semibold text-gray-800">
+                  {currentFootnoteId
+                    ? "Edit Catatan Kaki"
+                    : "Tambah Catatan Kaki"}
+                </h5>
+                <button
+                  className="rounded p-1 text-gray-500 hover:bg-gray-100 hover:text-gray-700"
+                  onClick={() => {
+                    setShowFootnoteModal(false);
+                    setFootnoteText("");
+                    setCurrentFootnoteId(null);
+                  }}
+                  aria-label="Tutup"
+                >
+                  ×
+                </button>
+              </div>
+              <div className="px-4 py-3">
+                <textarea
+                  className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-800 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+                  rows={4}
+                  value={footnoteText}
+                  onChange={(e) => setFootnoteText(e.target.value)}
+                  placeholder="Masukkan isi catatan kaki..."
+                  autoFocus
+                />
+              </div>
+              <div className="flex items-center justify-end gap-2 border-t border-gray-200 px-4 py-3">
+                <button
+                  className="rounded border border-gray-300 px-3 py-1 text-sm text-gray-700 hover:bg-gray-50"
+                  onClick={() => {
+                    setShowFootnoteModal(false);
+                    setFootnoteText("");
+                    setCurrentFootnoteId(null);
+                  }}
+                >
+                  Batal
+                </button>
+                <button
+                  className="rounded bg-blue-600 px-3 py-1 text-sm text-white hover:bg-blue-700"
+                  onClick={
+                    currentFootnoteId
+                      ? handleFootnoteUpdate
+                      : handleFootnoteSubmit
+                  }
+                >
+                  {currentFootnoteId ? "Update" : "Tambah"}
+                </button>
               </div>
             </div>
           </div>
           <div
-            className="modal-backdrop show"
+            className="fixed inset-0 z-40 bg-black/40"
             onClick={() => {
               setShowFootnoteModal(false);
               setFootnoteText("");
@@ -528,41 +513,53 @@ function CommentModal({ paragraphId, onClose }) {
   }
 
   return (
-    <div className="modal show d-block" tabIndex="-1">
-      <div className="modal-dialog modal-dialog-scrollable">
-        <div className="modal-content">
-          <div className="modal-header">
-            <h5 className="modal-title">Tanggapan</h5>
-            <button className="btn-close" onClick={onClose}></button>
+    <>
+      <div
+        className="fixed inset-0 z-50 flex items-center justify-center p-4"
+        tabIndex="-1"
+      >
+        <div className="max-h-[85vh] w-full max-w-2xl overflow-hidden rounded-md bg-white shadow-xl">
+          <div className="flex items-center justify-between border-b border-gray-200 px-4 py-3">
+            <h5 className="text-lg font-semibold">Tanggapan</h5>
+            <button
+              className="rounded p-1 text-gray-500 hover:bg-gray-100 hover:text-gray-700"
+              onClick={onClose}
+              aria-label="Tutup"
+            >
+              ×
+            </button>
           </div>
-          <div className="modal-body">
+          <div className="max-h-[70vh] overflow-y-auto px-4 py-3">
             <div className="mb-3">
               <textarea
-                className="form-control"
+                className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
                 rows="3"
                 value={newComment}
                 onChange={(e) => setNewComment(e.target.value)}
               />
               <button
-                className="btn btn-primary btn-sm mt-2"
+                className="mt-2 rounded bg-blue-600 px-3 py-1 text-sm text-white hover:bg-blue-700"
                 onClick={handleSubmit}
               >
                 Kirim
               </button>
             </div>
             {comments.map((c) => (
-              <div key={c.id} className="card mb-2">
-                <div className="card-body">
-                  <strong>{c.user?.username || "Anon"}</strong>
-                  <p className="mb-0">{c.content}</p>
-                </div>
+              <div
+                key={c.id}
+                className="mb-2 rounded border border-gray-200 bg-white p-3"
+              >
+                <strong className="text-sm">
+                  {c.user?.username || "Anon"}
+                </strong>
+                <p className="mb-0 text-sm text-gray-700">{c.content}</p>
               </div>
             ))}
           </div>
         </div>
       </div>
-      <div className="modal-backdrop show" onClick={onClose}></div>
-    </div>
+      <div className="fixed inset-0 z-40 bg-black/40" onClick={onClose}></div>
+    </>
   );
 }
 
@@ -586,29 +583,39 @@ function HistoryModal({ paragraphId, onClose }) {
   }
 
   return (
-    <div className="modal show d-block" tabIndex="-1">
-      <div className="modal-dialog modal-lg modal-dialog-scrollable">
-        <div className="modal-content">
-          <div className="modal-header">
-            <h5 className="modal-title">Riwayat</h5>
-            <button className="btn-close" onClick={onClose}></button>
+    <>
+      <div
+        className="fixed inset-0 z-50 flex items-center justify-center p-4"
+        tabIndex="-1"
+      >
+        <div className="max-h-[85vh] w-full max-w-3xl overflow-hidden rounded-md bg-white shadow-xl">
+          <div className="flex items-center justify-between border-b border-gray-200 px-4 py-3">
+            <h5 className="text-lg font-semibold">Riwayat</h5>
+            <button
+              className="rounded p-1 text-gray-500 hover:bg-gray-100 hover:text-gray-700"
+              onClick={onClose}
+              aria-label="Tutup"
+            >
+              ×
+            </button>
           </div>
-          <div className="modal-body">
-            <div className="list-group">
+          <div className="max-h-[70vh] overflow-y-auto px-4 py-3">
+            <div className="space-y-2">
               {revisions.map((r) => (
                 <div
                   key={r.id}
-                  className={`list-group-item ${selected?.id === r.id ? "active" : ""}`}
+                  className={`cursor-pointer rounded border p-3 transition-colors ${selected?.id === r.id ? "border-blue-200 bg-blue-50" : "border-gray-200 bg-white hover:bg-gray-50"}`}
                   onClick={() => setSelected(r)}
-                  style={{ cursor: "pointer" }}
                 >
-                  <div className="d-flex justify-content-between">
+                  <div className="flex items-center justify-between gap-2">
                     <strong>{r.created_by?.username}</strong>
-                    <small>{new Date(r.created_at).toLocaleString()}</small>
+                    <small className="text-gray-500">
+                      {new Date(r.created_at).toLocaleString()}
+                    </small>
                   </div>
                   {selected?.id === r.id && (
                     <div
-                      className="mt-2 p-2 bg-light text-dark rounded"
+                      className="mt-2 rounded bg-gray-100 p-2 text-gray-800"
                       dangerouslySetInnerHTML={{ __html: r.content }}
                     />
                   )}
@@ -618,7 +625,7 @@ function HistoryModal({ paragraphId, onClose }) {
           </div>
         </div>
       </div>
-      <div className="modal-backdrop show" onClick={onClose}></div>
-    </div>
+      <div className="fixed inset-0 z-40 bg-black/40" onClick={onClose}></div>
+    </>
   );
 }

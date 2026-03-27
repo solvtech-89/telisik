@@ -3,7 +3,11 @@ import { Link, useNavigate, useLocation } from "react-router-dom";
 import { ICONS, API_BASE } from "../config";
 import { useAuth } from "../AuthContext";
 import ProfilePhotoModal from "./ProfilePhotoModal";
-import "./SidebarNav.css";
+
+const menuItemBase =
+  "flex items-center gap-2.5 py-1.5 text-[15px] no-underline transition-all duration-300";
+const menuTitleBase =
+  "mb-1.5 flex items-center text-sm font-semibold text-[#6b6b6b] transition-all duration-300";
 
 const truncateText = (text, maxLength = 100) => {
   if (!text) return "";
@@ -18,6 +22,7 @@ export default function SidebarNav({
   collapsed = false,
   onToggle,
 }) {
+  const mediaBase = API_BASE || "https://api.telisik.org";
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
@@ -107,20 +112,16 @@ export default function SidebarNav({
 
   const fetchSidebarData = async () => {
     try {
-      setLoading(true);
-
       const bannersRes = await fetch(`${API_BASE}/api/banners/`);
 
       if (!bannersRes.ok) {
         throw new Error("Failed to fetch sidebar data");
       }
 
-      const bannersData = bannersRes.json();
+      const bannersData = await bannersRes.json();
       setBanners(bannersData.banners || []);
     } catch (error) {
       console.error("Error fetching sidebar data:", error);
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -135,6 +136,51 @@ export default function SidebarNav({
     }
   };
   const bannerLeft = getBannerByPosition("sidebar_top");
+
+  const resolveBannerImage = (banner) => {
+    if (!banner) return "";
+
+    const rawImage =
+      typeof banner.image === "string" ? banner.image.trim() : "";
+    const rawUrl = typeof banner.url === "string" ? banner.url.trim() : "";
+
+    // Some payloads send static image path in `url` while `image` is empty.
+    const imagePath =
+      rawImage ||
+      (rawUrl.startsWith("/static/") || rawUrl.startsWith("static/")
+        ? rawUrl
+        : "");
+
+    if (!imagePath) return "";
+    if (imagePath.startsWith("http://") || imagePath.startsWith("https://")) {
+      return imagePath;
+    }
+
+    return imagePath.startsWith("/")
+      ? `${mediaBase}${imagePath}`
+      : `${mediaBase}/${imagePath}`;
+  };
+
+  const getBannerHref = (banner) => {
+    if (!banner || typeof banner.url !== "string") return "";
+
+    const rawUrl = banner.url.trim();
+    if (!rawUrl) return "";
+
+    // Static asset path is an image source, not a click destination.
+    if (rawUrl.startsWith("/static/") || rawUrl.startsWith("static/")) {
+      return "";
+    }
+
+    return rawUrl;
+  };
+
+  const bannerLeftImage = resolveBannerImage(bannerLeft);
+  const bannerLeftHref = getBannerHref(bannerLeft);
+
+  const hideBrokenImage = (event) => {
+    event.currentTarget.style.display = "none";
+  };
 
   function timeAgo(dateString) {
     const now = new Date();
@@ -167,11 +213,11 @@ export default function SidebarNav({
 
   return (
     <>
-      <div className="pt-3 pb-3 sidebar-root hidden md:block">
+      <div className="sidebar-nav-shell hidden h-full bg-transparent px-4 pb-4 pt-4 md:block">
         {isLoggedIn ? (
           <div className="text-left mb-4">
             <div
-              className="profile-photo-btn mb-2"
+              className="mb-2 flex max-w-[112px] cursor-pointer items-center justify-center overflow-hidden rounded-full bg-[#eef6c9] transition-all duration-300"
               onClick={() => setShowPhotoModal(true)}
               style={{ cursor: "pointer" }}
             >
@@ -218,7 +264,7 @@ export default function SidebarNav({
           </div>
         ) : (
           <div
-            className="text-left mb-4 cursor-pointer"
+            className="mb-4 cursor-pointer text-left"
             onClick={() => navigate("/login")}
           >
             <img
@@ -229,14 +275,14 @@ export default function SidebarNav({
             />
             {!collapsed && (
               <>
-                <div className="font-semibold">Sila Masuk/Mendaftar</div>
-                <div className="text-gray-500 small">Sumbangsihmu ditunggu</div>
+                <div className="fw-semibold">Sila Masuk/Mendaftar</div>
+                <div className="text-muted small">Sumbangsihmu ditunggu</div>
               </>
             )}
           </div>
         )}
 
-        <hr className="mb-3 border-t" />
+        <hr className="mb-4 h-px border-3 bg-[#d9d6c7]" />
 
         {showTOC && !collapsed && (
           <>
@@ -245,11 +291,11 @@ export default function SidebarNav({
                 {articleTOC.map((it) => (
                   <li
                     key={it.id}
-                    className="mb-2 flex justify-between withborder"
+                    className="mb-2 flex justify-between border-b border-[#CDCB9C]"
                   >
                     <button
                       type="button"
-                      className="p-0 flex items-center w-full justify-start no-underline btn-leftnav"
+                      className="flex w-full items-center justify-start p-0 text-[#3f3e26] no-underline hover:text-[#1f1e12]"
                       onClick={() => {
                         const target = document.getElementById(
                           `section-${it.key}`,
@@ -290,9 +336,9 @@ export default function SidebarNav({
                     </button>
                   </li>
                 ))}
-                <li className="menu-item mb-2 justify-content-between withborder">
+                <li className="mb-2 flex justify-between border-b border-[#CDCB9C] py-1.5 text-[15px] text-[#4a4a4a]">
                   <Link
-                    className="p-0 flex items-center w-full justify-start no-underline btn-leftnav"
+                    className="flex w-full items-center justify-start p-0 text-[#3f3e26] no-underline hover:text-[#1f1e12]"
                     to="#riwayatsuntingan"
                   >
                     <span className="mr-2">
@@ -330,9 +376,9 @@ export default function SidebarNav({
                     <span>Riwayat Penyuntingan</span>
                   </Link>
                 </li>
-                <li className="menu-item mb-2 justify-content-between withborder">
+                <li className="mb-2 flex justify-between border-b border-[#CDCB9C] py-1.5 text-[15px] text-[#4a4a4a]">
                   <Link
-                    className="p-0 flex items-center w-full justify-start no-underline btn-leftnav"
+                    className="flex w-full items-center justify-start p-0 text-[#3f3e26] no-underline hover:text-[#1f1e12]"
                     to="#tanggapan"
                   >
                     <span className="mr-2">
@@ -368,7 +414,7 @@ export default function SidebarNav({
                 </li>
               </ul>
             </nav>
-            <hr />
+            <hr className="my-2 h-px border-3 bg-[#CDCB9C]" />
           </>
         )}
 
@@ -376,7 +422,7 @@ export default function SidebarNav({
           {isLoggedIn ? (
             <>
               <div
-                className={`menu-title flex ${collapsed ? "justify-center" : "justify-between"} items-center ${!isAkunActive ? "text-gray-500" : ""}`}
+                className={`${menuTitleBase} ${collapsed ? "justify-center" : "justify-between"} ${!isAkunActive ? "text-gray-500" : ""}`}
                 onClick={() => !collapsed && setAkunExpanded(!akunExpanded)}
                 style={{
                   cursor: collapsed ? "default" : "pointer",
@@ -391,10 +437,10 @@ export default function SidebarNav({
               </div>
 
               {akunExpanded && !collapsed && (
-                <div className="menu-child">
+                <div className="pl-6">
                   <Link
                     to="/complete-profile"
-                    className={`menu-item ${!isActive("/complete-profile") ? "text-gray-500" : ""}`}
+                    className={`${menuItemBase} ${!isActive("/complete-profile") ? "text-gray-500" : "text-[#4a4a4a]"}`}
                   >
                     <span dangerouslySetInnerHTML={{ __html: ICONS.user }} />
                     Biodata
@@ -402,7 +448,7 @@ export default function SidebarNav({
 
                   <Link
                     to="/settings"
-                    className={`menu-item ${!isActive("/settings") ? "text-gray-500" : ""}`}
+                    className={`${menuItemBase} ${!isActive("/settings") ? "text-gray-500" : "text-[#4a4a4a]"}`}
                   >
                     <span
                       dangerouslySetInnerHTML={{ __html: ICONS.settings }}
@@ -414,7 +460,7 @@ export default function SidebarNav({
             </>
           ) : (
             <div
-              className={`menu-item mt-2 text-gray-500 navinactive ${collapsed ? "text-center" : ""}`}
+              className={`${menuItemBase} mt-2 text-[#D1CFC3] ${collapsed ? "justify-center text-center" : ""}`}
             >
               <span dangerouslySetInnerHTML={{ __html: ICONS.user }} />
               {!collapsed && <> Akunku</>}
@@ -424,7 +470,7 @@ export default function SidebarNav({
           {isLoggedIn ? (
             <>
               <div
-                className={`menu-title flex ${collapsed ? "justify-center" : "justify-between"} items-center ${!isSumbangsihActive ? "text-gray-500" : ""}`}
+                className={`${menuTitleBase} ${collapsed ? "justify-center" : "justify-between"} ${!isSumbangsihActive ? "text-gray-500" : ""}`}
                 onClick={() =>
                   !collapsed && setsumbangsihExpanded(!sumbangsihExpanded)
                 }
@@ -441,24 +487,24 @@ export default function SidebarNav({
               </div>
 
               {sumbangsihExpanded && !collapsed && (
-                <div className="menu-child">
+                <div className="pl-6">
                   <Link
                     to="/kronik"
-                    className={`menu-item ${!isActive("/kronik") ? "text-gray-500" : ""}`}
+                    className={`${menuItemBase} ${!isActive("/kronik") ? "text-gray-500" : "text-[#4a4a4a]"}`}
                   >
                     <span dangerouslySetInnerHTML={{ __html: ICONS.kronik }} />
                     Kronik
                   </Link>
                   <Link
                     to="/tilik"
-                    className={`menu-item ${!isActive("/tilik") ? "text-gray-500" : ""}`}
+                    className={`${menuItemBase} ${!isActive("/tilik") ? "text-gray-500" : "text-[#4a4a4a]"}`}
                   >
                     <span dangerouslySetInnerHTML={{ __html: ICONS.tilik }} />
                     Tilik
                   </Link>
                   <Link
                     to="/diskursus"
-                    className={`menu-item ${!isActive("/diskursus") ? "text-gray-500" : ""}`}
+                    className={`${menuItemBase} ${!isActive("/diskursus") ? "text-gray-500" : "text-[#4a4a4a]"}`}
                   >
                     <span
                       dangerouslySetInnerHTML={{ __html: ICONS.diskursus }}
@@ -467,7 +513,7 @@ export default function SidebarNav({
                   </Link>
                   <Link
                     to="/tanggapan"
-                    className={`menu-item ${!isActive("/tanggapan") ? "text-gray-500" : ""}`}
+                    className={`${menuItemBase} ${!isActive("/tanggapan") ? "text-gray-500" : "text-[#4a4a4a]"}`}
                   >
                     <span
                       dangerouslySetInnerHTML={{ __html: ICONS.tanggapan }}
@@ -479,7 +525,7 @@ export default function SidebarNav({
             </>
           ) : (
             <div
-              className={`menu-item navinactive text-gray-500 ${collapsed ? "text-center" : ""}`}
+              className={`${menuItemBase} text-[#D1CFC3] ${collapsed ? "justify-center text-center" : ""}`}
             >
               <span dangerouslySetInnerHTML={{ __html: ICONS.edit }} />
               {!collapsed && <> Sumbangsih</>}
@@ -487,7 +533,7 @@ export default function SidebarNav({
           )}
           <Link
             to="/tentang-telisik"
-            className={`menu-item ${!isActive("/tentang-telisik") ? "text-gray-500" : ""} ${collapsed ? "text-center block" : ""}`}
+            className={`${menuItemBase} ${!isActive("/tentang-telisik") ? "text-gray-500" : "text-[#4a4a4a]"} ${collapsed ? "block justify-center text-center" : ""}`}
           >
             <span dangerouslySetInnerHTML={{ __html: ICONS.info }} />
             {!collapsed && <> Tentang Telisik</>}
@@ -495,19 +541,19 @@ export default function SidebarNav({
 
           <Link
             to="/bantuan"
-            className={`menu-item ${!isActive("/bantuan") ? "text-gray-500" : ""} ${collapsed ? "text-center block" : ""}`}
+            className={`${menuItemBase} ${!isActive("/bantuan") ? "text-gray-500" : "text-[#4a4a4a]"} ${collapsed ? "block justify-center text-center" : ""}`}
           >
             <span dangerouslySetInnerHTML={{ __html: ICONS.help }} />
             {!collapsed && <> Bantuan & Dukungan</>}
           </Link>
         </nav>
 
-        <hr className="mb-3" />
+        <hr className="mb-3 h-px border-3 bg-[#d9d6c7]" />
 
         {isLoggedIn ? (
           <Link
             to="#"
-            className={`menu-item ${collapsed ? "text-center block" : ""}`}
+            className={`${menuItemBase} text-[#4a4a4a] ${collapsed ? "block justify-center text-center" : ""}`}
             onClick={logout}
           >
             <span dangerouslySetInnerHTML={{ __html: ICONS.logout }} />
@@ -517,14 +563,14 @@ export default function SidebarNav({
           <>
             <Link
               to="#"
-              className={`menu-item navinactive text-gray-500 ${collapsed ? "block" : ""}`}
+              className={`${menuItemBase} text-[#D1CFC3] ${collapsed ? "block" : ""}`}
             >
               <span dangerouslySetInnerHTML={{ __html: ICONS.logout }} />
               {!collapsed && <> Keluar Log</>}
             </Link>
             <Link
               to="#"
-              className={`menu-item navinactive text-gray-500 ${collapsed ? "text-center block" : ""}`}
+              className={`${menuItemBase} text-[#D1CFC3] ${collapsed ? "block justify-center text-center" : ""}`}
               onClick={onToggle}
             >
               <span
@@ -537,32 +583,45 @@ export default function SidebarNav({
           </>
         )}
 
+        {!collapsed && <hr className="my-2 h-px border-3 bg-[#d9d6c7]" />}
+
         {/* Left Banner */}
-        {bannerLeft && (
+        {bannerLeft && bannerLeftImage && (
           <div className="mb-3">
-            <a href={bannerLeft.url} target="_blank" rel="noopener noreferrer">
+            {bannerLeftHref ? (
+              <a
+                href={bannerLeftHref}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <img
+                  src={bannerLeftImage}
+                  alt={bannerLeft.title}
+                  className="w-full rounded-sm border border-[#dedacb] shadow-sm"
+                  style={{ aspectRatio: "2/1", objectFit: "cover" }}
+                  onError={hideBrokenImage}
+                />
+              </a>
+            ) : (
               <img
-                src={
-                  bannerLeft.image.startsWith("/static/")
-                    ? `${API_BASE}${bannerLeft.image}`
-                    : bannerLeft.image
-                }
+                src={bannerLeftImage}
                 alt={bannerLeft.title}
-                className="w-full rounded-none shadow-sm"
+                className="w-full rounded-sm border border-[#dedacb] shadow-sm"
                 style={{ aspectRatio: "2/1", objectFit: "cover" }}
+                onError={hideBrokenImage}
               />
-            </a>
+            )}
           </div>
         )}
         {!collapsed && (
           <div className="feed-section mt-4">
+            <hr className="mb-4 h-px border-3 bg-[#d9d6c7]" />
             <h2
               className="font-semibold mb-3"
               style={{ fontSize: "1.3rem", color: "#FC6736" }}
             >
               Feed Tanggapan
             </h2>
-            <hr className="my-2" />
             {loading ? (
               <div className="text-center py-4">
                 <div
@@ -577,7 +636,7 @@ export default function SidebarNav({
                 {feedItems.map((item, index) => (
                   <div
                     key={`${item.article_id}-${item.paragraph_id}-${index}`}
-                    className="mb-3 pb-3 border-bottom"
+                    className="mb-3 border-b border-gray-200 pb-3"
                   >
                     <div className="mb-2 ml-5">
                       <span style={{ fontSize: "0.8rem", color: "#878672" }}>
@@ -599,7 +658,7 @@ export default function SidebarNav({
                             ? "transparent"
                             : "#f0ad4e",
                           backgroundImage: item.created_by.avatar
-                            ? `url(${item.created_by.avatar.startsWith("/static/") ? `${API_BASE}${item.created_by.avatar}` : item.created_by.avatar})`
+                            ? `url(${item.created_by.avatar.startsWith("/static/") ? `${mediaBase}${item.created_by.avatar}` : item.created_by.avatar})`
                             : "none",
                           backgroundSize: "cover",
                           backgroundPosition: "center",
@@ -653,12 +712,12 @@ export default function SidebarNav({
                         {item.images.map((thumb) => (
                           <div
                             key={thumb.id}
-                            className="rounded-0"
+                            className="rounded-none"
                             style={{
                               width: "48px",
                               height: "48px",
                               backgroundImage: thumb
-                                ? `url(${thumb.url.startsWith("/static/") ? `${API_BASE}${thumb.url}` : thumb.url})`
+                                ? `url(${thumb.url.startsWith("/static/") ? `${mediaBase}${thumb.url}` : thumb.url})`
                                 : "none",
                               backgroundColor: "#e9ecef",
                               backgroundSize: "cover",
@@ -696,7 +755,7 @@ export default function SidebarNav({
                             height="16"
                             viewBox="0 0 16 16"
                             fill="none"
-                            className="me-1"
+                            className="mr-1"
                           >
                             <path
                               d="M14.3438 7.99988C14.3438 11.5034 11.5035 14.3436 7.99997 14.3436C6.75253 14.3436 5.58919 13.9836 4.6082 13.3617L1.65619 14.3436L2.80682 11.6442C2.08183 10.6131 1.65619 9.35618 1.65619 7.99988C1.65619 4.49632 4.4964 1.65613 7.99997 1.65613C11.5035 1.65613 14.3438 4.49632 14.3438 7.99988Z"
@@ -727,7 +786,7 @@ export default function SidebarNav({
                             height="16"
                             viewBox="0 0 16 16"
                             fill="none"
-                            className="me-1"
+                            className="mr-1"
                           >
                             <path
                               d="M4.03769 5.87315L7.99993 1.91089M7.99993 1.91089L11.9622 5.87315M7.99993 1.91089V11.0702"

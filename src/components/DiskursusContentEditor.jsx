@@ -74,13 +74,8 @@ export default function DiskursusContentEditor({
           return;
         }
 
-        if (editor.isEmpty) {
-          setIsEditing(false);
-          setActiveEditorId(null);
-        } else {
-          setIsEditing(false);
-          setActiveEditorId(null);
-        }
+        setIsEditing(false);
+        setActiveEditorId(null);
       }, 150);
     },
   });
@@ -186,7 +181,12 @@ export default function DiskursusContentEditor({
       }
 
       if (tagName === "hr") {
-        return <hr key={`hr-${index}`} className="my-6 border-0 border-t border-gray-200" />;
+        return (
+          <hr
+            key={`hr-${index}`}
+            className="my-6 border-0 border-t border-gray-200"
+          />
+        );
       }
 
       if (tagName === "pre") {
@@ -218,19 +218,19 @@ export default function DiskursusContentEditor({
   };
 
   return (
-    <div onClick={handleClick}>
+    <div className="editor-content-shell" onClick={handleClick}>
       {isEditing ? (
-        <EditorContent editor={editor} />
+        <div className="editor-content-active">
+          <EditorContent editor={editor} />
+        </div>
       ) : editor && !editor.isEmpty ? (
-        renderUnfocusedContent()
+        <div className="editor-content-preview">{renderUnfocusedContent()}</div>
       ) : (
-        <div className="diskursuscontent cursor-pointer">
+        <div className="min-h-[120px] cursor-pointer rounded-md border border-dashed border-gray-300 bg-white px-4 py-4">
           <h2 className="mb-3 text-xl font-semibold italic text-gray-400">
             Sub judul
           </h2>
-          <p className="m-0 italic text-gray-400">
-            Isi diskursus
-          </p>
+          <p className="m-0 italic text-gray-400">Isi diskursus</p>
         </div>
       )}
     </div>

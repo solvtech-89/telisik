@@ -1,10 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import { MessageCircle, Share2, User } from 'lucide-react';
-import { API_BASE } from '../config';
-import "./CommentSection.css";
+import React, { useState, useEffect } from "react";
+import { MessageCircle, Share2, User } from "lucide-react";
+import { API_BASE } from "../config";
 
 function CommentCard({ comment, onReply, depth = 0 }) {
-  const [replyText, setReplyText] = useState('');
+  const [replyText, setReplyText] = useState("");
   const [showReplyBox, setShowReplyBox] = useState(false);
 
   const hasReplies = comment.replies && comment.replies.length > 0;
@@ -26,66 +25,79 @@ function CommentCard({ comment, onReply, depth = 0 }) {
         return `${counter}${unit.charAt(0)}`;
       }
     }
-    return 'now';
+    return "now";
   }
 
   const handleReplySubmit = () => {
     if (!replyText.trim()) return;
     onReply(comment.id, replyText);
-    setReplyText('');
+    setReplyText("");
     setShowReplyBox(false);
   };
 
   return (
-    <div className="comment-wrapper">
-      <div className="comment-item">
-        <div className="comment-avatar">
+    <div className="border-b border-gray-200 py-5 first:pt-0">
+      <div className="flex gap-3">
+        <div className="h-9 w-9 min-w-9 overflow-hidden rounded-full bg-gray-200 text-gray-400 flex items-center justify-center">
           {comment.created_by?.avatar ? (
-            <img src={comment.created_by.avatar} alt={comment.created_by.username} />
+            <img
+              className="h-full w-full object-cover"
+              src={comment.created_by.avatar}
+              alt={comment.created_by.username}
+            />
           ) : (
             <User size={20} />
           )}
         </div>
-        
-        <div className="comment-content-area">
-          <div className="comment-header">
-            <span className="comment-author">Display Name</span>
-            <span className="comment-username">@{comment.created_by?.username || 'username'}</span>
-            <span className="comment-time">• {timeAgo(comment.created_at)}</span>
+
+        <div className="min-w-0 flex-1">
+          <div className="mb-2 flex flex-wrap items-baseline gap-1.5">
+            <span className="text-sm font-semibold text-black">
+              Display Name
+            </span>
+            <span className="text-[0.85rem] text-gray-600">
+              @{comment.created_by?.username || "username"}
+            </span>
+            <span className="text-[0.85rem] text-gray-400">
+              • {timeAgo(comment.created_at)}
+            </span>
           </div>
 
-          <div className="comment-body">
+          <div className="text-gray-700">
             {comment.context_info?.type && (
-              <h5 className="comment-title">
-                {comment.context_info.type === 'paragraph' && 
+              <h5 className="mb-2 text-[0.95rem] font-semibold leading-[1.4] text-black">
+                {comment.context_info.type === "paragraph" &&
                   `Re: ${comment.context_info.section} - Paragraph ${comment.context_info.paragraph_order}`}
-                {comment.context_info.type === 'timeline_paragraph' && 
+                {comment.context_info.type === "timeline_paragraph" &&
                   `Re: ${comment.context_info.timeline_title}`}
-                {(comment.context_info.type === 'article' || comment.context_info.type === 'diskursus') && 
-                  'Heading H5 (Opsional) Maksimal 60 Karakter Lorem Ipsum Dolor'}
+                {(comment.context_info.type === "article" ||
+                  comment.context_info.type === "diskursus") &&
+                  "Heading H5 (Opsional) Maksimal 60 Karakter Lorem Ipsum Dolor"}
               </h5>
             )}
-            
-            <p className="comment-text">{comment.content}</p>
-            
+
+            <p className="mb-2 whitespace-pre-wrap break-words text-[0.9rem] leading-[1.6] text-gray-700">
+              {comment.content}
+            </p>
+
             {comment.selected_text && (
-              <blockquote className="comment-quote">
+              <blockquote className="my-3 border-l-[3px] border-l-[#ff6b35] bg-gray-100 px-3 py-2 text-[0.85rem] italic text-gray-500">
                 "{comment.selected_text}"
               </blockquote>
             )}
 
-            <div className="comment-footer">
-              <button className="comment-action">
+            <div className="mt-2 flex items-center gap-3">
+              <button className="flex items-center gap-1 rounded px-2 py-1 text-[0.85rem] text-gray-600 hover:bg-gray-100">
                 <MessageCircle size={16} />
                 <span>9,999</span>
               </button>
-              <button className="comment-action">
+              <button className="flex items-center gap-1 rounded px-2 py-1 text-[0.85rem] text-gray-600 hover:bg-gray-100">
                 <Share2 size={16} />
                 <span>9,999</span>
               </button>
               {depth < maxDepth && (
-                <button 
-                  className="comment-action-link"
+                <button
+                  className="rounded px-2 py-1 text-[0.85rem] text-gray-600 underline hover:text-black"
                   onClick={() => setShowReplyBox(!showReplyBox)}
                 >
                   Tanggapi
@@ -94,19 +106,25 @@ function CommentCard({ comment, onReply, depth = 0 }) {
             </div>
 
             {showReplyBox && (
-              <div className="reply-box">
+              <div className="mt-4 rounded-lg bg-gray-50 p-4">
                 <textarea
-                  className="reply-input"
+                  className="w-full resize-y rounded-md border border-gray-300 px-3 py-2 text-[0.9rem] focus:border-[#ff6b35] focus:outline-none"
                   rows="3"
                   placeholder="Tulis tanggapan..."
                   value={replyText}
                   onChange={(e) => setReplyText(e.target.value)}
                 />
-                <div className="reply-actions">
-                  <button className="btn-reply-cancel" onClick={() => setShowReplyBox(false)}>
+                <div className="mt-3 flex justify-end gap-2">
+                  <button
+                    className="rounded-md bg-gray-200 px-5 py-2 text-sm font-medium text-gray-700 hover:bg-gray-300"
+                    onClick={() => setShowReplyBox(false)}
+                  >
                     Batal
                   </button>
-                  <button className="btn-reply-submit" onClick={handleReplySubmit}>
+                  <button
+                    className="rounded-md bg-[#ff6b35] px-5 py-2 text-sm font-medium text-white hover:bg-[#e55a2b]"
+                    onClick={handleReplySubmit}
+                  >
                     Kirim
                   </button>
                 </div>
@@ -117,11 +135,11 @@ function CommentCard({ comment, onReply, depth = 0 }) {
       </div>
 
       {hasReplies && (
-        <div className="comment-replies">
+        <div className="ml-8 mt-4 md:ml-11">
           {comment.replies.map((reply) => (
-            <CommentCard 
-              key={reply.id} 
-              comment={reply} 
+            <CommentCard
+              key={reply.id}
+              comment={reply}
               onReply={onReply}
               depth={depth + 1}
             />
@@ -148,7 +166,7 @@ export default function CommentsSection({ articleSlug, tipe }) {
       if (loadingMore || !hasMore) return;
 
       // Target the middle column scroll container
-      const scrollContainer = document.getElementById('middle-col-scroll');
+      const scrollContainer = document.getElementById("middle-col-scroll");
       if (!scrollContainer) return;
 
       const { scrollTop, scrollHeight, clientHeight } = scrollContainer;
@@ -159,10 +177,10 @@ export default function CommentsSection({ articleSlug, tipe }) {
       }
     };
 
-    const scrollContainer = document.getElementById('middle-col-scroll');
+    const scrollContainer = document.getElementById("middle-col-scroll");
     if (scrollContainer) {
-      scrollContainer.addEventListener('scroll', handleScroll);
-      return () => scrollContainer.removeEventListener('scroll', handleScroll);
+      scrollContainer.addEventListener("scroll", handleScroll);
+      return () => scrollContainer.removeEventListener("scroll", handleScroll);
     }
   }, [loadingMore, hasMore, currentPage]);
 
@@ -175,7 +193,7 @@ export default function CommentsSection({ articleSlug, tipe }) {
 
     try {
       const response = await fetch(
-        `${API_BASE}/api/articles/${tipe}/${articleSlug}/comments/?page=${page}&limit=10`
+        `${API_BASE}/api/articles/${tipe}/${articleSlug}/comments/?page=${page}&limit=10`,
       );
       const data = await response.json();
 
@@ -188,7 +206,7 @@ export default function CommentsSection({ articleSlug, tipe }) {
       setHasMore(!!data.next);
       setCurrentPage(page);
     } catch (err) {
-      console.error('Failed to fetch comments:', err);
+      console.error("Failed to fetch comments:", err);
     } finally {
       setLoading(false);
       setLoadingMore(false);
@@ -196,63 +214,63 @@ export default function CommentsSection({ articleSlug, tipe }) {
   };
 
   const handleReply = async (parentId, content) => {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem("token");
     try {
       const response = await fetch(
         `${API_BASE}/api/articles/${tipe}/${articleSlug}/comments/add/`,
         {
-          method: 'POST',
-          credentials: 'include',
+          method: "POST",
+          credentials: "include",
           headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
             Authorization: `Token ${token}`,
           },
           body: JSON.stringify({
             content,
             parent_id: parentId,
-            comment_type: 'article',
+            comment_type: "article",
           }),
-        }
+        },
       );
 
       if (response.ok) {
         fetchComments(1);
       }
     } catch (err) {
-      console.error('Failed to submit reply:', err);
-      alert('Gagal mengirim tanggapan');
+      console.error("Failed to submit reply:", err);
+      alert("Gagal mengirim tanggapan");
     }
   };
 
   if (loading) {
     return (
-      <div className="comments-section">
-      <h2 className="comments-title">Tanggapan</h2>
-        <div className="comments-loading">Loading comments...</div>
+      <div className="w-full">
+        <h2 className="mb-2 text-2xl text-[#ff6b35]">Tanggapan</h2>
+        <div className="p-8 text-center text-gray-400">Loading comments...</div>
       </div>
     );
   }
 
   return (
-    <div className="comments-section">
-      <h2 className="comments-title">Tanggapan</h2>
-      <hr className="comments-divider" />
+    <div className="w-full">
+      <h2 className="mb-2 text-2xl text-[#ff6b35]">Tanggapan</h2>
+      <hr className="mb-6 mt-1 border-gray-300" />
       {comments.length === 0 ? (
-        <p className="comments-empty">Belum ada tanggapan</p>
+        <p className="p-8 text-center text-gray-400">Belum ada tanggapan</p>
       ) : (
         <>
-          <div className="comments-listed">
+          <div className="flex flex-col">
             {comments.map((comment) => (
-              <CommentCard 
-                key={comment.id} 
-                comment={comment} 
+              <CommentCard
+                key={comment.id}
+                comment={comment}
                 onReply={handleReply}
               />
             ))}
           </div>
-          
+
           {loadingMore && (
-            <div className="comments-loading-more">
+            <div className="p-4 text-center text-sm text-gray-400">
               Loading more comments...
             </div>
           )}

@@ -8,26 +8,11 @@ export default function DropdownItem({ icon, label, onClick, isActive }) {
         e.stopPropagation();
         onClick();
       }}
-      style={{
-        display: "flex",
-        alignItems: "center",
-        gap: "12px",
-        width: "100%",
-        padding: "8px 12px",
-        border: "none",
-        background: isActive ? "#f3f4f6" : "transparent",
-        cursor: "pointer",
-        fontSize: "14px",
-        textAlign: "left",
-        color: isActive ? "#1f2937" : "#4b5563",
-        fontWeight: isActive ? "500" : "400"
-      }}
-      onMouseEnter={(e) => {
-        if (!isActive) e.currentTarget.style.backgroundColor = "#f9fafb";
-      }}
-      onMouseLeave={(e) => {
-        if (!isActive) e.currentTarget.style.backgroundColor = "transparent";
-      }}
+      className={`flex w-full items-center gap-3 px-3 py-2 text-left text-sm transition-colors ${
+        isActive
+          ? "bg-gray-100 font-medium text-gray-800"
+          : "bg-transparent font-normal text-gray-600 hover:bg-gray-50"
+      }`}
     >
       {icon}
       <span>{label}</span>

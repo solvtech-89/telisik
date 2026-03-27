@@ -62,18 +62,14 @@ function renderNode(node, key) {
 
     case "blockquote":
       return (
-        <blockquote
-          key={key}
-          className="border-start border-3 ps-3 mb-3"
-          style={{ borderColor: "#dee2e6" }}
-        >
+        <blockquote key={key} className="mb-3 border-l-4 border-gray-300 pl-3">
           {renderNodes(node.content)}
         </blockquote>
       );
 
     case "codeBlock":
       return (
-        <pre key={key} className="bg-light p-3 rounded mb-3">
+        <pre key={key} className="mb-3 rounded bg-gray-100 p-3">
           <code>{renderContent(node.content)}</code>
         </pre>
       );
@@ -129,7 +125,7 @@ function renderTextNode(node, key) {
           break;
         case "code":
           element = (
-            <code key={key} className="bg-light px-1 rounded">
+            <code key={key} className="rounded bg-gray-100 px-1">
               {element}
             </code>
           );
@@ -141,7 +137,7 @@ function renderTextNode(node, key) {
               href={mark.attrs?.href}
               target={mark.attrs?.target}
               rel="noopener noreferrer"
-              className="text-primary"
+              className="text-blue-600 underline"
             >
               {element}
             </a>

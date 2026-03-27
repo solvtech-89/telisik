@@ -1,43 +1,39 @@
 import React from "react";
 import { Modal, Button } from "./ui";
 
-export default function ArticleEditModeModal({
-  show,
-  onConfirm,
-  onCancel,
-}) {
+export default function ArticleEditModeModal({ show, onConfirm, onCancel }) {
   return (
     <Modal
       show={show}
       onClose={onCancel}
       title="Sila tanggapi/sunting"
       size="lg"
-      className="bg-[#f5f1e8]"
+      className="admin-edit-modal bg-[#f5f1e8]"
       footer={[
         <Button
           key="cancel"
           variant="ghost"
-          className="border border-red-600 text-red-600 hover:bg-red-50"
+          className="admin-edit-modal-btn admin-edit-modal-cancel border border-red-600 text-red-600 hover:bg-red-50"
           onClick={onCancel}
         >
           Batalkan
         </Button>,
         <Button
           key="confirm"
-          className="bg-[#6b7c5a] hover:bg-[#5f6f50] active:bg-[#516046]"
+          className="admin-edit-modal-btn admin-edit-modal-confirm bg-[#6b7c5a] hover:bg-[#5f6f50] active:bg-[#516046]"
           onClick={onConfirm}
         >
           Saya Paham
         </Button>,
       ]}
     >
-      <div className="space-y-3 text-sm text-neutral-700">
+      <div className="admin-edit-modal-content space-y-3 text-sm text-neutral-700">
         <p>Klik tombol Tanggapi/Sunting di bawah paragraf sasaran.</p>
         <p className="italic text-neutral-500">
           Tiap paragraf maksimal 560 karakter termasuk spasi. Lebih dari itu,
           ketikan otomatis menjadi paragraf baru.
         </p>
-        <ul className="list-disc space-y-1 pl-5">
+        <ul className="admin-edit-modal-list list-disc space-y-1 pl-5">
           <li>Hindari beropini: suntingan wajib faktual dan relevan.</li>
           <li>
             Dilarang memuat ujaran kebencian atau stereotipe suku, agama, ras,
@@ -55,7 +51,7 @@ export default function ArticleEditModeModal({
             Sila baca{" "}
             <a
               href="/pages/terms-and-conditions"
-              className="font-medium text-blue-600 hover:text-blue-700"
+              className="admin-edit-modal-link font-medium text-blue-600 hover:text-blue-700"
             >
               Ketentuan Urun Daya Telisik
             </a>

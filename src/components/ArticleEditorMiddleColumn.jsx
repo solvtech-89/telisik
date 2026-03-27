@@ -42,15 +42,15 @@ export default function ArticleEditorMiddleColumn({
   return (
     <div
       id="middle-col-scroll"
-      className={`${
+      className={`editor-main-column col-span-1 ${
         isDiskursus
-          ? "md:col-span-7 border-r h-full py-5 px-5"
+          ? "md:col-span-7"
           : collapsed
-            ? "col border-r h-full py-5 px-5"
-            : "md:col-span-7 border-r h-full py-5 px-5"
-      } ${!isMobile ? "overflow-y-auto max-h-[calc(100vh-120px)]" : ""}`}
+            ? "md:col-span-8"
+            : "md:col-span-7"
+      } h-full min-h-0 border-r bg-[#fffdf8] px-5 py-5 ${!isMobile ? "overflow-y-scroll" : ""}`}
     >
-      <div className="container-fluid mt-2">
+      <div className="mt-2 mb-3">
         <Alert
           type={alert.type}
           message={alert.message}
@@ -69,8 +69,8 @@ export default function ArticleEditorMiddleColumn({
         <span className="text-blue-600">
           rangkuman isi tulisan sekaligus penggugah minat
         </span>{" "}
-        agar pembaca lanjut menelaah paparan—maksimal 155 karakter
-        termasuk spasi.
+        agar pembaca lanjut menelaah paparan—maksimal 155 karakter termasuk
+        spasi.
       </EditorHintBox>
       {isDiskursus ? (
         <>
@@ -85,9 +85,9 @@ export default function ArticleEditorMiddleColumn({
 
           <EditorHintBox className="mt-4">
             Manfaatkan <span className="text-blue-600">styling tools</span>{" "}
-            (bold, italic, numbering, footnote, dsb.) Tiap paragraf
-            maksimal 560 karakter termasuk spasi; Melebihi itu, kursor
-            otomatis turun membuat alinea baru.
+            (bold, italic, numbering, footnote, dsb.) Tiap paragraf maksimal 560
+            karakter termasuk spasi; Melebihi itu, kursor otomatis turun membuat
+            alinea baru.
           </EditorHintBox>
         </>
       ) : (
@@ -110,11 +110,11 @@ export default function ArticleEditorMiddleColumn({
                 </h2>
 
                 <EditorHintBox className="mt-2">
-                  Manfaatkan <span className="text-blue-600">styling tools</span>{" "}
-                  (bold, italic, numbering, footnote, dsb.) Tiap
-                  paragraf maksimal 560 karakter termasuk spasi;
-                  Melebihi itu, kursor otomatis turun membuat alinea
-                  baru.
+                  Manfaatkan{" "}
+                  <span className="text-blue-600">styling tools</span> (bold,
+                  italic, numbering, footnote, dsb.) Tiap paragraf maksimal 560
+                  karakter termasuk spasi; Melebihi itu, kursor otomatis turun
+                  membuat alinea baru.
                 </EditorHintBox>
 
                 <ArticleSectionEditor
@@ -128,7 +128,7 @@ export default function ArticleEditorMiddleColumn({
                   footnoteMap={footnoteMap}
                 />
               </div>
-              <hr />
+              <hr className="my-5 border-gray-200" />
             </React.Fragment>
           ),
         )

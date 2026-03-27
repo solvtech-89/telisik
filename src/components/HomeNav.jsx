@@ -77,12 +77,9 @@ export default function HomeNav() {
 
   if (authLoading) {
     return (
-      <div
-        className="p-2 flex justify-center items-center"
-        style={{ height: "100%" }}
-      >
+      <div className="flex h-full items-center justify-center p-2">
         <div
-          className="w-6 h-6 border-2 border-gray-300 rounded-full border-t-gray-600 animate-spin"
+          className="h-6 w-6 animate-spin rounded-full border-2 border-gray-300 border-t-gray-600"
           role="status"
         >
           <span className="sr-only">Loading...</span>
@@ -92,7 +89,7 @@ export default function HomeNav() {
   }
 
   return (
-    <div className="p-2" style={{ overflowY: "auto", height: "100%" }}>
+    <div className="h-full overflow-y-auto p-2">
       {/* Header Section */}
       <div className="nav-header mb-4">
         {isLoggedIn ? (
@@ -119,7 +116,7 @@ export default function HomeNav() {
             </Link>
             <button
               onClick={handleLogout}
-              className="w-full text-sm text-red-600 border border-red-600 rounded px-3 py-2 text-center"
+              className="w-full rounded border border-red-600 px-3 py-2 text-center text-sm text-red-600 transition-colors hover:bg-red-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500/30"
             >
               Keluar
             </button>
@@ -134,9 +131,9 @@ export default function HomeNav() {
                 <img src="/login.svg" className="mr-2" alt="Login" />
               </div>
               <div>
-                <h3 className="mt-3 mb-0 font-bold text-gray-900">
+                <h5 className="mt-3 mb-0 font-bold text-gray-900">
                   Sila Masuk/Mendaftar
-                </h3>
+                </h5>
                 <small className="text-gray-500">
                   Sunting profil mu, terlibatlah
                 </small>
@@ -148,32 +145,27 @@ export default function HomeNav() {
 
       {/* Navigation Menu */}
       <nav>
-        <ul className="list-none p-0 m-0">
+        <ul className="m-0 list-none p-0">
           {menuItems.map((item) => {
             const isDisabled = item.requiresAuth && !isLoggedIn;
             return (
-              <li key={item.id}>
+              <li key={item.id} className="mb-1">
                 <button
                   type="button"
-                  className={`flex items-center p-0 text-sm ${
-                    activeMenu === item.id
-                      ? "font-bold text-gray-900"
-                      : "text-gray-700"
+                  className={`flex w-full items-center rounded-md px-2 py-1.5 text-sm transition-colors ${
+                    isDisabled
+                      ? "cursor-not-allowed text-[#706f5e] opacity-70"
+                      : activeMenu === item.id
+                        ? "bg-gray-100 font-semibold text-gray-900"
+                        : "text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/30"
                   }`}
                   onClick={() => !isDisabled && setActiveMenu(item.id)}
                   disabled={isDisabled}
-                  style={{
-                    cursor: isDisabled ? "not-allowed" : "pointer",
-                    color: isDisabled ? "#706f5eff" : "inherit",
-                  }}
                 >
                   <span
-                    className="mr-2"
+                    className={`mr-2 ${isDisabled ? "opacity-40" : "opacity-100"}`}
                     dangerouslySetInnerHTML={{
                       __html: ICONS[item.key] || ICONS.h1,
-                    }}
-                    style={{
-                      opacity: isDisabled ? 0.4 : 1,
                     }}
                   />
                   <span>{item.label}</span>
@@ -187,13 +179,13 @@ export default function HomeNav() {
       {/* Feed Section */}
       <div className="feed-section mt-4">
         <h6 className="font-semibold text-gray-500 mb-3">
-          <span className="text-danger">❤️</span> (Feed Tanggapan)
+          <span className="text-red-500">❤️</span> (Feed Tanggapan)
         </h6>
 
         {loading ? (
           <div className="text-center py-4">
             <div
-              className="w-4 h-4 border-2 border-gray-300 rounded-full border-t-gray-600 animate-spin mx-auto"
+              className="mx-auto h-4 w-4 animate-spin rounded-full border-2 border-gray-300 border-t-gray-600"
               role="status"
             >
               <span className="sr-only">Loading...</span>
@@ -205,10 +197,7 @@ export default function HomeNav() {
               <div className="p-3">
                 {/* User Info */}
                 <div className="flex items-start mb-2">
-                  <div
-                    className="rounded-full bg-warning mr-2"
-                    style={{ width: "24px", height: "24px", minWidth: "24px" }}
-                  />
+                  <div className="mr-2 h-6 w-6 shrink-0 rounded-full bg-yellow-400" />
                   <div className="flex-1">
                     <div className="flex items-center mb-1">
                       <span className="font-semibold text-sm mr-2">
@@ -221,10 +210,7 @@ export default function HomeNav() {
                     <h6 className="mb-2 text-sm">
                       {truncateText(item.title, 60)}
                     </h6>
-                    <p
-                      className="text-gray-500 text-sm mb-2"
-                      style={{ fontSize: "0.85rem" }}
-                    >
+                    <p className="mb-2 text-[0.85rem] text-gray-500">
                       {truncateText(item.content, 120)}
                     </p>
                   </div>
@@ -235,11 +221,7 @@ export default function HomeNav() {
                     <img
                       src={item.image}
                       alt="preview"
-                      className="w-full h-auto rounded"
-                      style={{
-                        maxHeight: "100px",
-                        objectFit: "cover",
-                      }}
+                      className="h-auto max-h-[100px] w-full rounded object-cover"
                     />
                   </div>
                 )}
@@ -249,10 +231,8 @@ export default function HomeNav() {
                     {item.thumbnails.slice(0, 3).map((thumb, idx) => (
                       <div
                         key={idx}
-                        className="bg-warning rounded"
+                        className="h-[60px] w-[60px] rounded bg-yellow-400"
                         style={{
-                          width: "60px",
-                          height: "60px",
                           backgroundImage: thumb ? `url(${thumb})` : "none",
                           backgroundSize: "cover",
                           backgroundPosition: "center",
@@ -267,29 +247,21 @@ export default function HomeNav() {
                     <span>👁️ {item.views || "9.999"}</span>
                     <span>💬 {item.comments || "9.999"}</span>
                   </div>
-                  <button className="text-sm text-gray-600 border border-gray-300 rounded px-2 py-1">
+                  <button className="rounded border border-gray-300 px-2 py-1 text-sm text-gray-600 transition-colors hover:bg-gray-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/30">
                     Tanggapi
                   </button>
                 </div>
-                className="bg-yellow-400 rounded"
                 {item.messages && item.messages.length > 0 && (
-                  <div className="mt-3 pt-3 border-top">
+                  <div className="mt-3 border-t border-gray-200 pt-3">
                     <div className="mb-2">
-                      <span className="text-primary text-sm">
+                      <span className="text-sm text-blue-600">
                         Merespon #{item.messages[0].id || "000000-000"}
                       </span>
                     </div>
                     {item.messages.map((msg, msgIdx) => (
                       <div key={msgIdx} className="mb-2">
                         <div className="flex items-start">
-                          <div
-                            className="rounded-full bg-blue-300 mr-2"
-                            style={{
-                              width: "20px",
-                              height: "20px",
-                              minWidth: "20px",
-                            }}
-                          />
+                          <div className="mr-2 h-5 w-5 shrink-0 rounded-full bg-blue-300" />
                           <div className="flex-1">
                             <div className="flex items-center mb-1">
                               <span className="font-semibold text-sm mr-2">
@@ -299,10 +271,7 @@ export default function HomeNav() {
                                 {msg.timestamp || "00m"}
                               </span>
                             </div>
-                            <p
-                              className="text-gray-500 text-sm mb-0"
-                              style={{ fontSize: "0.85rem" }}
-                            >
+                            <p className="mb-0 text-[0.85rem] text-gray-500">
                               {truncateText(msg.content, 100)}
                               {msg.emoji && (
                                 <span className="ml-1">{msg.emoji}</span>
@@ -317,7 +286,7 @@ export default function HomeNav() {
                 {/* Show more messages */}
                 {item.hasMoreMessages && (
                   <div className="text-center mt-2">
-                    <button className="text-sm text-gray-500 p-0">
+                    <button className="rounded px-1 py-0.5 text-sm text-gray-500 hover:text-gray-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/30">
                       Menampilkan lainnya ↓
                     </button>
                   </div>
@@ -326,13 +295,10 @@ export default function HomeNav() {
             </div>
           ))
         ) : (
-          <div className="mb-3 bg-transparent border-0">
+          <div className="mb-3 bg-transparent">
             <div className="p-3">
               <div className="flex items-start mb-2">
-                <div
-                  className="rounded-full bg-yellow-400 mr-2"
-                  style={{ width: "24px", height: "24px", minWidth: "24px" }}
-                />
+                <div className="mr-2 h-6 w-6 shrink-0 rounded-full bg-yellow-400" />
                 <div className="flex-1">
                   <div className="flex items-center mb-1">
                     <span className="font-semibold text-sm mr-2">
@@ -343,10 +309,7 @@ export default function HomeNav() {
                   <h6 className="mb-2 text-sm">
                     Heading (Opsional) Maksimal 60 Karakter Lorem Ipsum Dolor
                   </h6>
-                  <p
-                    className="text-gray-500 text-sm mb-2"
-                    style={{ fontSize: "0.85rem" }}
-                  >
+                  <p className="mb-2 text-[0.85rem] text-gray-500">
                     Donec eget quam bibendum, verius eleifend feugiat metus.
                     Fusce pellentesque diam nunc bibendum est finibus nulla eget
                     molestie enim.
@@ -358,8 +321,7 @@ export default function HomeNav() {
                 {[1, 2, 3].map((idx) => (
                   <div
                     key={idx}
-                    className="bg-yellow-400 rounded"
-                    style={{ width: "60px", height: "60px" }}
+                    className="h-[60px] w-[60px] rounded bg-yellow-400"
                   />
                 ))}
               </div>
@@ -369,7 +331,7 @@ export default function HomeNav() {
                   <span>👁️ 9.999</span>
                   <span>💬 9.999</span>
                 </div>
-                <button className="text-sm border border-gray-300 rounded px-2 py-1">
+                <button className="rounded border border-gray-300 px-2 py-1 text-sm text-gray-600 transition-colors hover:bg-gray-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/30">
                   Tanggapi
                 </button>
               </div>

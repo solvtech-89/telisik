@@ -3,15 +3,15 @@ import React from "react";
 const categoryConfig = {
   AGRARIA: { label: "Agraria", color: "from-red-500 to-red-600" },
   EKOSOSPOL: { label: "Ekosospol", color: "from-blue-500 to-blue-600" },
-  SUMBER_DAYA_ALAM: { label: "Sumber Daya Alam", color: "from-green-500 to-green-600" },
+  SUMBER_DAYA_ALAM: {
+    label: "Sumber Daya Alam",
+    color: "from-green-500 to-green-600",
+  },
 };
 
-export default function CategoryFilter({
-  activeCategories,
-  onCategoryToggle,
-}) {
+export default function CategoryFilter({ activeCategories, onCategoryToggle }) {
   return (
-    <div className="bg-white rounded-lg p-4 shadow-sm">
+    <div className="category-filter-shell rounded-lg bg-white p-4 shadow-sm">
       <h3 className="text-sm font-semibold text-neutral-900 mb-3">
         Filter Kategori
       </h3>

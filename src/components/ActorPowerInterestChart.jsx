@@ -127,7 +127,7 @@ export default function ActorPowerInterestChart({ slug, tipe }) {
                       <div>Power: {actor.power}%</div>
                       <div>Interest: {actor.interest}%</div>
                       {actor.note && (
-                        <div className="text-muted">{actor.note}</div>
+                        <div className="text-gray-500">{actor.note}</div>
                       )}
                     </div>
                   );

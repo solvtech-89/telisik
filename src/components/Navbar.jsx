@@ -3,6 +3,256 @@ import { Link, useNavigate, useLocation } from "react-router-dom";
 import { ICONS } from "../config";
 import { useAuth } from "../AuthContext";
 
+const renderNavIcon = (type, className = "") => {
+  switch (type) {
+    case "beranda":
+      return (
+        <svg
+          width="16"
+          height="16"
+          viewBox="0 0 16 16"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+          className={className}
+          aria-hidden="true"
+        >
+          <path
+            d="M7.40792 1.44055C7.65013 0.949789 8.34993 0.94979 8.59214 1.44055L10.321 4.94358C10.4172 5.13846 10.6031 5.27353 10.8181 5.30478L14.684 5.86652C15.2256 5.94522 15.4418 6.61077 15.0499 6.99278L12.2526 9.7195C12.097 9.8712 12.0259 10.0898 12.0627 10.304L12.723 14.1541C12.8156 14.6935 12.2494 15.1049 11.765 14.8502L8.30729 13.0324C8.11493 12.9313 7.88513 12.9313 7.69277 13.0324L4.23507 14.8502C3.75067 15.1049 3.18451 14.6935 3.27702 14.1541L3.93738 10.304C3.97412 10.0898 3.90311 9.8712 3.74749 9.7195L0.950153 6.99278C0.558257 6.61077 0.774511 5.94522 1.3161 5.86652L5.18192 5.30478C5.39698 5.27353 5.5829 5.13846 5.67908 4.94358L7.40792 1.44055Z"
+            fill="currentColor"
+            stroke="currentColor"
+            strokeWidth="0.725"
+          />
+          <path
+            d="M8.00003 1.83105C8.00003 1.83105 8.00003 4.13285 8.00003 5.47898"
+            stroke="#F9F6EF"
+            strokeWidth="0.7"
+            strokeLinecap="round"
+          />
+          <path
+            d="M14.4631 6.54987C14.4631 6.54987 12.2806 7.24306 11.0004 7.65903"
+            stroke="#F9F6EF"
+            strokeWidth="0.7"
+            strokeLinecap="round"
+          />
+          <path
+            d="M1.7708 6.66632C1.7708 6.66632 3.71926 7.24289 4.99951 7.65887"
+            stroke="#F9F6EF"
+            strokeWidth="0.7"
+            strokeLinecap="round"
+          />
+          <path
+            d="M4.09967 14.0895C4.09967 14.0895 5.35423 12.2752 6.14546 11.1861"
+            stroke="#F9F6EF"
+            strokeWidth="0.7"
+            strokeLinecap="round"
+          />
+          <path
+            d="M6.021 5.88029C6.021 5.88029 6.20668 6.16551 6.99791 7.25455"
+            stroke="#F9F6EF"
+            strokeWidth="0.5"
+            strokeLinecap="round"
+          />
+          <path
+            d="M10.0091 5.70565C10.0091 5.70565 9.67621 6.21746 9.00211 7.25457"
+            stroke="#F9F6EF"
+            strokeWidth="0.5"
+            strokeLinecap="round"
+          />
+          <path
+            d="M4.68188 9.78115C4.68188 9.78115 5.09837 9.57665 6.37861 9.16067"
+            stroke="#F9F6EF"
+            strokeWidth="0.5"
+            strokeLinecap="round"
+          />
+          <path
+            d="M11.4064 9.75203C11.4064 9.75203 10.9017 9.57665 9.62144 9.16067"
+            stroke="#F9F6EF"
+            strokeWidth="0.5"
+            strokeLinecap="round"
+          />
+          <path
+            d="M8.00003 12.2847C8.00003 12.2847 8.00003 11.6849 8.00003 10.3388"
+            stroke="#F9F6EF"
+            strokeWidth="0.5"
+            strokeLinecap="round"
+          />
+          <path
+            d="M12.0469 14.1769C12.0469 14.1769 10.6457 12.2752 9.85442 11.1861"
+            stroke="#F9F6EF"
+            strokeWidth="0.7"
+            strokeLinecap="round"
+          />
+          <circle cx="8.00003" cy="8.53262" r="0.628047" fill="#F9F6EF" />
+        </svg>
+      );
+    case "kronik":
+      return (
+        <svg
+          width="16"
+          height="16"
+          viewBox="0 0 16 16"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+          className={className}
+          aria-hidden="true"
+        >
+          <rect
+            x="2.5"
+            y="1.83334"
+            width="11"
+            height="12.3333"
+            rx="1.16667"
+            stroke="currentColor"
+          />
+          <path
+            d="M4.66666 6.94662H9.99998"
+            stroke="currentColor"
+            strokeWidth="0.7"
+            strokeLinecap="round"
+          />
+          <path
+            d="M4.66666 9.06836H11.3333"
+            stroke="currentColor"
+            strokeWidth="0.7"
+            strokeLinecap="round"
+          />
+          <path
+            d="M4.66666 4.76855H11.3333"
+            stroke="currentColor"
+            strokeWidth="0.7"
+            strokeLinecap="round"
+          />
+          <path
+            d="M4.66666 11.2314H9.99998"
+            stroke="currentColor"
+            strokeWidth="0.7"
+            strokeLinecap="round"
+          />
+        </svg>
+      );
+    case "tilik":
+      return (
+        <svg
+          width="16"
+          height="16"
+          viewBox="0 0 16 16"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+          className={className}
+          aria-hidden="true"
+        >
+          <circle
+            cx="6.79981"
+            cy="6.79981"
+            r="6.39981"
+            transform="matrix(-1 0 0 1 15 1)"
+            stroke="currentColor"
+            strokeWidth="0.8"
+            strokeLinecap="round"
+          />
+          <path
+            d="M3.49255 12.5074L0.999927 15"
+            stroke="currentColor"
+            strokeLinecap="round"
+          />
+          <path
+            d="M3.92701 7.52269C3.82895 7.69678 3.82947 7.90265 3.92817 8.07638C4.31532 8.75782 5.54885 10.4627 8.20012 10.4627C10.6464 10.4627 11.9811 8.80151 12.434 8.10325C12.556 7.91521 12.5614 7.68131 12.4455 7.48946C12.0247 6.79302 10.7675 5.16419 8.20012 5.13696C5.53724 5.13696 4.31107 6.84086 3.92701 7.52269Z"
+            stroke="currentColor"
+            strokeWidth="0.8"
+          />
+          <circle
+            cx="1.7338"
+            cy="1.7338"
+            r="1.7338"
+            transform="matrix(-1 0 0 1 9.93396 6.06607)"
+            fill="currentColor"
+          />
+        </svg>
+      );
+    case "diskursus":
+      return (
+        <svg
+          width="16"
+          height="16"
+          viewBox="0 0 16 16"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+          className={className}
+          aria-hidden="true"
+        >
+          <path
+            d="M1.74963 8.49768H10.0807C10.1878 8.49783 10.275 8.58483 10.275 8.69202V12.1627C10.275 13.4202 9.25521 14.4401 7.99768 14.4401H3.83264C2.57511 14.4401 1.5553 13.4202 1.5553 12.1627V8.69202C1.5553 8.58474 1.64236 8.49768 1.74963 8.49768Z"
+            stroke="currentColor"
+          />
+          <path
+            d="M10.2773 9.73331H13.4647C13.8961 9.73331 14.2457 10.083 14.2457 10.5143C14.2457 11.8084 13.1967 12.8574 11.9027 12.8574H10.1774"
+            stroke="currentColor"
+          />
+          <path
+            d="M4.43363 6.95617V6.60905C4.43363 6.15841 4.28747 5.71993 4.01709 5.35942C3.64683 4.86574 3.64683 4.18692 4.01709 3.69324C4.28747 3.33273 4.43363 2.89425 4.43363 2.44361V1.40225"
+            stroke="currentColor"
+            strokeWidth="0.7"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+          <path
+            d="M2.69833 6.95651V6.24292C2.69833 6.02737 2.64814 5.81478 2.55174 5.62198L2.31456 5.14762C2.11911 4.75672 2.11912 4.29662 2.31456 3.90572L2.55174 3.43136C2.64814 3.23856 2.69833 3.02597 2.69833 2.81042V2.09683"
+            stroke="currentColor"
+            strokeWidth="0.7"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+          <path
+            d="M6.9563 2.5598V6.95633L8.29563 5.617C8.42582 5.48681 8.60241 5.41366 8.78653 5.41366H13.6668C14.4337 5.41366 15.0553 4.79202 15.0553 4.02518V2.5598C15.0553 1.79297 14.4337 1.17133 13.6668 1.17133H8.34478C7.57794 1.17133 6.9563 1.79297 6.9563 2.5598Z"
+            stroke="currentColor"
+            strokeWidth="0.8"
+            strokeLinejoin="round"
+          />
+          <circle cx="9.84872" cy="3.18075" r="0.6" fill="currentColor" />
+          <circle cx="12.1628" cy="3.18075" r="0.6" fill="currentColor" />
+        </svg>
+      );
+    case "profil":
+      return (
+        <svg
+          width="16"
+          height="16"
+          viewBox="0 0 16 16"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+          className={className}
+          aria-hidden="true"
+        >
+          <path
+            d="M2.53845 11.4687V13.0003C2.53845 13.8288 3.21003 14.5003 4.03845 14.5003H13.4309"
+            stroke="currentColor"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+          <path
+            d="M2.54146 13.043L2.53857 2.19042C2.53847 1.80926 2.84744 1.50021 3.2286 1.50021H13.1127C13.3032 1.50021 13.4577 1.65462 13.4577 1.84512L13.4606 11.4034C13.4606 11.594 13.3061 11.7486 13.1156 11.7486H3.83545C3.12062 11.7486 2.5412 12.3282 2.54146 13.043Z"
+            stroke="currentColor"
+            strokeLinejoin="round"
+          />
+          <path
+            d="M7.7663 4.4201H11.2185"
+            stroke="currentColor"
+            strokeWidth="0.7"
+            strokeLinecap="round"
+          />
+          <path
+            d="M7.76617 6.45618H11.2183"
+            stroke="currentColor"
+            strokeWidth="0.7"
+            strokeLinecap="round"
+          />
+        </svg>
+      );
+    default:
+      return null;
+  }
+};
+
 export default function Navbar() {
   const navigate = useNavigate();
   const location = useLocation();
@@ -87,8 +337,8 @@ export default function Navbar() {
 
   return (
     <>
-      <nav className="sticky top-0 z-50 bg-inherit border-b border-gray-100">
-        <div className="max-w-7xl mx-auto flex items-center h-16 px-4 md:px-8 w-full">
+      <nav className="site-top-nav sticky top-0 z-50 border-b border-[#dfddd4] bg-[#f6f3eb]/95 backdrop-blur">
+        <div className="mx-auto flex h-[60px] w-full max-w-[1760px] items-center px-4 md:px-6 xl:px-7">
           <div className="flex items-center flex-none">
             <Link className="inline-block mr-6 site-logo" to="/">
               <svg
@@ -152,16 +402,16 @@ export default function Navbar() {
             </Link>
           </div>
 
-          <div className="hidden md:flex flex-1 items-center justify-center">
+          <div className="hidden flex-1 items-center justify-center md:flex">
             <div id="navbar-menu" className="w-full">
-              <ul className="flex items-center justify-center gap-8">
+              <ul className="flex items-center justify-center gap-7">
                 <li>
                   <Link
                     to="/"
                     onClick={handleLinkClick}
-                    className={`inline-flex items-center text-sm uppercase tracking-wide nav-link ${isActive("/") ? "nav-link--active font-semibold" : "nav-link--inactive"}`}
-                    style={{ color: isActive("/") ? "#FC6736" : "#555333" }}
+                    className={`inline-flex items-center text-sm uppercase tracking-wide nav-link ${isActive("/") ? "nav-link--active" : "nav-link--inactive"}`}
                   >
+                    {renderNavIcon("beranda", "mr-2 h-4 w-4 shrink-0")}
                     Beranda
                   </Link>
                 </li>
@@ -169,13 +419,9 @@ export default function Navbar() {
                   <Link
                     to="/article/kronik"
                     onClick={handleLinkClick}
-                    className={`inline-flex items-center text-sm nav-link ${isActive("/article/kronik") ? "nav-link--active font-semibold" : "nav-link--inactive"}`}
-                    style={{
-                      color: isActive("/article/kronik")
-                        ? "#FC6736"
-                        : "#555333",
-                    }}
+                    className={`inline-flex items-center text-sm nav-link ${isActive("/article/kronik") ? "nav-link--active" : "nav-link--inactive"}`}
                   >
+                    {renderNavIcon("kronik", "mr-2 h-4 w-4 shrink-0")}
                     Kronik
                   </Link>
                 </li>
@@ -183,11 +429,9 @@ export default function Navbar() {
                   <Link
                     to="/article/tilik"
                     onClick={handleLinkClick}
-                    className={`inline-flex items-center text-sm nav-link ${isActive("/article/tilik") ? "nav-link--active font-semibold" : "nav-link--inactive"}`}
-                    style={{
-                      color: isActive("/article/tilik") ? "#FC6736" : "#555333",
-                    }}
+                    className={`inline-flex items-center text-sm nav-link ${isActive("/article/tilik") ? "nav-link--active" : "nav-link--inactive"}`}
                   >
+                    {renderNavIcon("tilik", "mr-2 h-4 w-4 shrink-0")}
                     Tilik
                   </Link>
                 </li>
@@ -195,13 +439,9 @@ export default function Navbar() {
                   <Link
                     to="/article/diskursus"
                     onClick={handleLinkClick}
-                    className={`inline-flex items-center text-sm nav-link ${isActive("/article/diskursus") ? "nav-link--active font-semibold" : "nav-link--inactive"}`}
-                    style={{
-                      color: isActive("/article/diskursus")
-                        ? "#FC6736"
-                        : "#555333",
-                    }}
+                    className={`inline-flex items-center text-sm nav-link ${isActive("/article/diskursus") ? "nav-link--active" : "nav-link--inactive"}`}
                   >
+                    {renderNavIcon("diskursus", "mr-2 h-4 w-4 shrink-0")}
                     Diskursus
                   </Link>
                 </li>
@@ -209,11 +449,9 @@ export default function Navbar() {
                   <Link
                     to="/profil"
                     onClick={handleLinkClick}
-                    className={`inline-flex items-center text-sm nav-link ${isActive("/profil") ? "nav-link--active font-semibold" : "nav-link--inactive"}`}
-                    style={{
-                      color: isActive("/profil") ? "#FC6736" : "#555333",
-                    }}
+                    className={`inline-flex items-center text-sm nav-link ${isActive("/profil") ? "nav-link--active" : "nav-link--inactive"}`}
                   >
+                    {renderNavIcon("profil", "mr-2 h-4 w-4 shrink-0")}
                     Profil
                   </Link>
                 </li>
@@ -244,11 +482,11 @@ export default function Navbar() {
             </button>
           </div>
 
-          <div className="col-3">
-            <div className="d-flex align-items-center justify-content-end gap-2">
-              <div className="urun-daya-container d-none d-md-block position-relative">
+          <div className="hidden flex-none justify-end md:flex">
+            <div className="flex items-center justify-end gap-2">
+              <div className="urun-daya-container relative">
                 <button
-                  className="btn btn-telisik d-flex align-items-center"
+                  className="nav-urun-btn inline-flex items-center"
                   onClick={() => setUrunDayaExpanded(!urunDayaExpanded)}
                 >
                   <svg
@@ -261,7 +499,7 @@ export default function Navbar() {
                     strokeWidth="2"
                     strokeLinecap="round"
                     strokeLinejoin="round"
-                    className="me-1"
+                    className="mr-1"
                   >
                     <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                     <path d="M12 5l0 14" />
@@ -302,14 +540,14 @@ export default function Navbar() {
                 </div>
               </div>
 
-              <div className="d-none d-md-flex">
+              <div className="hidden md:flex">
                 <button
                   className="theme-toggle-switch"
                   onClick={handleThemeToggle}
                   aria-label="Toggle theme"
                 >
                   <div className="theme-toggle-indicator" aria-hidden></div>
-                  <span className="theme-toggle-icon icon-sun hide-theme-dark">
+                  <span className="theme-toggle-icon icon-sun">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       viewBox="0 0 24 24"
@@ -330,7 +568,7 @@ export default function Navbar() {
                       <path d="M17.66 6.34l1.41-1.41" />
                     </svg>
                   </span>
-                  <span className="theme-toggle-icon icon-moon hide-theme-light">
+                  <span className="theme-toggle-icon icon-moon">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       viewBox="0 0 24 24"
@@ -351,7 +589,7 @@ export default function Navbar() {
       </nav>
 
       {isListPage && (
-        <nav className="sticky-top hidden md:block bg-white">
+        <nav className="category-strip-nav sticky-top hidden md:block">
           <div className="max-w-6xl mx-auto px-4">
             <div className="flex justify-center items-center gap-3 py-2 w-full">
               {categories.map((cat, index) => (
@@ -422,10 +660,10 @@ export default function Navbar() {
                       <span dangerouslySetInnerHTML={{ __html: ICONS.user }} />
                     </div>
                   )}
-                  <div className="fw-semibold">
+                  <div className="font-semibold">
                     {user.display_name || "Display Name"}
                   </div>
-                  <div className="text-muted small">
+                  <div className="text-sm text-gray-500">
                     @{user.username || "username"}
                   </div>
                 </div>
@@ -447,92 +685,64 @@ export default function Navbar() {
                       marginBottom: "10px",
                     }}
                   />
-                  <div className="fw-semibold">Sila Masuk/Mendaftar</div>
-                  <div className="text-muted small">Sumbangsihmu ditunggu</div>
+                  <div className="font-semibold">Sila Masuk/Mendaftar</div>
+                  <div className="text-sm text-gray-500">
+                    Sumbangsihmu ditunggu
+                  </div>
                 </div>
               )}
 
               <hr />
 
               <nav>
-                <ul className="list-unstyled">
+                <ul className="list-none space-y-2 p-0">
                   <li className="mb-2">
                     <Link
-                      className="d-flex align-items-center text-decoration-none"
+                      className="flex items-center no-underline"
                       to="/"
                       onClick={handleLinkClick}
                     >
-                      <img
-                        src="/menus/beranda.png"
-                        alt="Beranda"
-                        className="me-2"
-                        width="16"
-                        height="16"
-                      />
+                      {renderNavIcon("beranda", "mr-2 h-4 w-4 shrink-0")}
                       Beranda
                     </Link>
                   </li>
                   <li className="mb-2">
                     <Link
-                      className="d-flex align-items-center text-decoration-none"
+                      className="flex items-center no-underline"
                       to="/article/kronik"
                       onClick={handleLinkClick}
                     >
-                      <img
-                        src="/menus/kronik.png"
-                        alt="Kronik"
-                        className="me-2"
-                        width="16"
-                        height="16"
-                      />
+                      {renderNavIcon("kronik", "mr-2 h-4 w-4 shrink-0")}
                       Kronik
                     </Link>
                   </li>
                   <li className="mb-2">
                     <Link
-                      className="d-flex align-items-center text-decoration-none"
+                      className="flex items-center no-underline"
                       to="/article/tilik"
                       onClick={handleLinkClick}
                     >
-                      <img
-                        src="/menus/tilik.png"
-                        alt="Tilik"
-                        className="me-2"
-                        width="16"
-                        height="16"
-                      />
+                      {renderNavIcon("tilik", "mr-2 h-4 w-4 shrink-0")}
                       Tilik
                     </Link>
                   </li>
                   <li className="mb-2">
                     <Link
-                      className="d-flex align-items-center text-decoration-none"
+                      className="flex items-center no-underline"
                       to="/article/diskursus"
                       onClick={handleLinkClick}
                     >
-                      <img
-                        src="/menus/diskursus.png"
-                        alt="Diskursus"
-                        className="me-2"
-                        width="16"
-                        height="16"
-                      />
+                      {renderNavIcon("diskursus", "mr-2 h-4 w-4 shrink-0")}
                       Diskursus
                     </Link>
                   </li>
                   <li className="mb-2">
                     <Link
-                      className="d-flex align-items-center text-decoration-none"
+                      className="flex items-center no-underline"
                       to="/profile"
                       onClick={handleLinkClick}
                     >
-                      <img
-                        src="/menus/profil.png"
-                        alt="Profil"
-                        className="me-2"
-                        width="16"
-                        height="16"
-                      />
+                      {renderNavIcon("profil", "mr-2 h-4 w-4 shrink-0")}
                       Profil
                     </Link>
                   </li>
@@ -544,19 +754,19 @@ export default function Navbar() {
               {isListPage && (
                 <>
                   <div className="mb-3">
-                    <div className="text-muted small mb-2">
+                    <div className="mb-2 text-sm text-gray-500">
                       Filter Kategori:
                     </div>
                     {categories.map((cat, index) => (
                       <button
                         key={cat.key}
-                        className={`btn btn-sm me-2 mb-2 ${
+                        className={`mb-2 mr-2 rounded-full border px-3 py-1 text-sm ${
                           currentCategory === cat.key
-                            ? "btn-primary"
-                            : "btn-outline-secondary"
+                            ? "border-blue-600 bg-blue-600 text-white"
+                            : "border-gray-300 bg-white text-gray-700 hover:bg-gray-50"
                         }`}
                         onClick={() => handleCategoryClickInOffcanvas(cat.key)}
-                        style={{ fontSize: "0.85rem", borderRadius: "20px" }}
+                        style={{ fontSize: "0.85rem" }}
                       >
                         {cat.label}
                       </button>
@@ -569,9 +779,8 @@ export default function Navbar() {
               {isLoggedIn ? (
                 <>
                   <div
-                    className="d-flex justify-content-between align-items-center mb-2"
+                    className="mb-2 flex cursor-pointer items-center justify-between"
                     onClick={() => setAkunExpanded(!akunExpanded)}
-                    style={{ cursor: "pointer" }}
                   >
                     <span>
                       <span dangerouslySetInnerHTML={{ __html: ICONS.user }} />
@@ -581,10 +790,10 @@ export default function Navbar() {
                   </div>
 
                   {akunExpanded && (
-                    <div className="ms-4 mb-3">
+                    <div className="mb-3 ml-4">
                       <Link
                         to="/complete-profile"
-                        className="d-block mb-2 text-decoration-none text-dark"
+                        className="mb-2 block text-gray-800 no-underline hover:text-[#0068d6]"
                         onClick={handleLinkClick}
                       >
                         <span
@@ -594,7 +803,7 @@ export default function Navbar() {
                       </Link>
                       <Link
                         to="/settings"
-                        className="d-block mb-2 text-decoration-none text-dark"
+                        className="mb-2 block text-gray-800 no-underline hover:text-[#0068d6]"
                         onClick={handleLinkClick}
                       >
                         <span
@@ -606,9 +815,8 @@ export default function Navbar() {
                   )}
 
                   <div
-                    className="d-flex justify-content-between align-items-center mb-2"
+                    className="mb-2 flex cursor-pointer items-center justify-between"
                     onClick={() => setSumbangsihExpanded(!sumbangsihExpanded)}
-                    style={{ cursor: "pointer" }}
                   >
                     <span>
                       <span dangerouslySetInnerHTML={{ __html: ICONS.edit }} />
@@ -618,10 +826,10 @@ export default function Navbar() {
                   </div>
 
                   {sumbangsihExpanded && (
-                    <div className="ms-4 mb-3">
+                    <div className="mb-3 ml-4">
                       <Link
                         to="/kronik"
-                        className="d-block mb-2 text-decoration-none text-dark"
+                        className="mb-2 block text-gray-800 no-underline hover:text-[#0068d6]"
                         onClick={handleLinkClick}
                       >
                         <span
@@ -631,7 +839,7 @@ export default function Navbar() {
                       </Link>
                       <Link
                         to="/tilik"
-                        className="d-block mb-2 text-decoration-none text-dark"
+                        className="mb-2 block text-gray-800 no-underline hover:text-[#0068d6]"
                         onClick={handleLinkClick}
                       >
                         <span
@@ -641,7 +849,7 @@ export default function Navbar() {
                       </Link>
                       <Link
                         to="/diskursus"
-                        className="d-block mb-2 text-decoration-none text-dark"
+                        className="mb-2 block text-gray-800 no-underline hover:text-[#0068d6]"
                         onClick={handleLinkClick}
                       >
                         <span
@@ -651,7 +859,7 @@ export default function Navbar() {
                       </Link>
                       <Link
                         to="/tanggapan"
-                        className="d-block mb-2 text-decoration-none text-dark"
+                        className="mb-2 block text-gray-800 no-underline hover:text-[#0068d6]"
                         onClick={handleLinkClick}
                       >
                         <span
@@ -664,11 +872,11 @@ export default function Navbar() {
                 </>
               ) : (
                 <>
-                  <div className="mb-2 text-muted">
+                  <div className="mb-2 text-gray-500">
                     <span dangerouslySetInnerHTML={{ __html: ICONS.user }} />
                     &nbsp; Akunku
                   </div>
-                  <div className="mb-2 text-muted">
+                  <div className="mb-2 text-gray-500">
                     <span dangerouslySetInnerHTML={{ __html: ICONS.edit }} />
                     &nbsp; Sumbangsih
                   </div>
@@ -677,7 +885,7 @@ export default function Navbar() {
 
               <Link
                 to="/tentang"
-                className="d-block mb-2 text-decoration-none text-dark"
+                className="mb-2 block text-gray-800 no-underline hover:text-[#0068d6]"
                 onClick={handleLinkClick}
               >
                 <span dangerouslySetInnerHTML={{ __html: ICONS.info }} />
@@ -686,7 +894,7 @@ export default function Navbar() {
 
               <Link
                 to="/bantuan"
-                className="d-block mb-2 text-decoration-none text-dark"
+                className="mb-2 block text-gray-800 no-underline hover:text-[#0068d6]"
                 onClick={handleLinkClick}
               >
                 <span dangerouslySetInnerHTML={{ __html: ICONS.help }} />
@@ -698,7 +906,7 @@ export default function Navbar() {
               {isLoggedIn && (
                 <Link
                   to="#"
-                  className="d-block mb-2 text-decoration-none text-dark"
+                  className="mb-2 block text-gray-800 no-underline hover:text-[#0068d6]"
                   onClick={() => {
                     logout();
                     handleLinkClick();
@@ -711,7 +919,7 @@ export default function Navbar() {
 
               <div className="mt-3">
                 <button
-                  className="btn btn-telisik w-100 d-flex align-items-center justify-content-center"
+                  className="nav-urun-btn flex w-full items-center justify-center"
                   onClick={handleThemeToggle}
                 >
                   <svg
@@ -724,7 +932,7 @@ export default function Navbar() {
                     strokeWidth="2"
                     strokeLinecap="round"
                     strokeLinejoin="round"
-                    className="me-2"
+                    className="mr-2"
                   >
                     <path d="M12 12m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0" />
                   </svg>
@@ -733,9 +941,9 @@ export default function Navbar() {
               </div>
 
               <div className="mt-3">
-                <div className="urun-daya-container position-relative">
+                <div className="urun-daya-container relative">
                   <button
-                    className="btn btn-telisik d-flex align-items-center w-100"
+                    className="nav-urun-btn flex w-full items-center"
                     onClick={() => setUrunDayaExpanded(!urunDayaExpanded)}
                   >
                     <svg
@@ -748,7 +956,7 @@ export default function Navbar() {
                       strokeWidth="2"
                       strokeLinecap="round"
                       strokeLinejoin="round"
-                      className="me-1"
+                      className="mr-1"
                     >
                       <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                       <path d="M12 5l0 14" />

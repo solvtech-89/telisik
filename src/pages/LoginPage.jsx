@@ -1,11 +1,13 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { GoogleLogin } from "@react-oauth/google";
 import { API_BASE } from "../config";
 import { useAuth } from "../AuthContext";
 import Button from "../components/ui/Button";
 import Input from "../components/ui/Input";
 import Alert from "../components/ui/Alert";
+
+const DEMO_TOKEN_PREFIX = "demo-token-";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -15,7 +17,10 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const navigate = useNavigate();
+  const location = useLocation();
   const { login } = useAuth();
+  const redirectAfterLogin =
+    location.state?.from?.pathname || "/urun-daya/kronik";
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -40,7 +45,7 @@ export default function LoginPage() {
 
       if (response.ok) {
         login(data.access_token, data.user);
-        navigate(data.redirect_url);
+        navigate(data.redirect_url || redirectAfterLogin, { replace: true });
       } else {
         setError(data?.error || "Login gagal. Silakan cek email dan password");
       }
@@ -89,12 +94,29 @@ export default function LoginPage() {
     setError("Google login gagal. Silakan coba lagi.");
   };
 
+  const handleFakeLogin = () => {
+    const demoUser = {
+      id: "demo-user",
+      username: "demo",
+      display_name: "Demo User",
+      email: "demo@telisik.local",
+      avatar: null,
+      profile_completed: true,
+      is_demo: true,
+    };
+
+    login(`${DEMO_TOKEN_PREFIX}${Date.now()}`, demoUser);
+    navigate(redirectAfterLogin, { replace: true });
+  };
+
   return (
     <div className="min-h-screen flex flex-col items-center justify-center px-4 py-8 bg-neutral-50">
       <div className="w-full max-w-sm">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-neutral-800 mb-2">Masuk Log</h1>
+          <h1 className="text-3xl font-bold text-neutral-800 mb-2">
+            Masuk Log
+          </h1>
           <p className="text-neutral-600">
             Belum punya akun?{" "}
             <Link
@@ -143,7 +165,9 @@ export default function LoginPage() {
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
                 className="absolute right-3 text-gray-500 hover:text-gray-700 transition-colors p-1"
-                aria-label={showPassword ? "Sembunyikan password" : "Tampilkan password"}
+                aria-label={
+                  showPassword ? "Sembunyikan password" : "Tampilkan password"
+                }
               >
                 {showPassword ? (
                   <svg
@@ -191,7 +215,10 @@ export default function LoginPage() {
               onChange={(e) => setAgreed(e.target.checked)}
               className="mt-1 w-4 h-4 cursor-pointer accent-telisik rounded"
             />
-            <label htmlFor="agreeTerms" className="text-xs text-neutral-600 cursor-pointer leading-relaxed">
+            <label
+              htmlFor="agreeTerms"
+              className="text-xs text-neutral-600 cursor-pointer leading-relaxed"
+            >
               Saya sudah membaca, memahami, dan menyetujui{" "}
               <Link
                 to="/pages/terms-and-conditions"
@@ -218,6 +245,16 @@ export default function LoginPage() {
             className="rounded-full"
           >
             Masuk Log
+          </Button>
+
+          <Button
+            type="button"
+            fullWidth
+            variant="outline"
+            className="rounded-full"
+            onClick={handleFakeLogin}
+          >
+            Masuk Demo Sementara
           </Button>
 
           {/* Divider */}

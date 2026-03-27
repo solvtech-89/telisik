@@ -141,6 +141,7 @@ export default function ArticleSectionEditor({
 
   return (
     <div
+      className="editor-content-shell"
       onClick={() => {
         if (activeEditorId !== section.id) {
           setActiveEditorId(section.id);
@@ -152,11 +153,13 @@ export default function ArticleSectionEditor({
       }}
     >
       {activeEditorId === section.id ? (
-        <EditorContent editor={editor} />
+        <div className="editor-content-active">
+          <EditorContent editor={editor} />
+        </div>
       ) : editor && !editor.isEmpty ? (
-        renderUnfocusedContent()
+        <div className="editor-content-preview">{renderUnfocusedContent()}</div>
       ) : (
-        <p className="min-h-[80px] cursor-pointer italic text-gray-400">
+        <p className="min-h-[120px] cursor-pointer rounded-md border border-dashed border-gray-300 bg-white px-4 py-4 italic text-gray-400">
           Tulis paparan {section.title}
         </p>
       )}
