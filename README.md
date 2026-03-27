@@ -31,5 +31,11 @@ If you are developing a production application, we recommend using TypeScript wi
 
 - `VITE_API_BASE=` (empty)
 - `VITE_WS_BASE=wss://api.telisik.org` (or your websocket gateway)
+- `VITE_FORCE_SAME_ORIGIN_API=true` (recommended default)
 
 If `VITE_API_BASE` is set to `https://api.telisik.org`, browser calls become cross-origin again and can fail due to backend CORS policy.
+
+### Quick Verification After Deploy
+
+- `https://telisik.vercel.app/api/banners/` should return API JSON (not Vercel 404)
+- Network request URL from browser should be same-origin (`https://telisik.vercel.app/api/...`), not direct `https://api.telisik.org/...`

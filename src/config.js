@@ -1,6 +1,13 @@
-// Use same-origin by default so both local (Vite proxy) and Vercel (rewrites)
-// avoid browser-level CORS issues.
-export const API_BASE = import.meta.env.VITE_API_BASE ?? "";
+const configuredApiBase = (import.meta.env.VITE_API_BASE ?? "").trim();
+const forceSameOriginApi =
+  (import.meta.env.VITE_FORCE_SAME_ORIGIN_API ?? "true").toLowerCase() !==
+  "false";
+const isAbsoluteApiBase = /^https?:\/\//i.test(configuredApiBase);
+
+// Default to same-origin in production to avoid browser CORS errors.
+// Set VITE_FORCE_SAME_ORIGIN_API=false only if backend CORS is explicitly configured.
+export const API_BASE =
+  forceSameOriginApi && isAbsoluteApiBase ? "" : configuredApiBase;
 export const WS_BASE =
   import.meta.env.VITE_WS_BASE ||
   (import.meta.env.DEV
