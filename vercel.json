@@ -1,25 +1,32 @@
 {
   "version": 2,
-  "rewrites": [
+  "routes": [
     {
-      "source": "/api/:path*",
-      "destination": "https://api.telisik.org/api/:path*"
+      "src": "^/api/(.*)$",
+      "dest": "https://api.telisik.org/api/$1"
     },
     {
-      "source": "/auth/:path*",
-      "destination": "https://api.telisik.org/auth/:path*"
+      "src": "^/auth/(.*)$",
+      "dest": "https://api.telisik.org/auth/$1"
     },
     {
-      "source": "/articles/:path*",
-      "destination": "https://api.telisik.org/articles/:path*"
+      "src": "^/articles/(.*)$",
+      "dest": "https://api.telisik.org/articles/$1"
     },
     {
-      "source": "/static/:path*",
-      "destination": "https://api.telisik.org/static/:path*"
+      "src": "^/static/(.*)$",
+      "dest": "https://api.telisik.org/static/$1"
     },
     {
-      "source": "/media/:path*",
-      "destination": "https://api.telisik.org/media/:path*"
+      "src": "^/media/(.*)$",
+      "dest": "https://api.telisik.org/media/$1"
+    },
+    {
+      "handle": "filesystem"
+    },
+    {
+      "src": "^(?!/api/|/auth/|/articles/|/static/|/media/).*$",
+      "dest": "/index.html"
     }
   ]
 }
