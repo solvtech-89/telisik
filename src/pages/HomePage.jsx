@@ -108,13 +108,14 @@ export default function HomePage() {
 
         {/* Center - Main Content */}
         <main className="home-main-panel flex-1 border-x border-[#e2e0d8] bg-[#faf8f1] lg:h-full lg:overflow-y-auto lg:overscroll-contain">
-          <div className="home-main-inner mx-auto w-full max-w-none space-y-4 px-6 py-4 lg:space-y-5 xl:px-7">
+          <div className="home-main-inner mx-auto w-full max-w-none space-y-4 px-4 py-4 lg:space-y-5 lg:px-5 xl:px-6">
             {/* Map Section */}
             <div>
               <MapContainer
                 markers={markers}
                 activeCategories={activeCategories}
                 onCategoryToggle={handleCategoryToggle}
+                className="rounded-none shadow-none"
               />
             </div>
 
@@ -131,7 +132,7 @@ export default function HomePage() {
             <div className="home-kredo-cards-wrap space-y-4">
               {/* Loading State */}
               {loading ? (
-                <div className="home-kredo-cards-grid grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
+                <div className="home-kredo-cards-grid grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
                   {Array(6)
                     .fill(0)
                     .map((_, i) => (
@@ -142,9 +143,13 @@ export default function HomePage() {
                     ))}
                 </div>
               ) : displayedArticles.length > 0 ? (
-                <div className="home-kredo-cards-grid grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
+                <div className="home-kredo-cards-grid grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
                   {displayedArticles.map((article) => (
-                    <ArticleCardGrid key={article.id} article={article} />
+                    <ArticleCardGrid
+                      key={article.id}
+                      article={article}
+                      variant="home"
+                    />
                   ))}
                 </div>
               ) : (
@@ -159,7 +164,7 @@ export default function HomePage() {
         </main>
 
         {/* Right Sidebar - Secondary Info */}
-        <aside className="home-right-rail hidden border-l border-[#dfddd4] bg-[#f7f5ef] xl:block xl:h-full xl:w-[355px] xl:overflow-y-auto xl:overflow-x-hidden xl:overscroll-contain">
+        <aside className="home-right-rail hidden border-l border-[#dfddd4] bg-[#f7f5ef] lg:block lg:h-full lg:w-[345px] lg:overflow-y-auto lg:overflow-x-hidden lg:overscroll-contain xl:w-[355px]">
           <RightSidebar />
         </aside>
       </div>

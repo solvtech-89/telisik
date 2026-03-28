@@ -102,74 +102,79 @@ export default function RightSidebar({ currentType = null, isDetail = false }) {
       {/* SEARCH BOX WITH ADVANCED FILTER */}
       <div className="right-find-shell mb-4">
         <div className="mb-3">
-          <h3 className="right-find-title mb-0 text-[2rem] font-bold text-[#2f3a4f]">
+          <h3
+            className="right-find-title mb-0 text-[2rem] font-bold text-[#FC6736]"
+            style={{ color: "#FC6736" }}
+          >
             Temukan
           </h3>
         </div>
 
-        <div className="right-find-input-row mb-3 flex items-center space-x-2">
-          <input
-            type="text"
-            className="right-find-input flex-1 rounded-full border border-[#ddd9ce] bg-[#f9f7f0] px-4 py-2 text-[0.95rem] text-[#555333] focus:outline-none focus:ring-2 focus:ring-[#9ab1d3]"
-            placeholder="Temukan..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            onKeyPress={(e) => e.key === "Enter" && handleSearch()}
-          />
+        <div className="right-find-input-row mb-3 flex items-center">
+          <div className="relative flex-1">
+            <input
+              type="text"
+              className="right-find-input w-full rounded-full border border-[#ddd9ce] bg-[#FFFFFF] px-4 py-2 pr-12 text-[0.95rem] text-[#555333] focus:outline-none focus:ring-2 focus:ring-[#9ab1d3]"
+              placeholder="Temukan..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              onKeyPress={(e) => e.key === "Enter" && handleSearch()}
+            />
 
-          <div className="right-find-actions flex items-center space-x-2">
-            {searchQuery && (
+            <div className="absolute right-3 top-1/2 transform -translate-y-1/2 flex items-center space-x-2">
+              {searchQuery && (
+                <button
+                  type="button"
+                  onClick={() => setSearchQuery("")}
+                  aria-label="Clear search"
+                  className="p-1 rounded-full text-gray-500 hover:bg-gray-100"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path d="M18 6l-12 12"></path>
+                    <path d="M6 6l12 12"></path>
+                  </svg>
+                </button>
+              )}
+
               <button
-                type="button"
-                onClick={() => setSearchQuery("")}
-                aria-label="Clear search"
-                className="right-find-icon-btn text-gray-500"
+                onClick={handleSearch}
+                className="p-1 rounded-full text-gray-600 hover:bg-gray-100"
+                aria-label="Search"
               >
                 <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="20"
-                  height="20"
-                  viewBox="0 0 24 24"
+                  width="18"
+                  height="18"
+                  viewBox="0 0 16 16"
                   fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
+                  xmlns="http://www.w3.org/2000/svg"
                 >
-                  <path d="M18 6l-12 12"></path>
-                  <path d="M6 6l12 12"></path>
+                  <circle
+                    cx="7.5"
+                    cy="7.5"
+                    r="5.9"
+                    stroke="#878672"
+                    strokeWidth="1.2"
+                    strokeLinecap="round"
+                  />
+                  <path
+                    d="M12 12L14.3827 14.3827"
+                    stroke="#878672"
+                    strokeWidth="1.2"
+                    strokeLinecap="round"
+                  />
                 </svg>
               </button>
-            )}
-
-            <button
-              onClick={handleSearch}
-              className="right-find-icon-btn text-gray-600"
-              aria-label="Search"
-            >
-              <svg
-                width="18"
-                height="18"
-                viewBox="0 0 16 16"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <circle
-                  cx="7.5"
-                  cy="7.5"
-                  r="5.9"
-                  stroke="#878672"
-                  strokeWidth="1.2"
-                  strokeLinecap="round"
-                />
-                <path
-                  d="M12 12L14.3827 14.3827"
-                  stroke="#878672"
-                  strokeWidth="1.2"
-                  strokeLinecap="round"
-                />
-              </svg>
-            </button>
+            </div>
           </div>
         </div>
 
@@ -241,7 +246,9 @@ export default function RightSidebar({ currentType = null, isDetail = false }) {
                         })
                       }
                     />
-                    <span className="right-find-area-text">Kronik</span>
+                    <span className="right-find-area-text text-telisik">
+                      Kronik
+                    </span>
                   </label>
                   <label className="right-find-option right-find-area-option">
                     <input
@@ -255,6 +262,7 @@ export default function RightSidebar({ currentType = null, isDetail = false }) {
                         })
                       }
                     />
+
                     <span className="right-find-area-text">Tilik</span>
                   </label>
                   <label className="right-find-option right-find-area-option">
@@ -339,7 +347,10 @@ export default function RightSidebar({ currentType = null, isDetail = false }) {
       {currentType !== "kronik" && (
         <div className="mb-4">
           <div className="flex justify-between items-center mb-3">
-            <h3 className="right-feed-heading font-semibold text-gray-500 text-2xl mb-0">
+            <h3
+              className="right-feed-heading font-bold text-[#f26532] text-2xl mb-0"
+              style={{ color: "#FC6736" }}
+            >
               Kronik
             </h3>
           </div>
@@ -392,7 +403,7 @@ export default function RightSidebar({ currentType = null, isDetail = false }) {
                         <h4 className="font-bold text-lg">
                           <a
                             href={`/article/kronik/${item.slug}`}
-                            className="right-feed-lead-link font-bold text-amber-500 no-underline"
+                            className="right-feed-lead-link font-bold text-[#f26532] no-underline"
                           >
                             {truncateTitleText(item.title, 60)}
                           </a>
@@ -471,7 +482,10 @@ export default function RightSidebar({ currentType = null, isDetail = false }) {
       {currentType !== "tilik" && (
         <div className="mb-4">
           <div className="flex justify-between items-center mb-3">
-            <h3 className="right-feed-heading font-semibold text-gray-500 text-2xl mb-0">
+            <h3
+              className="right-feed-heading font-bold text-[#f26532] text-2xl mb-0"
+              style={{ color: "#FC6736" }}
+            >
               Tilik
             </h3>
           </div>
@@ -524,7 +538,7 @@ export default function RightSidebar({ currentType = null, isDetail = false }) {
                         <h4 className="font-bold text-lg">
                           <a
                             href={`/article/tilik/${item.slug}`}
-                            className="right-feed-lead-link font-bold text-amber-500 no-underline"
+                            className="right-feed-lead-link font-bold text-[#f26532] no-underline"
                           >
                             {truncateTitleText(item.title, 60)}
                           </a>

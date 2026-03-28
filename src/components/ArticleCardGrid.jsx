@@ -13,8 +13,9 @@ const formatDate = (dateString) => {
   });
 };
 
-export default function ArticleCardGrid({ article }) {
+export default function ArticleCardGrid({ article, variant = "default" }) {
   const mediaBase = API_BASE || "https://api.telisik.org";
+  const isHomeVariant = variant === "home";
   const articleUrl = article.type
     ? `/article/${article.type.toLowerCase()}/${article.slug}`
     : `/article/diskursus/${article.slug}`;
@@ -45,16 +46,25 @@ export default function ArticleCardGrid({ article }) {
 
   return (
     <article
-      className={`article-feed-card overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm transition-all duration-200 hover:-translate-y-[2px] hover:shadow-md ${
-        !showImage ? "article-feed-card--no-image" : ""
-      }`}
+      className={
+        isHomeVariant
+          ? `article-feed-card bg-transparent ${!showImage ? "article-feed-card--no-image" : ""}`
+          : `article-feed-card overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm transition-all duration-200 hover:-translate-y-[2px] hover:shadow-md ${
+              !showImage ? "article-feed-card--no-image" : ""
+            }`
+      }
     >
       {showImage && imageUrl ? (
         <Link to={articleUrl} className="article-feed-thumb-wrap block">
           <img
             src={imageUrl}
             alt={article.title}
-            className="article-feed-thumb h-[clamp(170px,15vw,228px)] w-full object-cover"
+            className={
+              isHomeVariant
+                ? "article-feed-thumb w-full object-cover"
+                : "article-feed-thumb h-[clamp(170px,15vw,228px)] w-full object-cover"
+            }
+            style={isHomeVariant ? { aspectRatio: "4 / 3" } : undefined}
             loading="lazy"
             decoding="async"
             onError={() => setShowImage(false)}
@@ -64,48 +74,76 @@ export default function ArticleCardGrid({ article }) {
         <div className="article-feed-thumb-placeholder" aria-hidden="true" />
       )}
 
-      <div className="article-feed-body space-y-3 p-4">
-        <div className="article-feed-meta flex items-center gap-2">
-          {article.type && (
-            <span
-              className={`article-feed-type-badge rounded px-2 py-1 text-[11px] font-semibold uppercase tracking-wide text-white ${typeColors[article.type] || "bg-gray-600"}`}
-            >
-              {article.type}
-            </span>
-          )}
-          {locationName && (
-            <span className="article-feed-location text-xs text-gray-500">
-              {locationName}
-            </span>
-          )}
-        </div>
+      <div
+        className={
+          isHomeVariant
+            ? "article-feed-body space-y-2 pt-2"
+            : "article-feed-body space-y-3 p-4"
+        }
+      >
+        {!isHomeVariant && (
+          <div className="article-feed-meta flex items-center gap-2">
+            {article.type && (
+              <span
+                className={`article-feed-type-badge rounded px-2 py-1 text-[11px] font-semibold uppercase tracking-wide text-white ${typeColors[article.type] || "bg-gray-600"}`}
+              >
+                {article.type}
+              </span>
+            )}
+            {locationName && (
+              <span className="article-feed-location text-xs text-gray-500">
+                {locationName}
+              </span>
+            )}
+          </div>
+        )}
 
-        <h3 className="article-feed-title text-lg font-semibold leading-tight text-telisik">
+        <h3
+          className={
+            isHomeVariant
+              ? "article-feed-title text-sm font-bold leading-snug text-[#f26532]"
+              : "article-feed-title text-lg font-semibold leading-tight text-telisik"
+          }
+        >
           <Link
             to={articleUrl}
-            className="line-clamp-2 transition-colors hover:text-[#0068d6]"
+            className={
+              isHomeVariant
+                ? "line-clamp-2 transition-colors hover:opacity-90"
+                : "line-clamp-2 transition-colors hover:text-[#0068d6]"
+            }
           >
             {article.title}
           </Link>
         </h3>
 
         {excerptText && (
-          <p className="article-feed-excerpt line-clamp-4 text-sm leading-relaxed text-gray-600">
+          <p
+            className={
+              isHomeVariant
+                ? "article-feed-excerpt line-clamp-3 text-xs leading-relaxed text-gray-600"
+                : "article-feed-excerpt line-clamp-4 text-sm leading-relaxed text-gray-600"
+            }
+          >
             {excerptText}
           </p>
         )}
 
-        <div className="article-feed-stats flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-gray-500">
-          {article.created_at && <span>{formatDate(article.created_at)}</span>}
-          {article.views !== undefined && (
-            <span>{formatCount(article.views)} dilihat</span>
-          )}
-          {article.comments_count !== undefined && (
-            <span>{formatCount(article.comments_count)} komentar</span>
-          )}
-        </div>
+        {!isHomeVariant && (
+          <div className="article-feed-stats flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-gray-500">
+            {article.created_at && (
+              <span>{formatDate(article.created_at)}</span>
+            )}
+            {article.views !== undefined && (
+              <span>{formatCount(article.views)} dilihat</span>
+            )}
+            {article.comments_count !== undefined && (
+              <span>{formatCount(article.comments_count)} komentar</span>
+            )}
+          </div>
+        )}
 
-        {article.metadata?.tags?.length > 0 && (
+        {!isHomeVariant && article.metadata?.tags?.length > 0 && (
           <div className="article-feed-tags flex flex-wrap gap-1.5 pt-1">
             {article.metadata.tags.slice(0, 3).map((tag, idx) => (
               <span

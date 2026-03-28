@@ -6,6 +6,9 @@ export default function MapContainer({
   markers = [],
   activeCategories = new Set(),
   onCategoryToggle,
+  className = "",
+  stageClassName = "",
+  legendClassName = "",
 }) {
   const mapRef = useRef(null);
   const mapInstance = useRef(null);
@@ -257,10 +260,13 @@ export default function MapContainer({
       className={`
         home-map-shell overflow-hidden rounded-xl border border-[#ddd9ce] bg-[#F0FDFF] shadow-[0_2px_8px_rgba(30,41,59,0.06)]
         ${isFullscreen ? "fixed inset-0 rounded-none border-none z-50" : ""}
+        ${className}
       `}
     >
       {/* Map Container */}
-      <div className="home-map-stage relative h-[320px] w-full bg-[#F0FDFF] sm:h-[360px] lg:h-[430px]">
+      <div
+        className={`home-map-stage relative h-[320px] w-full bg-[#F0FDFF] sm:h-[360px] lg:h-[430px] ${stageClassName}`}
+      >
         <div ref={mapRef} className="w-full h-full" />
 
         {/* Map Controls */}
@@ -370,7 +376,9 @@ export default function MapContainer({
       </div>
 
       {/* Category Legend */}
-      <div className="home-map-legend border-t border-[#dfddd4] px-6 py-4">
+      <div
+        className={`home-map-legend border-t border-[#dfddd4] px-6 py-4 ${legendClassName}`}
+      >
         <div className="flex flex-wrap items-center gap-x-7 gap-y-2">
           {[
             { key: "AGRARIA", label: "Agraria", color: "bg-red-500" },
