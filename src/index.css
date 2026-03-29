@@ -865,25 +865,66 @@ button:focus-visible {
 }
 
 :root[data-bs-theme="dark"] .article-list-shell {
-  background: #1b1f27;
+  background: #242424;
 }
 
 :root[data-bs-theme="dark"] .article-list-left,
 :root[data-bs-theme="dark"] .article-list-right {
-  background: #20242d;
-  border-color: #323847;
+  background: #242424;
+  border-color: #363a43;
 }
 
 :root[data-bs-theme="dark"] .article-list-main {
-  background: #1d2129;
+  background: #242424;
 }
 
 :root[data-bs-theme="dark"] .article-list-grid {
-  background: #1d2129;
+  background: #242424;
 }
 
 :root[data-bs-theme="dark"] .article-list-wrap {
-  background: #1b1f27;
+  background: #242424;
+}
+
+/* Further unification for dark mode: cards, sidebars, and category strip */
+:root[data-bs-theme="dark"] .article-feed-card,
+:root[data-bs-theme="dark"] .article-feed-card--no-image,
+:root[data-bs-theme="dark"] .article-feed-card .article-feed-body,
+:root[data-bs-theme="dark"] .right-sidebar-shell,
+:root[data-bs-theme="dark"] .sidebar-nav-shell,
+:root[data-bs-theme="dark"] .category-strip-nav,
+:root[data-bs-theme="dark"] .category-pill,
+:root[data-bs-theme="dark"] .category-pill--active,
+:root[data-bs-theme="dark"] .article-list-left,
+:root[data-bs-theme="dark"] .article-list-right {
+  background: #242424 !important;
+  border-color: #363a43 !important;
+  color: #d1d6e0 !important;
+}
+
+:root[data-bs-theme="dark"] .article-feed-card {
+  box-shadow: none !important;
+}
+
+:root[data-bs-theme="dark"] .article-feed-card .article-feed-body {
+  background: transparent !important;
+}
+
+:root[data-bs-theme="dark"] .article-feed-thumb-placeholder {
+  background: linear-gradient(145deg, #2b3136 0%, #24272b 100%) !important;
+  border-color: #353a43 !important;
+}
+
+:root[data-bs-theme="dark"] .category-pill--active {
+  background: rgba(252, 103, 54, 0.12) !important;
+  border-color: rgba(252, 103, 54, 0.12) !important;
+  color: #ff9059 !important;
+}
+
+:root[data-bs-theme="dark"] .right-sidebar-shell .right-banner-image,
+:root[data-bs-theme="dark"] .right-sidebar-shell .right-feed-item-row {
+  border-color: #353a43 !important;
+  background: #242424 !important;
 }
 
 :root[data-bs-theme="dark"] .article-list-main h1 {
@@ -893,6 +934,77 @@ button:focus-visible {
 :root[data-bs-theme="dark"] .article-list-main p,
 :root[data-bs-theme="dark"] .article-list-main .text-neutral-600 {
   color: #b6becc !important;
+}
+
+/* Mobile bottom navigation styles */
+.mobile-bottom-nav {
+  height: calc(56px + env(safe-area-inset-bottom));
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+.mobile-bottom-nav a,
+.mobile-bottom-nav .router-link,
+.mobile-bottom-nav a:link,
+.mobile-bottom-nav a:visited {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 6px;
+  color: var(--telisik-link-muted);
+  text-decoration: none;
+}
+
+.mobile-bottom-nav--active,
+.mobile-bottom-nav a.mobile-bottom-nav--active {
+  color: var(--telisik-active) !important;
+}
+
+:root[data-bs-theme="dark"] .mobile-bottom-nav {
+  background: #242424;
+  border-top-color: #2c313d;
+}
+
+:root[data-bs-theme="dark"] .mobile-bottom-nav a {
+  color: #c8ceda;
+}
+
+:root[data-bs-theme="dark"] .mobile-bottom-nav a.mobile-bottom-nav--active {
+  color: #ff9059;
+}
+
+/* Defensive offcanvas constraints to avoid full-page overlay */
+.site-offcanvas-backdrop {
+  /* keep the semi-transparent backdrop, but behind top nav */
+  z-index: 45;
+}
+
+.site-offcanvas-drawer {
+  width: 20rem; /* 320px */
+  max-width: 85vw;
+  min-width: 260px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+}
+
+/* On tablet and up, keep drawer narrow and anchored left */
+@media (min-width: 640px) {
+  .site-offcanvas-drawer {
+    width: 22.5rem; /* 360px */
+    max-width: 420px;
+  }
+}
+
+/* Ensure the drawer cannot be stretched by layout rules */
+.site-offcanvas-drawer,
+.site-offcanvas-backdrop {
+  left: 0 !important;
+  right: auto !important;
+}
+
+/* If any global rule accidentally set fixed elements to full-width, override it here */
+.site-offcanvas-drawer[style] {
+  width: 20rem !important;
+  max-width: 85vw !important;
 }
 
 .article-feed-card {
@@ -1428,6 +1540,65 @@ button:focus-visible {
   overflow-x: hidden;
 }
 
+/*
+  Article list: ensure mobile/tablet stays single-column.
+  Some layouts can end up with a narrow main column + large empty space
+  when other rules (grid/flex) win in the cascade.
+*/
+@media (max-width: 1279px) {
+  .article-list-wrap {
+    max-width: 100% !important;
+  }
+
+  .article-list-grid {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) !important;
+    width: 100% !important;
+  }
+
+  .article-list-main {
+    width: 100% !important;
+    max-width: 100% !important;
+    grid-column: 1 / -1 !important;
+  }
+}
+
+/* Defensive rules to avoid horizontal overflow from card content (only on <=1279px) */
+@media (max-width: 1279px) {
+  .article-list-main {
+    overflow-x: hidden;
+  }
+
+  .article-list-main .grid {
+    width: 100% !important;
+  }
+
+  .article-list-main .grid > * {
+    min-width: 0 !important; /* allow items to shrink */
+  }
+
+  .article-feed-card {
+    width: 100% !important;
+    min-width: 0 !important;
+    box-sizing: border-box;
+  }
+
+  .article-feed-thumb,
+  .article-feed-thumb-wrap img,
+  .article-feed-thumb-wrap > img {
+    max-width: 100% !important;
+    height: auto !important;
+    display: block !important;
+  }
+}
+
+/* Force single-column only on narrow mobile screens (<768px) */
+@media (max-width: 767px) {
+  .article-list-main .grid {
+    grid-template-columns: repeat(1, minmax(0, 1fr)) !important;
+  }
+}
+
 @media (max-width: 767px) {
   .article-list-main {
     padding-left: 1rem;
@@ -1495,6 +1666,33 @@ button:focus-visible {
   }
 }
 
+/* Tablet-specific adjustments (dedicated layout between mobile and desktop) */
+@media (min-width: 768px) and (max-width: 1279px) {
+  .article-list-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 1.25rem !important;
+  }
+
+  .article-feed-thumb {
+    height: clamp(220px, 32vw, 320px) !important;
+  }
+
+  .article-feed-body {
+    padding: 1rem !important;
+  }
+
+  .article-list-main {
+    padding-left: 1.25rem !important;
+    padding-right: 1.25rem !important;
+  }
+
+  /* Slightly larger title on tablet */
+  .article-feed-title,
+  .article-feed-title a {
+    font-size: 1.06rem !important;
+  }
+}
+
 @media (min-width: 1280px) {
   .article-list-main {
     padding-left: 1.5rem;
@@ -1538,6 +1736,28 @@ button:focus-visible {
   .article-list-main > .grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 1.5rem;
+  }
+}
+
+/* Force explicit columns for the inner article grid at each breakpoint to avoid overrides */
+@media (max-width: 767px) {
+  .article-list-main > .grid {
+    grid-template-columns: 1fr !important;
+    gap: 1rem !important;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1279px) {
+  .article-list-main > .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 1.25rem !important;
+  }
+}
+
+@media (min-width: 1280px) {
+  .article-list-main > .grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 1.5rem !important;
   }
 }
 

@@ -139,7 +139,7 @@ export default function ArticleListPage() {
 
             {/* Loading State */}
             {loading ? (
-              <div className="grid grid-cols-1 gap-7 items-start sm:grid-cols-2 xl:grid-cols-3">
+              <div className="grid grid-cols-1 gap-7 items-start md:grid-cols-2 xl:grid-cols-3">
                 {Array(6)
                   .fill(0)
                   .map((_, i) => (
@@ -151,7 +151,7 @@ export default function ArticleListPage() {
               </div>
             ) : articles.length > 0 ? (
               <>
-                <div className="grid grid-cols-1 gap-7 items-start sm:grid-cols-2 xl:grid-cols-3">
+                <div className="grid grid-cols-1 gap-7 items-start md:grid-cols-2 xl:grid-cols-3">
                   {articles.map((a) => (
                     <div key={a.id} className="col-span-1">
                       <ArticleCardGrid article={a} />

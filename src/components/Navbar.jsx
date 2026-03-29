@@ -277,6 +277,11 @@ export default function Navbar() {
     }
   }, []);
 
+  // Close offcanvas when route changes to avoid leaving it open on other pages
+  useEffect(() => {
+    setShowOffcanvas(false);
+  }, [location.pathname]);
+
   const handleThemeToggle = (e) => {
     e.preventDefault();
     const currentTheme =
@@ -402,7 +407,7 @@ export default function Navbar() {
             </Link>
           </div>
 
-          <div className="hidden flex-1 items-center justify-center md:flex">
+          <div className="hidden flex-1 items-center justify-center lg:flex">
             <div id="navbar-menu" className="w-full">
               <ul className="flex items-center justify-center gap-7">
                 <li>
@@ -458,31 +463,11 @@ export default function Navbar() {
               </ul>
             </div>
           </div>
-          <div className="md:hidden flex-1 flex justify-end">
-            <button
-              className="ml-auto"
-              type="button"
-              onClick={() => setShowOffcanvas(true)}
-              aria-label="Toggle navigation"
-            >
-              <svg
-                className="w-6 h-6"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M4 6h16M4 12h16M4 18h16"
-                ></path>
-              </svg>
-            </button>
+          <div className="hidden">
+            {/* mobile burger removed in favor of bottom nav */}
           </div>
 
-          <div className="hidden flex-none justify-end md:flex">
+          <div className="hidden flex-none justify-end lg:flex">
             <div className="flex items-center justify-end gap-2">
               <div className="urun-daya-container relative">
                 <button
@@ -540,7 +525,7 @@ export default function Navbar() {
                 </div>
               </div>
 
-              <div className="hidden md:flex">
+              <div className="hidden lg:flex">
                 <button
                   className="theme-toggle-switch"
                   onClick={handleThemeToggle}
@@ -588,6 +573,58 @@ export default function Navbar() {
         </div>
       </nav>
 
+      {/* Mobile bottom navigation: visible on small screens, hidden on md+ */}
+      <nav className="mobile-bottom-nav fixed bottom-0 left-0 right-0 z-50 border-t border-[#dfddd4] bg-[#f6f3eb]/95 backdrop-blur lg:hidden">
+        <div className="mx-auto flex h-14 w-full max-w-[1760px] items-center px-4 md:px-6 xl:px-7">
+          <div className="flex w-full gap-1">
+            <Link
+              to="/"
+              onClick={handleLinkClick}
+              className={`flex-1 flex flex-col items-center justify-center text-[11px] py-2 ${isActive("/") ? "mobile-bottom-nav--active" : ""}`}
+            >
+              {renderNavIcon("beranda", "h-5 w-5")}
+              <span className="mt-1">Beranda</span>
+            </Link>
+
+            <Link
+              to="/article/kronik"
+              onClick={handleLinkClick}
+              className={`flex-1 flex flex-col items-center justify-center text-[11px] py-2 ${isActive("/article/kronik") ? "mobile-bottom-nav--active" : ""}`}
+            >
+              {renderNavIcon("kronik", "h-5 w-5")}
+              <span className="mt-1">Kronik</span>
+            </Link>
+
+            <Link
+              to="/article/tilik"
+              onClick={handleLinkClick}
+              className={`flex-1 flex flex-col items-center justify-center text-[11px] py-2 ${isActive("/article/tilik") ? "mobile-bottom-nav--active" : ""}`}
+            >
+              {renderNavIcon("tilik", "h-5 w-5")}
+              <span className="mt-1">Tilik</span>
+            </Link>
+
+            <Link
+              to="/article/diskursus"
+              onClick={handleLinkClick}
+              className={`flex-1 flex flex-col items-center justify-center text-[11px] py-2 ${isActive("/article/diskursus") ? "mobile-bottom-nav--active" : ""}`}
+            >
+              {renderNavIcon("diskursus", "h-5 w-5")}
+              <span className="mt-1">Diskursus</span>
+            </Link>
+
+            <Link
+              to="/profil"
+              onClick={handleLinkClick}
+              className={`flex-1 flex flex-col items-center justify-center text-[11px] py-2 ${isActive("/profil") ? "mobile-bottom-nav--active" : ""}`}
+            >
+              {renderNavIcon("profil", "h-5 w-5")}
+              <span className="mt-1">Profil</span>
+            </Link>
+          </div>
+        </div>
+      </nav>
+
       {isListPage && (
         <nav className="category-strip-nav sticky-top hidden md:block">
           <div className="max-w-6xl mx-auto px-4">
@@ -614,10 +651,10 @@ export default function Navbar() {
       {showOffcanvas && (
         <>
           <div
-            className="fixed inset-0 bg-black/40 z-40"
+            className="fixed inset-0 bg-black/40 z-40 site-offcanvas-backdrop"
             onClick={() => setShowOffcanvas(false)}
           ></div>
-          <div className="fixed left-0 top-0 z-50 h-full w-80 bg-white dark:bg-gray-800 p-4 overflow-auto">
+          <div className="fixed left-0 top-0 z-50 h-full w-80 bg-white dark:bg-gray-800 p-4 overflow-auto site-offcanvas-drawer">
             <div className="flex items-center justify-between mb-4">
               <h5 className="text-lg font-semibold">Menu</h5>
               <button
