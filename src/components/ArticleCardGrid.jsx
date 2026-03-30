@@ -67,7 +67,7 @@ export default function ArticleCardGrid({ article, variant = "default" }) {
         className={
           isHomeVariant
             ? "article-feed-body space-y-1 pt-2"
-            : "article-feed-body space-y-1 p-4"
+            : "article-feed-body space-y-0 p-0"
         }
       >
         {!isHomeVariant && locationName && (
@@ -81,9 +81,10 @@ export default function ArticleCardGrid({ article, variant = "default" }) {
         <h3
           className={
             isHomeVariant
-              ? "article-feed-title text-sm font-bold leading-snug"
-              : "article-feed-title text-lg font-semibold leading-tight"
+              ? "article-feed-title text-sm font-bold leading-snug text-left"
+              : "article-feed-title text-lg font-semibold leading-tight text-left"
           }
+          style={{ textAlign: "left" }}
         >
           <Link
             to={articleUrl}

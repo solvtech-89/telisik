@@ -1177,6 +1177,18 @@ button:focus-visible {
   gap: 0.68rem;
 }
 
+/* Override list-page horizontal paddings so cards can be full-bleed */
+.article-list-main {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
+.article-list-main .article-feed-body {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  gap: 0 !important;
+}
+
 .article-feed-thumb-placeholder {
   height: clamp(120px, 10vw, 150px);
   background: linear-gradient(
@@ -1431,6 +1443,43 @@ button:focus-visible {
   border-color: #3e4758;
 }
 
+/* Final overrides: ensure article titles/excerpts and grid use full width */
+.article-list-main > .grid {
+  gap: 0 !important;
+}
+
+.article-list-main .article-feed-body {
+  padding: 0 !important;
+  gap: 0 !important;
+}
+
+.article-feed-title,
+.article-feed-excerpt {
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  width: 100% !important;
+}
+
+/* remove any leftover horizontal padding on title/link elements */
+.article-feed-title a {
+  display: inline-block;
+  width: 100%;
+}
+
+/* Stronger overrides: remove any horizontal padding on grid items and card body */
+.article-list-main > .grid > * {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+
+.article-list-main > .grid > * .article-feed-body {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  width: 100% !important;
+}
+
 :root[data-bs-theme="dark"] .article-list-right .right-feed-item-row {
   border-bottom-color: #3b4352;
 }
@@ -1634,6 +1683,53 @@ button:focus-visible {
 
 :root[data-bs-theme="dark"] .category-filter-shell button {
   border-color: #465069;
+}
+
+/* Strongest final override: force zero horizontal gaps and padding for article grid/cards */
+html body .article-list-main > .grid {
+  gap: 1rem !important;
+  column-gap: 1rem !important;
+  row-gap: 1rem !important;
+}
+
+html body .article-list-main > .grid > * {
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+/* give a small horizontal padding inside each card body on list pages */
+html body .article-list-main .article-feed-body {
+  padding-left: 0.6rem !important;
+  padding-right: 0.6rem !important;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+}
+
+/* ensure title/excerpt expand but respect the small inner padding */
+html body .article-feed-title,
+html body .article-feed-excerpt {
+  width: auto !important;
+}
+
+html body .article-feed-thumb,
+html body .article-feed-thumb img,
+html body .article-feed-thumb-wrap img {
+  display: block !important;
+  width: 100% !important;
+  height: auto !important;
+}
+
+/* If borders on main are visually adding space, remove them to allow true full-bleed */
+html body .article-list-main {
+  border-left: none !important;
+  border-right: none !important;
+}
+
+/* Add small horizontal inset so content doesn't touch sidebars */
+html body .article-list-main {
+  padding-left: 1rem !important;
+  padding-right: 1rem !important;
+  box-sizing: border-box;
 }
 
 :root[data-bs-theme="dark"]

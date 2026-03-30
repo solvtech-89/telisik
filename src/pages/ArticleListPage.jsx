@@ -107,12 +107,12 @@ export default function ArticleListPage() {
     <div className="article-list-shell min-h-screen bg-[#f7f5ef] lg:h-[calc(100vh-104px)] lg:min-h-0 lg:overflow-hidden">
       <div className="article-list-layout flex min-h-[calc(100vh-104px)] flex-col lg:h-full lg:min-h-0 lg:flex-row lg:overflow-hidden">
         {/* Left Sidebar - Navigation */}
-        <aside className="article-list-left hidden border-r border-[#dfddd4] bg-[#f7f5ef] lg:block lg:h-full lg:w-[295px] lg:overflow-y-auto lg:overflow-x-hidden lg:overscroll-contain xl:w-[305px]">
+        <aside className="article-list-left hidden border-r border-[#dfddd4] bg-[#f7f5ef] lg:block lg:h-full lg:w-[265px] lg:overflow-y-auto lg:overflow-x-hidden lg:overscroll-contain xl:w-[275px]">
           <SidebarNav />
         </aside>
 
         {/* Center - Main Content */}
-        <main className="article-list-main relative z-0 min-w-0 flex-1 overflow-x-hidden border-x border-[#e2e0d8] bg-[#faf8f1] px-5 pt-5 lg:h-full lg:overflow-y-auto lg:overscroll-contain lg:px-6 lg:pt-6">
+        <main className="article-list-main relative z-0 min-w-0 flex-1 overflow-x-hidden border-x border-[#e2e0d8] bg-[#faf8f1] px-0 pt-5 lg:h-full lg:overflow-y-auto lg:overscroll-contain lg:px-0 lg:pt-6">
           <h1 className="article-list-title mb-4 text-2xl font-semibold">
             {capitalize(tipe)}
           </h1>
@@ -138,7 +138,7 @@ export default function ArticleListPage() {
 
           {/* Loading State */}
           {loading ? (
-            <div className="grid grid-cols-1 gap-7 items-start md:grid-cols-2 xl:grid-cols-3">
+            <div className="grid grid-cols-1 gap-0 items-start md:grid-cols-2 xl:grid-cols-3">
               {Array(6)
                 .fill(0)
                 .map((_, i) => (
@@ -150,7 +150,7 @@ export default function ArticleListPage() {
             </div>
           ) : articles.length > 0 ? (
             <>
-              <div className="grid grid-cols-1 gap-7 items-start md:grid-cols-2 xl:grid-cols-3">
+              <div className="grid grid-cols-1 gap-0 items-start md:grid-cols-2 xl:grid-cols-3">
                 {articles.map((a) => (
                   <div key={a.id} className="col-span-1">
                     <ArticleCardGrid article={a} />
@@ -194,7 +194,7 @@ export default function ArticleListPage() {
         </main>
 
         {/* Right Sidebar - Secondary Info */}
-        <aside className="article-list-right article-list-right-panel hidden border-l border-[#dfddd4] bg-[#f7f5ef] lg:block lg:h-full lg:w-[345px] lg:overflow-y-auto lg:overflow-x-hidden lg:overscroll-contain xl:w-[355px]">
+        <aside className="article-list-right article-list-right-panel hidden border-l border-[#dfddd4] bg-[#f7f5ef] lg:block lg:h-full lg:w-[385px] lg:overflow-y-auto lg:overflow-x-hidden lg:overscroll-contain xl:w-[395px]">
           <RightSidebar currentType={tipe} />
         </aside>
       </div>

@@ -102,13 +102,13 @@ export default function HomePage() {
       {/* Main Layout */}
       <div className="home-layout flex min-h-[calc(100vh-60px)] flex-col lg:h-full lg:min-h-0 lg:flex-row lg:overflow-hidden">
         {/* Left Sidebar - Navigation */}
-        <aside className="home-left-rail hidden border-r border-[#dfddd4] bg-[#f7f5ef] lg:block lg:h-full lg:w-[295px] lg:overflow-y-auto lg:overflow-x-hidden lg:overscroll-contain xl:w-[305px]">
+        <aside className="home-left-rail hidden border-r border-[#dfddd4] bg-[#f7f5ef] lg:block lg:h-full lg:w-[265px] lg:overflow-y-auto lg:overflow-x-hidden lg:overscroll-contain xl:w-[275px]">
           <SidebarNav />
         </aside>
 
         {/* Center - Main Content */}
         <main className="home-main-panel flex-1 border-x border-[#e2e0d8] bg-[#faf8f1] lg:h-full lg:overflow-y-auto lg:overscroll-contain">
-          <div className="home-main-inner mx-auto w-full max-w-none space-y-4 px-4 py-4 lg:space-y-5 lg:px-5 xl:px-6">
+          <div className="home-main-inner mx-auto w-full max-w-none space-y-4 px-4 py-4 lg:space-y-5 lg:px-4 xl:px-4">
             {/* Map Section */}
             <div>
               <MapContainer
@@ -164,7 +164,7 @@ export default function HomePage() {
         </main>
 
         {/* Right Sidebar - Secondary Info */}
-        <aside className="home-right-rail hidden border-l border-[#dfddd4] bg-[#f7f5ef] lg:block lg:h-full lg:w-[345px] lg:overflow-y-auto lg:overflow-x-hidden lg:overscroll-contain xl:w-[355px]">
+        <aside className="home-right-rail hidden border-l border-[#dfddd4] bg-[#f7f5ef] lg:block lg:h-full lg:w-[385px] lg:overflow-y-auto lg:overflow-x-hidden lg:overscroll-contain xl:w-[395px]">
           <RightSidebar />
         </aside>
       </div>
