@@ -362,7 +362,7 @@
 :root[data-bs-theme="dark"] .editor-left-rail,
 :root[data-bs-theme="dark"] .editor-main-column,
 :root[data-bs-theme="dark"] .editor-right-rail {
-  background: #272c35 !important;
+  background: #242424 !important;
   border-color: #3a404d !important;
 }
 

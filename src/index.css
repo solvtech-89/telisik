@@ -493,9 +493,9 @@ button:focus-visible {
 :root:not([data-bs-theme="dark"]) .home-right-rail .right-find-checkbox {
   appearance: none;
   -webkit-appearance: none;
-  width: 28px;
-  height: 28px;
-  border-radius: 6px;
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
   background: #eef0ea;
   border: 1px solid #d7d4c6;
   margin-right: 0.5rem;
@@ -523,14 +523,14 @@ button:focus-visible {
 }
 
 :root:not([data-bs-theme="dark"]) .home-right-rail .right-find-submit {
-  background: #556232;
-  color: #fff;
+  background: #555333;
+  color: #f9f6ef;
   padding: 0.6rem 1.1rem;
   border-radius: 999px;
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  border: 2px solid rgba(0, 0, 0, 0.06);
+  border: 2px solid #cecb9c;
 }
 
 :root:not([data-bs-theme="dark"]) .home-right-rail .right-find-submit:hover {
@@ -648,6 +648,34 @@ button:focus-visible {
   color: #8fa3d1;
 }
 
+/* Dashboard / sidebar dark-mode overrides to fix inconsistent inline utility colors */
+:root[data-bs-theme="dark"] .sidebar-nav-shell .mb-2 {
+  background-color: #2b3136 !important;
+}
+
+:root[data-bs-theme="dark"] .sidebar-nav-shell hr {
+  background: #242424 !important;
+  border-color: #3a3f44 !important;
+}
+
+:root[data-bs-theme="dark"] .sidebar-nav-shell .fw-semibold,
+:root[data-bs-theme="dark"] .sidebar-nav-shell .font-semibold {
+  color: #e6e9ef !important;
+}
+
+:root[data-bs-theme="dark"] .sidebar-nav-shell button,
+:root[data-bs-theme="dark"] .sidebar-nav-shell a,
+:root[data-bs-theme="dark"] .sidebar-nav-shell .text-muted,
+:root[data-bs-theme="dark"] .sidebar-nav-shell .text-gray-500 {
+  color: #c7ccd6 !important;
+}
+
+/* Ensure HR and separators in sidebars are muted for dark */
+:root[data-bs-theme="dark"] .sidebar-nav-shell .border-#CDCB9C,
+:root[data-bs-theme="dark"] .sidebar-nav-shell .border-3 {
+  border-color: #3a4046 !important;
+}
+
 /* Consistent vertical spacing between direct children in sidebars */
 .right-sidebar-shell > * + *,
 .sidebar-nav-shell > * + *,
@@ -734,10 +762,10 @@ button:focus-visible {
 
 :root[data-bs-theme="dark"] .home-right-rail .right-find-area-title {
   color: #c5cad3 !important;
-  font-size: 2.2rem;
-  line-height: 1.22;
+  font-size: 1.12rem;
+  line-height: 1.25;
   letter-spacing: -0.01em;
-  margin-bottom: 0.95rem;
+  margin-bottom: 0.5rem;
 }
 
 :root[data-bs-theme="dark"] .home-right-rail .right-find-area-grid--home {
@@ -758,9 +786,9 @@ button:focus-visible {
 
 :root[data-bs-theme="dark"] .home-right-rail .right-find-area-text {
   color: inherit;
-  font-size: 2rem;
+  font-size: 1rem;
   font-weight: 500;
-  line-height: 1.16;
+  line-height: 1.2;
   letter-spacing: -0.01em;
   white-space: nowrap;
 }
@@ -977,6 +1005,27 @@ button:focus-visible {
 .site-offcanvas-backdrop {
   /* keep the semi-transparent backdrop, but behind top nav */
   z-index: 45;
+}
+
+/* Enforce unified dark background color across dashboard/editor/sidebar */
+:root[data-bs-theme="dark"] .editor-page-shell,
+:root[data-bs-theme="dark"] .editor-body-shell,
+:root[data-bs-theme="dark"] .editor-left-rail,
+:root[data-bs-theme="dark"] .editor-main-column,
+:root[data-bs-theme="dark"] .editor-right-rail,
+:root[data-bs-theme="dark"] .home-right-rail,
+:root[data-bs-theme="dark"] .home-main-panel,
+:root[data-bs-theme="dark"] .right-sidebar-shell,
+:root[data-bs-theme="dark"] .sidebar-nav-shell,
+:root[data-bs-theme="dark"] .article-list-shell,
+:root[data-bs-theme="dark"] .article-list-left,
+:root[data-bs-theme="dark"] .article-list-right {
+  background: #242424 !important;
+}
+
+:root[data-bs-theme="dark"] .editor-header {
+  background: #242424 !important;
+  border-bottom-color: #363a43 !important;
 }
 
 .site-offcanvas-drawer {

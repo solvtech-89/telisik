@@ -26,6 +26,16 @@ export default function RightSidebar({ currentType = null, isDetail = false }) {
     diskursus: true,
     tanggapan: true,
   });
+  const [provinces, setProvinces] = useState([]);
+  const [regencies, setRegencies] = useState([]);
+  const [selectedProvince, setSelectedProvince] = useState("");
+  const [selectedRegency, setSelectedRegency] = useState("");
+  const conflictOptions = [
+    { id: "sda", label: "Pemanfaatan SDA" },
+    { id: "agraria", label: "Agraria/pemanfaatan lahan" },
+    { id: "ekonomi", label: "Ekonomi, sosial, politik, SARA" },
+  ];
+  const [selectedConflictTypes, setSelectedConflictTypes] = useState([]);
 
   useEffect(() => {
     fetchRightSidebarData();
@@ -77,7 +87,12 @@ export default function RightSidebar({ currentType = null, isDetail = false }) {
     const params = new URLSearchParams();
     if (searchQuery) params.append("q", searchQuery);
     if (searchFilters.lokasi) params.append("lokasi", "1");
+    if (selectedProvince) params.append("province", selectedProvince);
+    if (selectedRegency) params.append("regency", selectedRegency);
     if (searchFilters.jenisKonflik) params.append("jenis_konflik", "1");
+    if (searchFilters.jenisKonflik && selectedConflictTypes.length) {
+      params.set("jenis_konflik", selectedConflictTypes.join(","));
+    }
 
     const types = [];
     if (searchFilters.kronik) types.push("kronik");
@@ -88,6 +103,48 @@ export default function RightSidebar({ currentType = null, isDetail = false }) {
 
     window.location.href = `/search?${params.toString()}`;
   };
+
+  // Load provinces when advanced search shown and lokasi enabled
+  useEffect(() => {
+    if (!showAdvancedSearch || !searchFilters.lokasi) return;
+
+    const fetchProvinces = async () => {
+      try {
+        const resp = await fetch(`${API_BASE}/api/locations/provinces/`);
+        if (!resp.ok) return;
+        const data = await resp.json();
+        setProvinces(data.results || data || []);
+      } catch (err) {
+        console.error("Failed to load provinces", err);
+      }
+    };
+
+    fetchProvinces();
+  }, [showAdvancedSearch, searchFilters.lokasi]);
+
+  // Load regencies when a province selected
+  useEffect(() => {
+    if (!selectedProvince) {
+      setRegencies([]);
+      setSelectedRegency("");
+      return;
+    }
+
+    const fetchRegencies = async () => {
+      try {
+        const resp = await fetch(
+          `${API_BASE}/api/locations/regencies/?province=${selectedProvince}`,
+        );
+        if (!resp.ok) return;
+        const data = await resp.json();
+        setRegencies(data.results || data || []);
+      } catch (err) {
+        console.error("Failed to load regencies", err);
+      }
+    };
+
+    fetchRegencies();
+  }, [selectedProvince]);
 
   const { tilik, kronik } = data;
   const bannerTop = getBannerByPosition("rightsidebar_top");
@@ -226,6 +283,90 @@ export default function RightSidebar({ currentType = null, isDetail = false }) {
                   <span className="right-find-label-text">Jenis Konflik</span>
                 </label>
               </div>
+
+              {/* Location selectors: province -> regency */}
+              {showAdvancedSearch && searchFilters.lokasi && (
+                <div className="mt-3 pl-4">
+                  <div className="mb-2">
+                    <label className="text-sm font-medium text-neutral-700">
+                      Provinsi
+                    </label>
+                    <select
+                      className="mt-1 block w-full rounded border border-[#d9d2bf] bg-white px-3 py-2 text-sm text-[#555333]"
+                      value={selectedProvince}
+                      onChange={(e) => setSelectedProvince(e.target.value)}
+                    >
+                      <option value="">Pilih provinsi...</option>
+                      {provinces.map((p) => (
+                        <option
+                          key={p.id || p.code || p.name}
+                          value={p.id || p.code || p.name}
+                        >
+                          {p.name || p.province_name || p.title}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div className="mb-2">
+                    <label className="text-sm font-medium text-neutral-700">
+                      Kabupaten / Kota
+                    </label>
+                    <select
+                      className="mt-1 block w-full rounded border border-[#d9d2bf] bg-white px-3 py-2 text-sm text-[#555333]"
+                      value={selectedRegency}
+                      onChange={(e) => setSelectedRegency(e.target.value)}
+                      disabled={!regencies || regencies.length === 0}
+                    >
+                      <option value="">Pilih kabupaten / kota...</option>
+                      {regencies.map((r) => (
+                        <option
+                          key={r.id || r.code || r.name}
+                          value={r.id || r.code || r.name}
+                        >
+                          {r.name || r.regency_name || r.title}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+              )}
+
+              {showAdvancedSearch && searchFilters.jenisKonflik && (
+                <div className="mt-3 pl-4">
+                  <div className="mb-2">
+                    <div className="text-sm font-medium text-neutral-700 mb-1">
+                      Jenis Konflik
+                    </div>
+                    <div className="space-y-2">
+                      {conflictOptions.map((opt) => (
+                        <label
+                          key={opt.id}
+                          className="flex items-center space-x-2"
+                        >
+                          <input
+                            type="checkbox"
+                            className="right-find-checkbox"
+                            checked={selectedConflictTypes.includes(opt.id)}
+                            onChange={(e) => {
+                              if (e.target.checked) {
+                                setSelectedConflictTypes((s) => [...s, opt.id]);
+                              } else {
+                                setSelectedConflictTypes((s) =>
+                                  s.filter((x) => x !== opt.id),
+                                );
+                              }
+                            }}
+                          />
+                          <span className="text-sm text-[#555333]">
+                            {opt.label}
+                          </span>
+                        </label>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              )}
 
               <hr className="mb-3" />
 
