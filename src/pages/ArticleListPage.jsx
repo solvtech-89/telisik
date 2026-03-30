@@ -104,101 +104,99 @@ export default function ArticleListPage() {
   }
 
   return (
-    <div className="article-list-shell min-h-screen bg-neutral-50 xl:h-[calc(100vh-104px)] xl:min-h-0 xl:overflow-hidden">
-      <div className="article-list-wrap mx-auto max-w-7xl w-full px-3 xl:h-full xl:min-h-0">
-        <div className="article-list-grid grid grid-cols-1 gap-6 xl:h-full xl:grid-cols-[260px_minmax(0,1fr)_350px] xl:gap-6 xl:overflow-hidden">
-          {/* Left Sidebar Navigation */}
-          <div className="article-list-left hidden xl:block xl:h-full xl:overflow-y-scroll xl:overflow-x-hidden xl:overscroll-contain">
-            <SidebarNav />
-          </div>
+    <div className="article-list-shell min-h-screen bg-[#f7f5ef] lg:h-[calc(100vh-104px)] lg:min-h-0 lg:overflow-hidden">
+      <div className="article-list-layout flex min-h-[calc(100vh-104px)] flex-col lg:h-full lg:min-h-0 lg:flex-row lg:overflow-hidden">
+        {/* Left Sidebar - Navigation */}
+        <aside className="article-list-left hidden border-r border-[#dfddd4] bg-[#f7f5ef] lg:block lg:h-full lg:w-[295px] lg:overflow-y-auto lg:overflow-x-hidden lg:overscroll-contain xl:w-[305px]">
+          <SidebarNav />
+        </aside>
 
-          {/* Main Content */}
-          <div className="article-list-main relative z-0 min-w-0 overflow-x-hidden px-5 pt-5 xl:h-full xl:overflow-y-scroll xl:overscroll-contain xl:px-6 xl:pt-6">
-            <h1 className="article-list-title mb-4 text-2xl font-semibold text-neutral-900">
-              {capitalize(tipe)}
-            </h1>
-            <p className="article-list-subtitle mb-4 text-sm italic text-neutral-600">
-              {tipe === "kronik"
-                ? "Dokumentasi konflik yang sedang berlangsung."
-                : "Dokumentasi potensi konflik yang bisa terjadi."}
-            </p>
+        {/* Center - Main Content */}
+        <main className="article-list-main relative z-0 min-w-0 flex-1 overflow-x-hidden border-x border-[#e2e0d8] bg-[#faf8f1] px-5 pt-5 lg:h-full lg:overflow-y-auto lg:overscroll-contain lg:px-6 lg:pt-6">
+          <h1 className="article-list-title mb-4 text-2xl font-semibold">
+            {capitalize(tipe)}
+          </h1>
+          <p className="article-list-subtitle mb-4 text-sm italic text-neutral-600">
+            {tipe === "kronik"
+              ? "Dokumentasi konflik yang sedang berlangsung."
+              : "Dokumentasi potensi konflik yang bisa terjadi."}
+          </p>
 
-            {/* Category Filter Badge */}
-            {category && category !== "semua" && (
-              <div className="mb-4">
-                <Alert
-                  type="info"
-                  message={
-                    <>
-                      Menampilkan: <strong>{getCategoryLabel()}</strong>
-                    </>
-                  }
-                />
-              </div>
-            )}
+          {/* Category Filter Badge */}
+          {category && category !== "semua" && (
+            <div className="mb-4">
+              <Alert
+                type="info"
+                message={
+                  <>
+                    Menampilkan: <strong>{getCategoryLabel()}</strong>
+                  </>
+                }
+              />
+            </div>
+          )}
 
-            {/* Loading State */}
-            {loading ? (
+          {/* Loading State */}
+          {loading ? (
+            <div className="grid grid-cols-1 gap-7 items-start md:grid-cols-2 xl:grid-cols-3">
+              {Array(6)
+                .fill(0)
+                .map((_, i) => (
+                  <div key={i} className="space-y-2">
+                    <Skeleton height="h-40" />
+                    <Skeleton count={2} />
+                  </div>
+                ))}
+            </div>
+          ) : articles.length > 0 ? (
+            <>
               <div className="grid grid-cols-1 gap-7 items-start md:grid-cols-2 xl:grid-cols-3">
-                {Array(6)
-                  .fill(0)
-                  .map((_, i) => (
-                    <div key={i} className="space-y-2">
-                      <Skeleton height="h-40" />
-                      <Skeleton count={2} />
-                    </div>
-                  ))}
+                {articles.map((a) => (
+                  <div key={a.id} className="col-span-1">
+                    <ArticleCardGrid article={a} />
+                  </div>
+                ))}
               </div>
-            ) : articles.length > 0 ? (
-              <>
-                <div className="grid grid-cols-1 gap-7 items-start md:grid-cols-2 xl:grid-cols-3">
-                  {articles.map((a) => (
-                    <div key={a.id} className="col-span-1">
-                      <ArticleCardGrid article={a} />
-                    </div>
-                  ))}
-                </div>
 
-                {/* Infinite Scroll Observer Target */}
-                <div ref={observerTarget} className="mt-6 mb-6">
-                  {/* Loading More Indicator */}
-                  {loadingMore && (
-                    <div className="flex flex-col items-center py-8">
-                      <div className="flex gap-2">
-                        <div className="w-3 h-3 rounded-full bg-neutral-400 bounce-dot bounce-dot-1" />
-                        <div className="w-3 h-3 rounded-full bg-neutral-400 bounce-dot bounce-dot-2" />
-                        <div className="w-3 h-3 rounded-full bg-neutral-400 bounce-dot bounce-dot-3" />
-                      </div>
+              {/* Infinite Scroll Observer Target */}
+              <div ref={observerTarget} className="mt-6 mb-6">
+                {/* Loading More Indicator */}
+                {loadingMore && (
+                  <div className="flex flex-col items-center py-8">
+                    <div className="flex gap-2">
+                      <div className="w-3 h-3 rounded-full bg-neutral-400 bounce-dot bounce-dot-1" />
+                      <div className="w-3 h-3 rounded-full bg-neutral-400 bounce-dot bounce-dot-2" />
+                      <div className="w-3 h-3 rounded-full bg-neutral-400 bounce-dot bounce-dot-3" />
                     </div>
-                  )}
+                  </div>
+                )}
 
-                  {/* End of List Indicator */}
-                  {!hasMore && totalCount > 0 && !loadingMore && (
-                    <div className="text-center py-8">
-                      <p className="text-neutral-600">
-                        Menampilkan semua {articles.length} dari {totalCount}{" "}
-                        artikel
-                      </p>
-                    </div>
-                  )}
-                </div>
-              </>
-            ) : (
-              <div className="article-list-empty rounded-lg border border-gray-200 bg-white py-12 text-center">
-                <p className="text-neutral-600">
-                  {category && category !== "semua"
-                    ? `Tidak ada artikel dalam kategori ${getCategoryLabel()}`
-                    : "Tidak ada artikel yang ditemukan."}
-                </p>
+                {/* End of List Indicator */}
+                {!hasMore && totalCount > 0 && !loadingMore && (
+                  <div className="text-center py-8">
+                    <p className="text-neutral-600">
+                      Menampilkan semua {articles.length} dari {totalCount}{" "}
+                      artikel
+                    </p>
+                  </div>
+                )}
               </div>
-            )}
-          </div>
+            </>
+          ) : (
+            <div className="article-list-empty rounded-lg border border-gray-200 bg-white py-12 text-center">
+              <p className="text-neutral-600">
+                {category && category !== "semua"
+                  ? `Tidak ada artikel dalam kategori ${getCategoryLabel()}`
+                  : "Tidak ada artikel yang ditemukan."}
+              </p>
+            </div>
+          )}
+        </main>
 
-          {/* Right Sidebar */}
-          <div className="article-list-right article-list-right-panel relative z-10 min-w-0 hidden xl:block xl:h-full xl:overflow-y-scroll xl:overflow-x-hidden xl:overscroll-contain">
-            <RightSidebar currentType={tipe} />
-          </div>
-        </div>
+        {/* Right Sidebar - Secondary Info */}
+        <aside className="article-list-right article-list-right-panel hidden border-l border-[#dfddd4] bg-[#f7f5ef] lg:block lg:h-full lg:w-[345px] lg:overflow-y-auto lg:overflow-x-hidden lg:overscroll-contain xl:w-[355px]">
+          <RightSidebar currentType={tipe} />
+        </aside>
       </div>
     </div>
   );

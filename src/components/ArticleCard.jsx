@@ -3,13 +3,7 @@ import { Link } from "react-router-dom";
 import { formatCount } from "../utils/tracking";
 import { API_BASE } from "../config";
 
-const truncateText = (text, maxLength = 150) => {
-  if (!text) return "";
-  if (text.length > maxLength) {
-    return text.substring(0, maxLength) + "...";
-  }
-  return text;
-};
+// keep full text; avoid forced truncation here so UI can wrap naturally
 
 const formatDate = (dateString) => {
   if (!dateString) return "";
@@ -30,14 +24,11 @@ export default function ArticleCard({ article }) {
     article.location_geojson?.properties?.name ||
     "";
 
-  const typeColors = {
-    TILIK: "bg-[#ff6b35]",
-    KRONIK: "bg-[#0068d6]",
-    DISKURSUS: "bg-[#0f766e]",
-  };
-
   return (
-    <article className="mb-4 overflow-hidden rounded-md border border-gray-200 bg-white shadow-sm transition-shadow hover:shadow-md">
+    <article
+      className="mb-4 overflow-hidden rounded-md"
+      style={{ backgroundColor: "transparent", border: "none" }}
+    >
       <div
         className={`grid grid-cols-1 ${article.featured_image ? "md:grid-cols-3" : "md:grid-cols-1"}`}
       >
@@ -59,31 +50,24 @@ export default function ArticleCard({ article }) {
 
         <div className={article.featured_image ? "md:col-span-2 p-4" : "p-4"}>
           <div>
-            <div className="mb-2 flex items-center gap-2">
-              <span
-                className={`rounded px-2 py-1 text-[11px] font-semibold uppercase tracking-wide text-white ${typeColors[article.type] || "bg-gray-600"}`}
-              >
-                {article.type}
-              </span>
-              {locationName && (
-                <span className="ml-2 text-xs text-gray-500">
-                  {locationName}
-                </span>
-              )}
-            </div>
+            {locationName && (
+              <div className="mb-1 flex items-center">
+                <span className="text-xs text-gray-500">{locationName}</span>
+              </div>
+            )}
 
-            <h3 className="text-lg font-semibold leading-tight text-telisik">
+            <h3 className="text-lg font-semibold leading-tight text-[#FC6736]">
               <Link
                 to={articleUrl}
-                className="block line-clamp-2 text-gray-900 no-underline transition-colors hover:text-[#0068d6]"
+                className="block text-inherit no-underline transition-colors hover:text-[#dc5b2b]"
               >
                 {article.title}
               </Link>
             </h3>
 
             {article.lead_excerpt && (
-              <p className="mb-2 text-sm leading-relaxed text-gray-600">
-                {truncateText(article.lead_excerpt, 150)}
+              <p className="mb-1 text-sm leading-relaxed text-gray-600 line-clamp-3 overflow-hidden">
+                {article.lead_excerpt}
               </p>
             )}
 

@@ -48,7 +48,9 @@ export default function ArticleEditorMiddleColumn({
           : collapsed
             ? "md:col-span-8"
             : "md:col-span-7"
-      } h-full min-h-0 border-r bg-[#fffdf8] px-5 py-5 ${!isMobile ? "overflow-y-scroll" : ""}`}
+      } lg:col-span-1 lg:col-start-2 h-full min-h-0 border-x border-[#e2e0d8] bg-[#faf8f1] px-5 py-5 ${
+        !isMobile ? "overflow-y-scroll" : ""
+      }`}
     >
       <div className="mt-2 mb-3">
         <Alert

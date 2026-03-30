@@ -241,7 +241,7 @@ export default function ArticlePage() {
 
   if (!article || (!isDiskursus && !sections)) {
     return (
-      <div className="min-h-screen bg-neutral-50">
+      <div className="min-h-screen bg-[#f7f5ef]">
         <div className="mx-auto grid w-[98%] grid-cols-1 gap-4 py-4 md:grid-cols-12">
           <div className="hidden md:col-span-2 md:block">
             <Skeleton height="h-[80vh]" />
@@ -261,7 +261,7 @@ export default function ArticlePage() {
   }
 
   return (
-    <div className="article-page-shell flex min-h-screen flex-col bg-neutral-50 xl:h-[calc(100vh-60px)] xl:min-h-0 xl:overflow-hidden">
+    <div className="article-page-shell flex min-h-screen flex-col bg-[#f7f5ef] xl:h-[calc(100vh-60px)] xl:min-h-0 xl:overflow-hidden">
       <ArticleEditModeModal
         show={showModal}
         onConfirm={handleConfirmEditMode}
@@ -283,8 +283,8 @@ export default function ArticlePage() {
             <div
               className={
                 collapsed
-                  ? "article-left-rail hidden h-full overflow-y-scroll overflow-x-hidden border-r border-neutral-200 transition-[width] duration-200 md:col-auto md:block md:w-[52px]"
-                  : "article-left-rail hidden h-full overflow-y-scroll overflow-x-hidden border-r border-neutral-200 pb-5 transition-[width] duration-200 md:col-span-2 md:block"
+                  ? "article-left-rail hidden h-full overflow-y-scroll overflow-x-hidden border-r border-[#dfddd4] bg-[#f7f5ef] transition-[width] duration-200 md:col-auto md:block md:w-[52px]"
+                  : "article-left-rail hidden h-full overflow-y-scroll overflow-x-hidden border-r border-[#dfddd4] bg-[#f7f5ef] pb-5 transition-[width] duration-200 md:col-span-2 md:block"
               }
             >
               <SidebarNav
@@ -296,7 +296,7 @@ export default function ArticlePage() {
 
             <div
               id="middle-col-scroll"
-              className="article-main-panel h-full min-h-0 overflow-y-auto border-r border-neutral-200 pb-5 transition-[width] duration-200 md:col-span-7 md:overflow-y-scroll md:max-h-none"
+              className="article-main-panel h-full min-h-0 overflow-y-auto border-x border-[#e2e0d8] bg-[#faf8f1] pb-5 transition-[width] duration-200 md:col-span-7 md:overflow-y-scroll md:max-h-none"
             >
               <div className="p-3">
                 <nav
@@ -368,7 +368,7 @@ export default function ArticlePage() {
               </div>
             </div>
 
-            <div className="article-right-rail h-full min-h-0 overflow-y-auto px-3 pb-5 md:col-span-3 md:overflow-y-scroll md:max-h-none">
+            <div className="article-right-rail h-full min-h-0 overflow-y-auto border-l border-[#dfddd4] bg-[#f7f5ef] px-3 pb-5 md:col-span-3 md:overflow-y-scroll md:max-h-none">
               <div className="article-search-shell mb-4 rounded-2xl border border-neutral-200 bg-white p-4 shadow-sm">
                 <div className="mb-3">
                   <h3 className="mb-0 text-2xl font-semibold text-telisik">

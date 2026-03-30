@@ -132,7 +132,7 @@ export default function CompleteProfilePage() {
 
   if (initializing) {
     return (
-      <div className="min-h-screen bg-neutral-50">
+      <div className="min-h-screen bg-[#f7f5ef]">
         <div className="mx-auto grid w-[98%] grid-cols-1 gap-4 py-4 md:grid-cols-12">
           <div className="hidden md:col-span-3 md:block lg:col-span-2">
             <Skeleton height="h-[78vh]" />
@@ -148,7 +148,7 @@ export default function CompleteProfilePage() {
   }
 
   return (
-    <div className="min-h-screen bg-neutral-50">
+    <div className="min-h-screen bg-[#f7f5ef]">
       <Modal
         show={showSuccessModal}
         onClose={() => setShowSuccessModal(false)}
@@ -184,14 +184,16 @@ export default function CompleteProfilePage() {
       </Modal>
 
       <div className="mx-auto grid w-[98%] grid-cols-1 gap-4 py-4 md:grid-cols-12">
-        <aside className="hidden border-r border-neutral-200 bg-white p-4 md:col-span-3 md:block lg:col-span-2">
+        <aside className="hidden border-r border-[#dfddd4] bg-[#f7f5ef] p-4 md:col-span-3 md:block lg:col-span-2">
           <SidebarNav />
         </aside>
 
         <main className="md:col-span-9 lg:col-span-10">
           <div className="mx-auto max-w-4xl rounded-2xl border border-neutral-200 bg-white p-5 shadow-sm md:p-7">
             <div className="mb-6">
-              <h2 className="mb-2 text-3xl font-bold text-neutral-900">Buat Akun</h2>
+              <h2 className="mb-2 text-3xl font-bold text-neutral-900">
+                Buat Akun
+              </h2>
               <p className="text-neutral-600">
                 Tetapkan nama pengguna, nama tampilan, tanggal lahir, dan unggah
                 foto profil.
@@ -259,7 +261,9 @@ export default function CompleteProfilePage() {
                     value={dateOfBirth}
                     onChange={(e) => setDateOfBirth(e.target.value)}
                     readOnly={isDateReadOnly}
-                    className={isDateReadOnly ? "bg-neutral-100 cursor-not-allowed" : ""}
+                    className={
+                      isDateReadOnly ? "bg-neutral-100 cursor-not-allowed" : ""
+                    }
                     required
                   />
                   <small className="text-xs italic text-neutral-500">

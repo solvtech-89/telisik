@@ -26,7 +26,9 @@ export default function ArticleHeader({
 }) {
   const primaryContributor = Array.isArray(contributor) ? contributor[0] : null;
   const contributorName = primaryContributor?.username || "Kontributor";
-  const contributorAvatar = resolveAssetUrl(primaryContributor?.avatar_url || "");
+  const contributorAvatar = resolveAssetUrl(
+    primaryContributor?.avatar_url || "",
+  );
   const coverUrl = resolveAssetUrl(article.cover || article.cover_url || "");
   const resensiMeta = [
     { label: "Judul Buku", value: article.book_title },
@@ -40,7 +42,7 @@ export default function ArticleHeader({
 
   return (
     <div className="space-y-4 px-3 pb-3">
-      <h1 className="text-3xl font-bold text-neutral-900">{article.title}</h1>
+      <h1 className="text-3xl font-bold text-[#555333]">{article.title}</h1>
 
       {isDiskursus ? (
         <>

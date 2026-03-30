@@ -3,6 +3,7 @@ import { Link, useNavigate, useLocation } from "react-router-dom";
 import { ICONS, API_BASE } from "../config";
 import { useAuth } from "../AuthContext";
 import ProfilePhotoModal from "./ProfilePhotoModal";
+import UserBadge from "./UserBadge";
 
 const menuItemBase =
   "flex items-center gap-2.5 py-1.5 text-[15px] no-underline transition-all duration-300";
@@ -253,12 +254,15 @@ export default function SidebarNav({
             </div>
             {!collapsed && (
               <>
-                <div className="font-semibold">
-                  {user.display_name || "Display Name"}
-                </div>
-                <div className="text-gray-500 text-sm">
-                  @{user.username || "username"}
-                </div>
+                <UserBadge
+                  layout="stack"
+                  name={user.display_name || "Display Name"}
+                  avatar={user.avatar || ""}
+                  size={48}
+                  nameSize="0.95rem"
+                  subtitle={`@${user.username || "username"}`}
+                  subtitleSize="0.8rem"
+                />
               </>
             )}
           </div>
@@ -270,7 +274,7 @@ export default function SidebarNav({
             <img
               src="/login.svg"
               alt="Login"
-              className={collapsed ? "w-10 h-10" : "w-20 h-20 mb-2"}
+              className={collapsed ? "w-10 h-10" : "w-16 h-16 mb-2"}
               style={{ transition: "all 0.3s ease" }}
             />
             {!collapsed && (
@@ -614,13 +618,20 @@ export default function SidebarNav({
           </div>
         )}
         {!collapsed && (
-          <div className="feed-section mt-4">
+          <div
+            className="feed-section mt-4 w-full text-left"
+            style={{ paddingLeft: 0, paddingRight: 0 }}
+          >
             <hr className="mb-4 h-px border-3 bg-[#d9d6c7]" />
             <h2
-              className="font-semibold mb-3"
-              style={{ fontSize: "1.3rem", color: "#FC6736" }}
+              className="font-semibold mb-2"
+              style={{
+                fontSize: "1.15rem",
+                color: "#f97316",
+                textAlign: "left",
+              }}
             >
-              Feed Tanggapan
+              (Feed Tanggapan)
             </h2>
             {loading ? (
               <div className="text-center py-4">
@@ -636,60 +647,50 @@ export default function SidebarNav({
                 {feedItems.map((item, index) => (
                   <div
                     key={`${item.article_id}-${item.paragraph_id}-${index}`}
-                    className="mb-3 border-b border-gray-200 pb-3"
+                    className="mb-2 border-b border-gray-200 pb-2"
                   >
-                    <div className="mb-2 ml-5">
-                      <span style={{ fontSize: "0.8rem", color: "#878672" }}>
-                        Merespons{" "}
-                        <Link to={getArticleUrl(item)}>
-                          {truncateText(item.paragraph_id, 10)}
-                        </Link>
-                      </span>
+                    <div
+                      className="mb-2"
+                      style={{ fontSize: "0.78rem", color: "#9ca3af" }}
+                    >
+                      Merespons{" "}
+                      <Link
+                        to={getArticleUrl(item)}
+                        className="no-underline text-[#0088FF]"
+                        style={{ color: "#0088FF" }}
+                      >
+                        {truncateText(item.paragraph_id, 40)}
+                      </Link>
                     </div>
 
-                    <div className="flex items-start mb-2">
-                      <div
-                        className="rounded-full mr-2"
-                        style={{
-                          width: "24px",
-                          height: "24px",
-                          minWidth: "24px",
-                          backgroundColor: item.created_by.avatar
-                            ? "transparent"
-                            : "#f0ad4e",
-                          backgroundImage: item.created_by.avatar
-                            ? `url(${item.created_by.avatar.startsWith("/static/") ? `${mediaBase}${item.created_by.avatar}` : item.created_by.avatar})`
-                            : "none",
-                          backgroundSize: "cover",
-                          backgroundPosition: "center",
-                        }}
-                      />
-                      <div className="flex-1">
-                        <div className="flex items-center mb-1">
-                          <span
-                            className="font-semibold mr-2"
-                            style={{ fontSize: "0.875rem" }}
-                          >
-                            {item.created_by.display_name || "Display Name"}
-                          </span>
-                          <span
-                            className="text-gray-500"
-                            style={{ fontSize: "0.75rem" }}
-                          >
-                            · {timeAgo(item.created_at) || "0m"}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
+                    <UserBadge
+                      name={item.created_by.display_name || "Display Name"}
+                      avatar={
+                        item.created_by.avatar
+                          ? item.created_by.avatar.startsWith("/static/")
+                            ? `${mediaBase}${item.created_by.avatar}`
+                            : item.created_by.avatar
+                          : ""
+                      }
+                      time={timeAgo(item.created_at) || "0m"}
+                      size={22}
+                      nameSize="0.78rem"
+                      timeSize="0.65rem"
+                      nameColor="#1f2937"
+                    />
                     <div>
                       <div>
                         <h6
                           className="mb-2 font-bold"
-                          style={{ fontSize: "0.875rem", lineHeight: "1.3" }}
+                          style={{
+                            fontSize: "0.9rem",
+                            lineHeight: "1.2",
+                          }}
                         >
                           <Link
                             to={getArticleUrl(item)}
                             className="no-underline"
+                            style={{ color: "#f97316" }}
                           >
                             {truncateText(item.article_title, 60)}
                           </Link>
@@ -699,8 +700,12 @@ export default function SidebarNav({
                     <div>
                       <div>
                         <p
-                          className="text-gray-500 mb-2"
-                          style={{ fontSize: "0.8rem", lineHeight: "1.4" }}
+                          className="mb-1"
+                          style={{
+                            fontSize: "0.78rem",
+                            lineHeight: "1.4",
+                            color: "#6b6b6b",
+                          }}
                         >
                           {truncateText(item.comment, 150)}
                         </p>
@@ -708,17 +713,18 @@ export default function SidebarNav({
                     </div>
 
                     {item.images && item.images.length > 0 && (
-                      <div className="flex gap-2 mb-2 ml-5">
+                      <div className="flex gap-2 mb-2">
                         {item.images.map((thumb) => (
                           <div
                             key={thumb.id}
-                            className="rounded-none"
+                            className="rounded-none overflow-hidden"
                             style={{
                               width: "48px",
                               height: "48px",
-                              backgroundImage: thumb
-                                ? `url(${thumb.url.startsWith("/static/") ? `${mediaBase}${thumb.url}` : thumb.url})`
-                                : "none",
+                              backgroundImage:
+                                thumb && thumb.url
+                                  ? `url(${thumb.url.startsWith("/static/") ? `${mediaBase}${thumb.url}` : thumb.url})`
+                                  : "none",
                               backgroundColor: "#e9ecef",
                               backgroundSize: "cover",
                               backgroundPosition: "center",
@@ -729,7 +735,7 @@ export default function SidebarNav({
                     )}
 
                     {item.image && (
-                      <div className="mb-2 ml-5">
+                      <div className="mb-2">
                         <img
                           src={item.image}
                           alt="preview"
@@ -745,14 +751,14 @@ export default function SidebarNav({
 
                     <div className="flex items-center justify-between">
                       <div
-                        className="flex gap-3 text-gray-500"
-                        style={{ fontSize: "0.8rem" }}
+                        className="flex gap-3"
+                        style={{ fontSize: "0.78rem", color: "#9ca3af" }}
                       >
                         <span>
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
-                            width="16"
-                            height="16"
+                            width="14"
+                            height="14"
                             viewBox="0 0 16 16"
                             fill="none"
                             className="mr-1"
@@ -782,8 +788,8 @@ export default function SidebarNav({
                         <span>
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
-                            width="16"
-                            height="16"
+                            width="14"
+                            height="14"
                             viewBox="0 0 16 16"
                             fill="none"
                             className="mr-1"

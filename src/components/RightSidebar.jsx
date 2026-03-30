@@ -147,6 +147,8 @@ export default function RightSidebar({ currentType = null, isDetail = false }) {
   }, [selectedProvince]);
 
   const { tilik, kronik } = data;
+  const showKronikSection = !currentType || currentType === "kronik";
+  const showTilikSection = !currentType || currentType === "tilik";
   const bannerTop = getBannerByPosition("rightsidebar_top");
   const bannerMiddle = getBannerByPosition("rightsidebar_middle");
   const bannerBottom = getBannerByPosition("rightsidebar_bottom");
@@ -236,7 +238,7 @@ export default function RightSidebar({ currentType = null, isDetail = false }) {
         </div>
 
         <div
-          className={`right-find-advanced ${showAdvancedSearch ? "right-find-advanced-panel rounded border px-3 py-2" : ""}`}
+          className={`right-find-advanced ${showAdvancedSearch ? "right-find-advanced-panel" : ""}`}
         >
           <label className="right-find-toggle-label flex items-center space-x-2">
             <input
@@ -484,8 +486,8 @@ export default function RightSidebar({ currentType = null, isDetail = false }) {
         </div>
       )}
 
-      {/* KRONIK SECTION - Hide if we're on Kronik page */}
-      {currentType !== "kronik" && (
+      {/* KRONIK SECTION */}
+      {showKronikSection && (
         <div className="mb-4">
           <div className="flex justify-between items-center mb-3">
             <h3
@@ -544,7 +546,8 @@ export default function RightSidebar({ currentType = null, isDetail = false }) {
                         <h4 className="font-bold text-lg">
                           <a
                             href={`/article/kronik/${item.slug}`}
-                            className="right-feed-lead-link font-bold text-[#f26532] no-underline"
+                            className="right-feed-lead-link font-bold no-underline"
+                            style={{ color: "#FC6736" }}
                           >
                             {truncateTitleText(item.title, 60)}
                           </a>
@@ -578,10 +581,15 @@ export default function RightSidebar({ currentType = null, isDetail = false }) {
                         </div>
                         <div className="flex-1">
                           <div className="py-0 pl-2">
-                            <h6 className="mb-0 text-sm">
+                            <h6 className="mb-0 font-semibold">
                               <a
                                 href={`/article/kronik/${item.slug}`}
                                 className="right-feed-item-link text-gray-800 no-underline dark:text-gray-100"
+                                style={{
+                                  fontSize: "16px",
+                                  lineHeight: "20px",
+                                  fontWeight: 600,
+                                }}
                               >
                                 {truncateTitleText(item.title, 60)}
                               </a>
@@ -619,8 +627,8 @@ export default function RightSidebar({ currentType = null, isDetail = false }) {
         </div>
       )}
 
-      {/* TILIK SECTION - Hide if we're on Tilik page */}
-      {currentType !== "tilik" && (
+      {/* TILIK SECTION */}
+      {showTilikSection && (
         <div className="mb-4">
           <div className="flex justify-between items-center mb-3">
             <h3
@@ -679,7 +687,8 @@ export default function RightSidebar({ currentType = null, isDetail = false }) {
                         <h4 className="font-bold text-lg">
                           <a
                             href={`/article/tilik/${item.slug}`}
-                            className="right-feed-lead-link font-bold text-[#f26532] no-underline"
+                            className="right-feed-lead-link font-bold no-underline"
+                            style={{ color: "#FC6736" }}
                           >
                             {truncateTitleText(item.title, 60)}
                           </a>
@@ -713,10 +722,15 @@ export default function RightSidebar({ currentType = null, isDetail = false }) {
                         </div>
                         <div className="flex-1">
                           <div className="py-0 pl-2">
-                            <h6 className="mb-0 text-sm">
+                            <h6 className="mb-0 font-semibold">
                               <a
                                 href={`/article/tilik/${item.slug}`}
                                 className="right-feed-item-link no-underline text-gray-800 dark:text-gray-100"
+                                style={{
+                                  fontSize: "16px",
+                                  lineHeight: "20px",
+                                  fontWeight: 600,
+                                }}
                               >
                                 {truncateTitleText(item.title, 60)}
                               </a>

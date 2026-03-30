@@ -264,81 +264,21 @@ export default function MapContainer({
       `}
     >
       {/* Map Container */}
-      <div
-        className={`home-map-stage relative h-[320px] w-full bg-[#F0FDFF] sm:h-[360px] lg:h-[430px] ${stageClassName}`}
-      >
-        <div ref={mapRef} className="w-full h-full" />
+      <div className="map-inner-container mx-auto w-full max-w-[760px]">
+        <div
+          className={`home-map-stage relative h-[180px] w-full bg-[#F0FDFF] sm:h-[220px] lg:h-[280px] ${stageClassName}`}
+        >
+          <div ref={mapRef} className="w-full h-full" />
 
-        {/* Map Controls */}
-        <div className="home-map-controls absolute right-4 top-4 z-10 inline-flex overflow-hidden rounded-[2px] border border-[#d3cfbf] bg-[#f8f8f7] shadow-[0_1px_2px_rgba(15,23,42,0.08)]">
-          <button
-            onClick={handleZoom(false)}
-            className="home-map-control-btn grid h-12 w-12 place-items-center text-[#7b828f] transition hover:bg-[#f2f3f4]"
-            title="Zoom out"
-          >
-            <svg
-              className="h-5 w-5"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
+          {/* Map Controls (moved inside map stage so they align to map's right) */}
+          <div className="home-map-controls absolute right-2 top-2 z-10 inline-flex overflow-hidden rounded-[3px] border border-[#d3cfbf] bg-[#f8f8f7] shadow-[0_1px_2px_rgba(15,23,42,0.08)]">
+            <button
+              onClick={handleZoom(false)}
+              className="home-map-control-btn grid h-8 w-8 place-items-center text-[#7b828f] transition hover:bg-[#f2f3f4]"
+              title="Zoom out"
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M21 21l-4.35-4.35"
-              />
-              <circle cx="11" cy="11" r="6.5" strokeWidth={2} />
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M8.5 11h5"
-              />
-            </svg>
-          </button>
-
-          <button
-            onClick={handleZoom(true)}
-            className="home-map-control-btn grid h-12 w-12 place-items-center border-l border-[#d3cfbf] text-[#7b828f] transition hover:bg-[#f2f3f4]"
-            title="Zoom in"
-          >
-            <svg
-              className="h-5 w-5"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M21 21l-4.35-4.35"
-              />
-              <circle cx="11" cy="11" r="6.5" strokeWidth={2} />
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M11 8.5v5"
-              />
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M8.5 11h5"
-              />
-            </svg>
-          </button>
-
-          <button
-            onClick={handleFullscreen}
-            className="home-map-control-btn grid h-12 w-12 place-items-center border-l border-[#d3cfbf] text-[#7b828f] transition hover:bg-[#f2f3f4]"
-            title={isFullscreen ? "Exit fullscreen" : "Fullscreen"}
-          >
-            {isFullscreen ? (
               <svg
-                className="h-5 w-5"
+                className="h-4 w-4"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -347,12 +287,25 @@ export default function MapContainer({
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   strokeWidth={2}
-                  d="M6 18L18 6M6 6l12 12"
+                  d="M21 21l-4.35-4.35"
+                />
+                <circle cx="11" cy="11" r="6.5" strokeWidth={2} />
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M8.5 11h5"
                 />
               </svg>
-            ) : (
+            </button>
+
+            <button
+              onClick={handleZoom(true)}
+              className="home-map-control-btn grid h-8 w-8 place-items-center border-l border-[#d3cfbf] text-[#7b828f] transition hover:bg-[#f2f3f4]"
+              title="Zoom in"
+            >
               <svg
-                className="h-5 w-5"
+                className="h-4 w-4"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -361,25 +314,74 @@ export default function MapContainer({
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   strokeWidth={2}
-                  d="M8 5h11v11"
+                  d="M21 21l-4.35-4.35"
+                />
+                <circle cx="11" cy="11" r="6.5" strokeWidth={2} />
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M11 8.5v5"
                 />
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   strokeWidth={2}
-                  d="M8 16L19 5"
+                  d="M8.5 11h5"
                 />
               </svg>
-            )}
-          </button>
+            </button>
+
+            <button
+              onClick={handleFullscreen}
+              className="home-map-control-btn grid h-8 w-8 place-items-center border-l border-[#d3cfbf] text-[#7b828f] transition hover:bg-[#f2f3f4]"
+              title={isFullscreen ? "Exit fullscreen" : "Fullscreen"}
+            >
+              {isFullscreen ? (
+                <svg
+                  className="h-5 w-5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </svg>
+              ) : (
+                <svg
+                  className="h-5 w-5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M8 5h11v11"
+                  />
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M8 16L19 5"
+                  />
+                </svg>
+              )}
+            </button>
+          </div>
         </div>
       </div>
 
       {/* Category Legend */}
       <div
-        className={`home-map-legend border-t border-[#dfddd4] px-6 py-4 ${legendClassName}`}
+        className={`home-map-legend border-t border-[#dfddd4] px-4 py-1 ${legendClassName}`}
       >
-        <div className="flex flex-wrap items-center gap-x-7 gap-y-2">
+        <div className="flex flex-wrap items-center gap-x-6 gap-y-1">
           {[
             { key: "AGRARIA", label: "Agraria", color: "bg-red-500" },
             { key: "EKOSOSPOL", label: "Ekosospol", color: "bg-blue-500" },
@@ -448,7 +450,7 @@ export default function MapContainer({
           ))}
         </div>
 
-        <p className="home-map-info mt-3 text-[0.78rem] italic leading-[1.45] text-[#5f6980] sm:text-[0.84rem]">
+        <p className="home-map-info mt-1 text-[0.78rem] italic leading-[1.45] text-[#5f6980] sm:text-[0.84rem]">
           {mapInfoText}
         </p>
       </div>

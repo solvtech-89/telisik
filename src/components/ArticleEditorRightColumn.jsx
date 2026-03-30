@@ -29,7 +29,9 @@ export default function ArticleEditorRightColumn({
 
   return (
     <div
-      className={`editor-right-rail col-span-1 ${collapsed ? "md:col-span-4" : "md:col-span-3"} h-full min-h-0 overflow-y-scroll bg-white px-4 pt-5`}
+      className={`editor-right-rail col-span-1 ${
+        collapsed ? "md:col-span-4" : "md:col-span-3"
+      } lg:col-span-1 lg:col-start-3 h-full min-h-0 overflow-y-scroll border-l border-[#dfddd4] bg-[#f7f5ef] px-4 pt-5`}
     >
       {isDiskursus ? (
         <>

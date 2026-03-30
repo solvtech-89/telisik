@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { ICONS } from "../config";
+import UserBadge from "./UserBadge";
 import { useAuth } from "../AuthContext";
 
 const renderNavIcon = (type, className = "") => {
@@ -669,40 +670,15 @@ export default function Navbar() {
             <div>
               {isLoggedIn ? (
                 <div className="text-center mb-4">
-                  {user.avatar ? (
-                    <img
-                      src={user.avatar}
-                      alt="Foto profil"
-                      style={{
-                        width: "80px",
-                        height: "80px",
-                        borderRadius: "50%",
-                        objectFit: "cover",
-                        marginBottom: "10px",
-                      }}
-                    />
-                  ) : (
-                    <div
-                      style={{
-                        width: "80px",
-                        height: "80px",
-                        borderRadius: "50%",
-                        backgroundColor: "#e0e0e0",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        margin: "0 auto 10px",
-                      }}
-                    >
-                      <span dangerouslySetInnerHTML={{ __html: ICONS.user }} />
-                    </div>
-                  )}
-                  <div className="font-semibold">
-                    {user.display_name || "Display Name"}
-                  </div>
-                  <div className="text-sm text-gray-500">
-                    @{user.username || "username"}
-                  </div>
+                  <UserBadge
+                    layout="stack"
+                    name={user.display_name || "Display Name"}
+                    avatar={user.avatar || ""}
+                    size={80}
+                    nameSize="1rem"
+                    subtitle={`@${user.username || "username"}`}
+                    subtitleSize="0.85rem"
+                  />
                 </div>
               ) : (
                 <div

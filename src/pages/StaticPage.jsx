@@ -40,7 +40,7 @@ export default function StaticPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-neutral-50">
+      <div className="min-h-screen bg-[#f7f5ef]">
         <div className="mx-auto grid w-[98%] grid-cols-1 gap-4 py-4 md:grid-cols-[auto,1fr] lg:grid-cols-[auto,1fr,18rem]">
           <div className="hidden md:block md:w-64">
             <Skeleton height="h-[75vh]" />
@@ -59,7 +59,7 @@ export default function StaticPage() {
   }
 
   return (
-    <div className="flex min-h-screen flex-col bg-neutral-50">
+    <div className="flex min-h-screen flex-col bg-[#f7f5ef]">
       <div className="mx-auto mt-2 w-[98%] px-1">
         <Alert
           type={alert.type}
@@ -73,16 +73,14 @@ export default function StaticPage() {
         <div className="h-full">
           <div className="mx-auto flex h-full w-[98%] flex-col md:flex-row">
             <div
-              className={`${collapsed ? "md:w-[52px]" : "w-full md:w-64"} hidden h-full overflow-y-auto border-r border-neutral-200 pb-5 transition-[width] duration-200 md:block`}
+              className={`${collapsed ? "md:w-[52px]" : "w-full md:w-[295px] xl:w-[305px]"} hidden h-full overflow-y-auto border-r border-[#dfddd4] bg-[#f7f5ef] pb-5 transition-[width] duration-200 md:block`}
             >
               <SidebarNav
                 collapsed={collapsed}
                 onToggle={() => setCollapsed(!collapsed)}
               />
             </div>
-            <div
-              className="flex-1 overflow-y-auto pb-5 md:max-h-[calc(100vh-120px)]"
-            >
+            <div className="flex-1 overflow-y-auto pb-5 md:max-h-[calc(100vh-120px)]">
               <div className="p-3">
                 <div className="flex items-center gap-2 px-1 text-sm">
                   <Link to="/" className="text-telisik hover:text-telisik-dark">
@@ -121,9 +119,7 @@ export default function StaticPage() {
               )}
             </div>
 
-            <aside
-              className="hidden h-full overflow-y-auto border-l border-neutral-200 bg-white lg:block lg:w-72 lg:max-h-[calc(100vh-120px)]"
-            >
+            <aside className="hidden h-full overflow-y-auto border-l border-neutral-200 bg-white lg:block lg:w-72 lg:max-h-[calc(100vh-120px)]">
               <div className="p-4">
                 <h5 className="mb-3 text-base font-semibold text-neutral-900">
                   Navigasi

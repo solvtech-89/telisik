@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { ICONS, API_BASE } from "../config";
+import UserBadge from "./UserBadge";
 import { useAuth } from "../AuthContext";
 
 const truncateText = (text, maxLength = 100) => {
@@ -197,16 +198,16 @@ export default function HomeNav() {
               <div className="p-3">
                 {/* User Info */}
                 <div className="flex items-start mb-2">
-                  <div className="mr-2 h-6 w-6 shrink-0 rounded-full bg-yellow-400" />
-                  <div className="flex-1">
-                    <div className="flex items-center mb-1">
-                      <span className="font-semibold text-sm mr-2">
-                        {item.display_name || "Display Name"}
-                      </span>
-                      <span className="text-gray-500 text-sm">
-                        {item.timestamp || "00m"}
-                      </span>
-                    </div>
+                  <UserBadge
+                    name={item.display_name || "Display Name"}
+                    avatar={item.avatar || ""}
+                    time={item.timestamp || "00m"}
+                    size={24}
+                    nameSize="0.78rem"
+                    timeSize="0.65rem"
+                    nameColor="#1f2937"
+                  />
+                  <div style={{ flexBasis: 0, flexGrow: 1 }}>
                     <h6 className="mb-2 text-sm">
                       {truncateText(item.title, 60)}
                     </h6>
@@ -261,16 +262,16 @@ export default function HomeNav() {
                     {item.messages.map((msg, msgIdx) => (
                       <div key={msgIdx} className="mb-2">
                         <div className="flex items-start">
-                          <div className="mr-2 h-5 w-5 shrink-0 rounded-full bg-blue-300" />
+                          <UserBadge
+                            name={msg.display_name || "Display Name"}
+                            avatar={msg.avatar || ""}
+                            time={msg.timestamp || "00m"}
+                            size={20}
+                            nameSize="0.78rem"
+                            timeSize="0.65rem"
+                            nameColor="#1f2937"
+                          />
                           <div className="flex-1">
-                            <div className="flex items-center mb-1">
-                              <span className="font-semibold text-sm mr-2">
-                                {msg.display_name || "Display Name"}
-                              </span>
-                              <span className="text-gray-500 text-sm">
-                                {msg.timestamp || "00m"}
-                              </span>
-                            </div>
                             <p className="mb-0 text-[0.85rem] text-gray-500">
                               {truncateText(msg.content, 100)}
                               {msg.emoji && (

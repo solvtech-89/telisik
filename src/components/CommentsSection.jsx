@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { MessageCircle, Share2, User } from "lucide-react";
+import UserBadge from "./UserBadge";
 import { API_BASE } from "../config";
 
 function CommentCard({ comment, onReply, depth = 0 }) {
@@ -38,30 +39,17 @@ function CommentCard({ comment, onReply, depth = 0 }) {
   return (
     <div className="border-b border-gray-200 py-5 first:pt-0">
       <div className="flex gap-3">
-        <div className="h-9 w-9 min-w-9 overflow-hidden rounded-full bg-gray-200 text-gray-400 flex items-center justify-center">
-          {comment.created_by?.avatar ? (
-            <img
-              className="h-full w-full object-cover"
-              src={comment.created_by.avatar}
-              alt={comment.created_by.username}
-            />
-          ) : (
-            <User size={20} />
-          )}
-        </div>
-
         <div className="min-w-0 flex-1">
-          <div className="mb-2 flex flex-wrap items-baseline gap-1.5">
-            <span className="text-sm font-semibold text-black">
-              Display Name
-            </span>
-            <span className="text-[0.85rem] text-gray-600">
-              @{comment.created_by?.username || "username"}
-            </span>
-            <span className="text-[0.85rem] text-gray-400">
-              • {timeAgo(comment.created_at)}
-            </span>
-          </div>
+          <UserBadge
+            name={comment.created_by?.display_name || "Display Name"}
+            avatar={comment.created_by?.avatar || ""}
+            username={comment.created_by?.username || "username"}
+            time={timeAgo(comment.created_at)}
+            size={36}
+            nameSize="0.95rem"
+            usernameSize="0.78rem"
+            timeSize="0.75rem"
+          />
 
           <div className="text-gray-700">
             {comment.context_info?.type && (
