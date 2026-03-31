@@ -1,6 +1,14 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap");
 @import "tailwindcss";
 
+/*
+  Tabler also defines a `.grid` class (with its own grid-template).
+  Use this utility when we want Tailwind-style grids without collisions.
+*/
+.tw-grid {
+  display: grid;
+}
+
 :root {
   font-family: "Inter", sans-serif;
   line-height: 1.5;
@@ -457,6 +465,25 @@ button:focus-visible {
   min-width: 0;
 }
 
+:root:not([data-bs-theme="dark"])
+  :where(.right-sidebar-shell)
+  .right-find-area-grid--home {
+  padding-left: 1.05rem;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.85rem 1.35rem;
+  align-items: center;
+}
+
+:root:not([data-bs-theme="dark"])
+  :where(.right-sidebar-shell)
+  .right-find-area-option {
+  display: flex;
+  align-items: center;
+  gap: 0.72rem;
+  min-width: 0;
+}
+
 :root:not([data-bs-theme="dark"]) .home-right-rail .right-find-master-toggle,
 :root:not([data-bs-theme="dark"]) .home-right-rail .right-find-switch,
 :root:not([data-bs-theme="dark"]) .article-list-right .right-find-master-toggle,
@@ -552,6 +579,24 @@ button:focus-visible {
     border-color 120ms ease;
 }
 
+:root:not([data-bs-theme="dark"])
+  :where(.right-sidebar-shell)
+  .right-find-checkbox {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
+  background: #eef0ea;
+  border: 1px solid #d7d4c6;
+  margin-right: 0.5rem;
+  display: inline-block;
+  vertical-align: middle;
+  transition:
+    background 120ms ease,
+    border-color 120ms ease;
+}
+
 :root:not([data-bs-theme="dark"]) .home-right-rail .right-find-checkbox:checked,
 :root:not([data-bs-theme="dark"])
   .article-list-right
@@ -564,8 +609,26 @@ button:focus-visible {
   background-size: 60%;
 }
 
+:root:not([data-bs-theme="dark"])
+  :where(.right-sidebar-shell)
+  .right-find-checkbox:checked {
+  background: var(--telisik-success);
+  border-color: var(--telisik-success);
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><path fill='none' stroke='%23ffffff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' d='M3.5 8.5l2.5 2.5L12.5 4.5'/></svg>");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 60%;
+}
+
 :root:not([data-bs-theme="dark"]) .home-right-rail .right-find-area-text,
 :root:not([data-bs-theme="dark"]) .article-list-right .right-find-area-text {
+  font-size: 1rem;
+  color: #4b4a43;
+}
+
+:root:not([data-bs-theme="dark"])
+  :where(.right-sidebar-shell)
+  .right-find-area-text {
   font-size: 1rem;
   color: #4b4a43;
 }
@@ -582,8 +645,27 @@ button:focus-visible {
   border: 2px solid #cecb9c;
 }
 
+:root:not([data-bs-theme="dark"])
+  :where(.right-sidebar-shell)
+  .right-find-submit {
+  background: #555333;
+  color: #f9f6ef;
+  padding: 0.6rem 1.1rem;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  border: 2px solid #cecb9c;
+}
+
 :root:not([data-bs-theme="dark"]) .home-right-rail .right-find-submit:hover,
 :root:not([data-bs-theme="dark"]) .article-list-right .right-find-submit:hover {
+  filter: brightness(0.95);
+}
+
+:root:not([data-bs-theme="dark"])
+  :where(.right-sidebar-shell)
+  .right-find-submit:hover {
   filter: brightness(0.95);
 }
 
@@ -1818,6 +1900,16 @@ html body .article-list-main {
 .article-search-shell {
   border-color: #e4e7ec;
   box-shadow: 0 2px 10px rgba(15, 23, 42, 0.04);
+}
+
+@media (max-width: 1023px) {
+  .article-search-shell {
+    border: 0 !important;
+    box-shadow: none !important;
+    background: transparent !important;
+    padding: 0 !important;
+    border-radius: 0 !important;
+  }
 }
 
 .article-search-shell h3 {

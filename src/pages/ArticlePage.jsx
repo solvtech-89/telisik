@@ -242,17 +242,17 @@ export default function ArticlePage() {
   if (!article || (!isDiskursus && !sections)) {
     return (
       <div className="min-h-screen bg-[#f7f5ef]">
-        <div className="mx-auto grid w-[98%] grid-cols-1 gap-4 py-4 md:grid-cols-12">
-          <div className="hidden md:col-span-2 md:block">
+        <div className="mx-auto tw-grid w-[98%] grid-cols-1 gap-4 py-4 lg:grid-cols-12">
+          <div className="hidden lg:col-span-2 lg:block">
             <Skeleton height="h-[80vh]" />
           </div>
-          <div className="space-y-4 md:col-span-7">
+          <div className="space-y-4 lg:col-span-7">
             <Skeleton height="h-6" />
             <Skeleton height="h-10" />
             <Skeleton height="h-64" />
             <Skeleton count={5} />
           </div>
-          <div className="hidden md:col-span-3 md:block">
+          <div className="hidden lg:col-span-3 lg:block">
             <Skeleton height="h-[60vh]" />
           </div>
         </div>
@@ -279,24 +279,27 @@ export default function ArticlePage() {
 
       <div className="flex-1 min-h-0">
         <div className="h-full min-h-0">
-          <div className="grid h-full min-h-0 grid-cols-1 md:grid-cols-12">
+          <div className="tw-grid h-full min-h-0 grid-cols-1 lg:grid-cols-12">
             <div
               className={
                 collapsed
-                  ? "article-left-rail hidden h-full overflow-y-scroll overflow-x-hidden border-r border-[#dfddd4] bg-[#f7f5ef] transition-[width] duration-200 md:col-auto md:block md:w-[52px]"
-                  : "article-left-rail hidden h-full overflow-y-scroll overflow-x-hidden border-r border-[#dfddd4] bg-[#f7f5ef] pb-5 transition-[width] duration-200 md:col-span-2 md:block"
+                  ? "article-left-rail hidden h-full overflow-y-scroll overflow-x-hidden border-r border-[#dfddd4] bg-[#f7f5ef] transition-[width] duration-200 lg:col-span-1 lg:block lg:w-[52px]"
+                  : "article-left-rail hidden h-full overflow-y-scroll overflow-x-hidden border-r border-[#dfddd4] bg-[#f7f5ef] pb-5 transition-[width] duration-200 lg:col-span-3 lg:block"
               }
             >
               <SidebarNav
                 articleTOC={navItems}
                 collapsed={collapsed}
+                mode="article"
                 onToggle={() => setCollapsed(!collapsed)}
               />
             </div>
 
             <div
               id="middle-col-scroll"
-              className="article-main-panel h-full min-h-0 overflow-y-auto border-x border-[#e2e0d8] bg-[#faf8f1] pb-5 transition-[width] duration-200 md:col-span-7 md:overflow-y-scroll md:max-h-none"
+              className={`article-main-panel h-full min-h-0 min-w-0 overflow-x-hidden overflow-y-auto border-x border-[#e2e0d8] bg-[#faf8f1] pb-5 transition-[width] duration-200 lg:overflow-y-scroll lg:max-h-none ${
+                collapsed ? "lg:col-span-8" : "lg:col-span-6"
+              }`}
             >
               <div className="p-3">
                 <nav
@@ -368,168 +371,179 @@ export default function ArticlePage() {
               </div>
             </div>
 
-            <div className="article-right-rail h-full min-h-0 overflow-y-auto border-l border-[#dfddd4] bg-[#f7f5ef] px-3 pb-5 md:col-span-3 md:overflow-y-scroll md:max-h-none">
-              <div className="article-search-shell mb-4 rounded-2xl border border-neutral-200 bg-white p-4 shadow-sm">
-                <div className="mb-3">
-                  <h3 className="mb-0 text-2xl font-semibold text-telisik">
-                    Temukan
-                  </h3>
-                </div>
-                <div className="article-search-input-shell mb-3 rounded-2xl border border-neutral-200 bg-neutral-50 p-2">
-                  <div className="relative flex items-center">
-                    <input
-                      type="text"
-                      className="article-search-input w-full rounded-full border border-neutral-300 bg-white px-3 py-2 pr-20 text-sm text-neutral-800 outline-none transition-colors focus:border-telisik"
-                      placeholder="Lorem ipsum search"
-                      value={searchQuery}
-                      onChange={(e) => setSearchQuery(e.target.value)}
-                    />
-                    <div className="absolute right-2 flex items-center space-x-2">
-                      {searchQuery && (
+            <div className="article-right-rail h-full min-h-0 min-w-0 overflow-x-hidden overflow-y-auto border-l border-[#dfddd4] bg-[#f7f5ef] px-3 pb-5 lg:col-span-3 lg:overflow-y-scroll lg:max-h-none">
+              <div className="right-sidebar-shell px-1 py-1">
+                <div className="right-find-shell mb-4">
+                  <div className="mb-3">
+                    <h3
+                      className="right-find-title mb-0 text-[2rem] font-bold text-[#FC6736]"
+                      style={{ color: "#FC6736" }}
+                    >
+                      Temukan
+                    </h3>
+                  </div>
+
+                  <div className="right-find-input-row mb-3 flex items-center">
+                    <div className="relative flex-1">
+                      <input
+                        type="text"
+                        className="right-find-input w-full rounded-full border border-[#ddd9ce] bg-[#FFFFFF] px-4 py-2 pr-12 text-[0.95rem] text-[#555333] focus:outline-none focus:ring-2 focus:ring-[#9ab1d3]"
+                        placeholder="Temukan..."
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        onKeyDown={(e) => e.key === "Enter" && handleSearch()}
+                      />
+
+                      <div className="absolute right-3 top-1/2 flex -translate-y-1/2 items-center space-x-2">
+                        {searchQuery && (
+                          <button
+                            type="button"
+                            onClick={() => setSearchQuery("")}
+                            aria-label="Clear search"
+                            className="rounded-full p-1 text-gray-500 hover:bg-gray-100"
+                          >
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="16"
+                              height="16"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              strokeWidth="2"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            >
+                              <path d="M18 6l-12 12"></path>
+                              <path d="M6 6l12 12"></path>
+                            </svg>
+                          </button>
+                        )}
+
                         <button
-                          onClick={() => setSearchQuery("")}
-                          className="article-search-icon-btn text-neutral-500 hover:text-neutral-700"
-                          aria-label="Clear search"
+                          onClick={handleSearch}
+                          className="rounded-full p-1 text-gray-600 hover:bg-gray-100"
+                          aria-label="Search"
                         >
                           <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="20"
-                            height="20"
-                            viewBox="0 0 24 24"
+                            width="18"
+                            height="18"
+                            viewBox="0 0 16 16"
                             fill="none"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            className="icon icon-1"
+                            xmlns="http://www.w3.org/2000/svg"
                           >
-                            <path d="M18 6l-12 12"></path>
-                            <path d="M6 6l12 12"></path>
+                            <circle
+                              cx="7.5"
+                              cy="7.5"
+                              r="5.9"
+                              stroke="#878672"
+                              strokeWidth="1.2"
+                              strokeLinecap="round"
+                            />
+                            <path
+                              d="M12 12L14.3827 14.3827"
+                              stroke="#878672"
+                              strokeWidth="1.2"
+                              strokeLinecap="round"
+                            />
                           </svg>
                         </button>
-                      )}
-                      <button
-                        onClick={handleSearch}
-                        className="article-search-icon-btn ml-2 text-neutral-500 hover:text-neutral-700"
-                        aria-label="Cari"
-                      >
-                        <svg
-                          width="16"
-                          height="16"
-                          viewBox="0 0 16 16"
-                          fill="none"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <circle
-                            cx="7.5"
-                            cy="7.5"
-                            r="5.9"
-                            stroke="#878672"
-                            strokeWidth="1.2"
-                            strokeLinecap="round"
-                          />
-                          <path
-                            d="M12 12L14.3827 14.3827"
-                            stroke="#878672"
-                            strokeWidth="1.2"
-                            strokeLinecap="round"
-                          />
-                        </svg>
-                      </button>
+                      </div>
                     </div>
                   </div>
-                </div>
 
-                <div className="article-advanced-shell rounded-2xl border border-neutral-200 bg-neutral-50 p-3">
-                  <div>
-                    <label className="article-advanced-toggle-label flex items-center gap-2">
+                  <div
+                    className={`right-find-advanced ${showAdvancedSearch ? "right-find-advanced-panel" : ""}`}
+                  >
+                    <label className="right-find-toggle-label flex items-center space-x-2">
                       <input
                         type="checkbox"
-                        className="article-advanced-toggle h-4 w-4 rounded border-neutral-300 text-telisik focus:ring-telisik"
+                        className="right-find-master-toggle"
                         checked={showAdvancedSearch}
-                        onChange={(e) =>
-                          setShowAdvancedSearch(e.target.checked)
-                        }
+                        onChange={(e) => setShowAdvancedSearch(e.target.checked)}
                       />
-                      <span className="text-sm italic text-neutral-500">
+                      <span className="right-find-label-text italic">
                         Perinci pencarian
                       </span>
                     </label>
-                  </div>
 
-                  {showAdvancedSearch && (
-                    <div className="advanced-search-panel mt-3 space-y-4">
-                      <div className="space-y-2 pl-5">
-                        <label className="flex items-center">
-                          <input
-                            type="checkbox"
-                            className="mr-2 h-4 w-4 rounded border-neutral-300 text-telisik focus:ring-telisik"
-                            checked={searchFilters.lokasi}
-                            onChange={handleSearchFilterChange("lokasi")}
-                          />
-                          <span className="text-neutral-600">Lokasi</span>
-                        </label>
+                    {showAdvancedSearch && (
+                      <div className="mt-3">
+                        <div className="mb-3 space-y-3 pl-4">
+                          <label className="right-find-option flex items-center space-x-2">
+                            <input
+                              type="checkbox"
+                              className="right-find-switch"
+                              checked={searchFilters.lokasi}
+                              onChange={handleSearchFilterChange("lokasi")}
+                            />
+                            <span className="right-find-label-text">Lokasi</span>
+                          </label>
 
-                        <label className="flex items-center">
-                          <input
-                            type="checkbox"
-                            className="mr-2 h-4 w-4 rounded border-neutral-300 text-telisik focus:ring-telisik"
-                            checked={searchFilters.jenisKonflik}
-                            onChange={handleSearchFilterChange("jenisKonflik")}
-                          />
-                          <span className="text-neutral-600">
-                            Jenis Konflik
-                          </span>
-                        </label>
-                      </div>
-
-                      <div className="pl-5">
-                        <div className="mb-2 italic text-neutral-500">
-                          Area pencarian:
+                          <label className="right-find-option flex items-center space-x-2">
+                            <input
+                              type="checkbox"
+                              className="right-find-switch"
+                              checked={searchFilters.jenisKonflik}
+                              onChange={handleSearchFilterChange("jenisKonflik")}
+                            />
+                            <span className="right-find-label-text">
+                              Jenis Konflik
+                            </span>
+                          </label>
                         </div>
-                        <div className="ml-2 grid grid-cols-2 gap-2 text-sm text-neutral-700">
-                          {searchAreaOptions.map((option) => (
-                            <label
-                              key={option.key}
-                              className="flex items-center"
-                            >
-                              <input
-                                type="checkbox"
-                                className="mr-2 h-4 w-4 rounded border-neutral-300 text-telisik focus:ring-telisik"
-                                checked={searchFilters[option.key]}
-                                onChange={handleSearchFilterChange(option.key)}
-                              />
-                              {option.label}
-                            </label>
-                          ))}
-                        </div>
-                      </div>
 
-                      <div className="flex justify-end mt-3">
-                        <Button
-                          className="rounded-full bg-[#6b7c5a] hover:bg-[#5f6f50] active:bg-[#516046]"
-                          onClick={handleSearch}
-                        >
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="18"
-                            height="18"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            className="mr-2 inline-block"
+                        <hr className="mb-3" />
+
+                        <div className="mt-0">
+                          <div className="right-find-area-title mb-2 italic">
+                            Area pencarian:
+                          </div>
+                          <div className="right-find-area-grid right-find-area-grid--home">
+                            {searchAreaOptions.map((option) => (
+                              <label
+                                key={option.key}
+                                className="right-find-option right-find-area-option"
+                              >
+                                <input
+                                  type="checkbox"
+                                  className="right-find-checkbox"
+                                  checked={searchFilters[option.key]}
+                                  onChange={handleSearchFilterChange(option.key)}
+                                />
+                                <span className="right-find-area-text">
+                                  {option.label}
+                                </span>
+                              </label>
+                            ))}
+                          </div>
+                        </div>
+
+                        <div className="right-find-submit-row mt-3 flex justify-end">
+                          <button
+                            onClick={handleSearch}
+                            className="right-find-submit font-medium text-sm transition"
                           >
-                            <circle cx="11" cy="11" r="8" />
-                            <path d="m21 21-4.35-4.35" />
-                          </svg>
-                          Temukan
-                        </Button>
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="18"
+                              height="18"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              strokeWidth="2"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              className="mr-2 inline-block"
+                            >
+                              <circle cx="11" cy="11" r="8" />
+                              <path d="m21 21-4.35-4.35" />
+                            </svg>
+                            Temukan
+                          </button>
+                        </div>
                       </div>
-                    </div>
-                  )}
+                    )}
+                  </div>
                 </div>
               </div>
 

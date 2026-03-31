@@ -22,6 +22,7 @@ export default function SidebarNav({
   articleTOC = [],
   collapsed = false,
   onToggle,
+  mode = "default",
 }) {
   const mediaBase = API_BASE || "https://api.telisik.org";
   const { user, logout } = useAuth();
@@ -42,6 +43,7 @@ export default function SidebarNav({
     location.pathname,
   );
   const showTOC = isArticlePage && articleTOC.length > 0;
+  const focusArticleSubnav = mode === "article" && showTOC && !collapsed;
 
   const fetchFeedItems = async (page = 1, append = false) => {
     if (page === 1) {
@@ -214,11 +216,17 @@ export default function SidebarNav({
 
   return (
     <>
-      <div className="sidebar-nav-shell hidden h-full bg-transparent px-4 pb-4 pt-4 md:block">
+      <div
+        className={`sidebar-nav-shell hidden h-full bg-transparent pb-4 pt-4 md:block ${
+          focusArticleSubnav ? "px-3" : "px-4"
+        }`}
+      >
         {isLoggedIn ? (
           <div className="text-left mb-4">
             <div
-              className="mb-2 flex max-w-[112px] cursor-pointer items-center justify-center overflow-hidden rounded-full bg-[#eef6c9] transition-all duration-300"
+              className={`mb-2 flex cursor-pointer items-center justify-center overflow-hidden rounded-full bg-[#eef6c9] transition-all duration-300 ${
+                focusArticleSubnav ? "w-full max-w-none" : "max-w-[112px]"
+              }`}
               onClick={() => setShowPhotoModal(true)}
               style={{ cursor: "pointer" }}
             >
@@ -295,11 +303,11 @@ export default function SidebarNav({
                 {articleTOC.map((it) => (
                   <li
                     key={it.id}
-                    className="mb-2 flex justify-between border-b border-[#CDCB9C]"
+                    className="border-b border-[#CDCB9C] py-2"
                   >
                     <button
                       type="button"
-                      className="flex w-full items-center justify-start p-0 text-[#3f3e26] no-underline hover:text-[#1f1e12]"
+                      className="flex w-full items-center justify-start gap-2 p-0 text-left text-[#3f3e26] no-underline hover:text-[#1f1e12]"
                       onClick={() => {
                         const target = document.getElementById(
                           `section-${it.key}`,
@@ -314,7 +322,7 @@ export default function SidebarNav({
                         }
                       }}
                     >
-                      <span className="mr-2">
+                      <span className="shrink-0">
                         <svg
                           width="24"
                           height="24"
@@ -340,12 +348,12 @@ export default function SidebarNav({
                     </button>
                   </li>
                 ))}
-                <li className="mb-2 flex justify-between border-b border-[#CDCB9C] py-1.5 text-[15px] text-[#4a4a4a]">
+                <li className="border-b border-[#CDCB9C] py-2 text-[15px] text-[#4a4a4a]">
                   <Link
-                    className="flex w-full items-center justify-start p-0 text-[#3f3e26] no-underline hover:text-[#1f1e12]"
+                    className="flex w-full items-center justify-start gap-2 p-0 text-left text-[#3f3e26] no-underline hover:text-[#1f1e12]"
                     to="#riwayatsuntingan"
                   >
-                    <span className="mr-2">
+                    <span className="shrink-0">
                       <svg
                         width="24"
                         height="24"
@@ -380,12 +388,12 @@ export default function SidebarNav({
                     <span>Riwayat Penyuntingan</span>
                   </Link>
                 </li>
-                <li className="mb-2 flex justify-between border-b border-[#CDCB9C] py-1.5 text-[15px] text-[#4a4a4a]">
+                <li className="border-b border-[#CDCB9C] py-2 text-[15px] text-[#4a4a4a]">
                   <Link
-                    className="flex w-full items-center justify-start p-0 text-[#3f3e26] no-underline hover:text-[#1f1e12]"
+                    className="flex w-full items-center justify-start gap-2 p-0 text-left text-[#3f3e26] no-underline hover:text-[#1f1e12]"
                     to="#tanggapan"
                   >
-                    <span className="mr-2">
+                    <span className="shrink-0">
                       <svg
                         width="24"
                         height="24"
@@ -422,7 +430,9 @@ export default function SidebarNav({
           </>
         )}
 
-        <nav>
+        {focusArticleSubnav && <div className="pb-2" />}
+
+        {!focusArticleSubnav && <nav>
           {isLoggedIn ? (
             <>
               <div
@@ -550,11 +560,11 @@ export default function SidebarNav({
             <span dangerouslySetInnerHTML={{ __html: ICONS.help }} />
             {!collapsed && <> Bantuan & Dukungan</>}
           </Link>
-        </nav>
+        </nav>}
 
-        <hr className="mb-3 h-px border-3 bg-[#d9d6c7]" />
+        {!focusArticleSubnav && <hr className="mb-3 h-px border-3 bg-[#d9d6c7]" />}
 
-        {isLoggedIn ? (
+        {!focusArticleSubnav && (isLoggedIn ? (
           <Link
             to="#"
             className={`${menuItemBase} text-[#4a4a4a] ${collapsed ? "block justify-center text-center" : ""}`}
@@ -585,12 +595,14 @@ export default function SidebarNav({
               {!collapsed && <> Tutup Menu</>}
             </Link>
           </>
+        ))}
+
+        {!focusArticleSubnav && !collapsed && (
+          <hr className="my-2 h-px border-3 bg-[#d9d6c7]" />
         )}
 
-        {!collapsed && <hr className="my-2 h-px border-3 bg-[#d9d6c7]" />}
-
         {/* Left Banner */}
-        {bannerLeft && bannerLeftImage && (
+        {!focusArticleSubnav && bannerLeft && bannerLeftImage && (
           <div className="mb-3">
             {bannerLeftHref ? (
               <a
@@ -617,7 +629,7 @@ export default function SidebarNav({
             )}
           </div>
         )}
-        {!collapsed && (
+        {!focusArticleSubnav && !collapsed && (
           <div
             className="feed-section mt-4 w-full text-left"
             style={{ paddingLeft: 0, paddingRight: 0 }}
