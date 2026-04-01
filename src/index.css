@@ -380,7 +380,7 @@ button:focus-visible {
 
 .theme-toggle-switch .theme-toggle-icon {
   z-index: 2;
-  display: inline-flex;
+  display: flex;
   align-items: center;
   justify-content: center;
   /* match the indicator size so the icon is perfectly centered */
@@ -395,9 +395,10 @@ button:focus-visible {
 
 .theme-toggle-switch .theme-toggle-icon svg {
   display: block;
-  margin: 0 auto;
-  width: 16px;
-  height: 16px;
+  margin: auto;
+  width: 20px;
+  height: 20px;
+  padding: 0;
 }
 
 .theme-toggle-switch:hover {
@@ -449,7 +450,7 @@ button:focus-visible {
 
 :root[data-bs-theme="dark"] .theme-toggle-indicator {
   /* move indicator to the right and style the thumb for dark mode */
-  transform: translateY(-50%) translateX(44px);
+  transform: translateY(-50%) translateX(40px);
   background: #686d76;
   border: 2px solid #131d31; /* subtle beige ring */
   box-shadow: 0 6px 12px rgba(12, 18, 28, 0.32);

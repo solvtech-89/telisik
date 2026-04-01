@@ -1,4 +1,3 @@
-import React from "react";
 import { ICONS } from "../config";
 
 export default function LeftNav({ items = [], collapsed = false, onToggle }) {
