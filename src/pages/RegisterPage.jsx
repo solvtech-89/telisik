@@ -277,7 +277,7 @@ export default function RegisterPage() {
 
             <button
               type="button"
-              className="theme-toggle-switch"
+              className="theme-toggle-switch hidden sm:inline-flex"
               onClick={handleThemeToggle}
               aria-label="Toggle theme"
             >
