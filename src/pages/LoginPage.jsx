@@ -2,11 +2,8 @@ import React, { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { API_BASE } from "../config";
 import { useAuth } from "../AuthContext";
-import Button from "../components/ui/Button";
 import Input from "../components/ui/Input";
 import Alert from "../components/ui/Alert";
-
-const DEMO_TOKEN_PREFIX = "demo-token-";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -20,18 +17,6 @@ export default function LoginPage() {
   const { login } = useAuth();
   const redirectAfterLogin =
     location.state?.from?.pathname || "/urun-daya/kronik";
-
-  const handleCancel = () => {
-    navigate("/", { replace: true });
-  };
-
-  const handleThemeToggle = () => {
-    const currentTheme =
-      document.documentElement.getAttribute("data-bs-theme") || "light";
-    const newTheme = currentTheme === "light" ? "dark" : "light";
-    document.documentElement.setAttribute("data-bs-theme", newTheme);
-    localStorage.setItem("theme", newTheme);
-  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -68,118 +53,20 @@ export default function LoginPage() {
     }
   };
 
-  const handleFakeLogin = () => {
-    const demoUser = {
-      id: "demo-user",
-      username: "demo",
-      display_name: "Demo User",
-      email: "demo@telisik.local",
-      avatar: null,
-      profile_completed: true,
-      is_demo: true,
-    };
-
-    login(`${DEMO_TOKEN_PREFIX}${Date.now()}`, demoUser);
-    navigate(redirectAfterLogin, { replace: true });
-  };
-
   return (
     <div className="min-h-screen px-4" style={{ background: "inherit" }}>
-      <div className="mx-auto w-full max-w-sm">
-        {/* Top controls (auth header) */}
-        <div className="flex items-center justify-between pt-4">
-          <button
-            type="button"
-            aria-label="Kembali"
-            onClick={handleCancel}
-            className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-neutral-200 bg-white/40 text-neutral-600 hover:bg-white/70"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="18"
-              height="18"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              aria-hidden="true"
-            >
-              <path d="M15 18l-6-6 6-6" />
-            </svg>
-          </button>
-
-          <div className="flex items-center gap-2">
-            <button
-              type="button"
-              onClick={handleCancel}
-              className="rounded-full border border-telisik/40 px-3 py-1.5 text-xs font-semibold text-telisik hover:bg-telisik/10"
-            >
-              Batalkan
-            </button>
-
-            <button
-              type="button"
-              className="theme-toggle-switch"
-              onClick={handleThemeToggle}
-              aria-label="Toggle theme"
-            >
-              <div className="theme-toggle-indicator" aria-hidden></div>
-              <span className="theme-toggle-icon icon-sun">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="18"
-                  height="18"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  aria-hidden="true"
-                >
-                  <circle cx="12" cy="12" r="5" />
-                  <path d="M12 1v2" />
-                  <path d="M12 21v2" />
-                  <path d="M4.22 4.22l1.42 1.42" />
-                  <path d="M18.36 18.36l1.42 1.42" />
-                  <path d="M1 12h2" />
-                  <path d="M21 12h2" />
-                  <path d="M4.22 19.78l1.42-1.42" />
-                  <path d="M18.36 5.64l1.42-1.42" />
-                </svg>
-              </span>
-              <span className="theme-toggle-icon icon-moon">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="18"
-                  height="18"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  aria-hidden="true"
-                >
-                  <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
-                </svg>
-              </span>
-            </button>
-          </div>
-        </div>
-
+      <div className="mx-auto w-full max-w-[340px] pb-10 pt-7">
         {/* Header */}
-        <div className="pt-10 pb-6 text-center">
-          <h1 className="text-[1.35rem] font-semibold tracking-tight text-neutral-800">
+        <div className="pb-3">
+          <h1 className="text-[clamp(2.18rem,8vw,2.85rem)] font-semibold leading-[0.98] tracking-[-0.01em] text-[#555333]">
             Masuk Log
           </h1>
-          <p className="mt-1 text-sm text-neutral-600">
+          <p className="mt-1.5 text-[1.05rem] text-[#555333]/90">
             Belum punya akun?{" "}
             <Link
               to="/register"
-              className="font-semibold text-telisik hover:text-telisik-dark transition-colors"
+              className="font-semibold text-[#FC6736] hover:text-[#e0592d] transition-colors"
+              style={{ color: "#FC6736" }}
             >
               GABUNG →
             </Link>
@@ -197,7 +84,7 @@ export default function LoginPage() {
         )}
 
         {/* Login Form */}
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-3.5">
           {/* Email Input */}
           <Input
             type="email"
@@ -205,11 +92,11 @@ export default function LoginPage() {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
-            className="rounded-md border border-neutral-200 bg-white"
+            className="h-[50px] rounded-md border border-[#d9d5c7] bg-[#f9f8f3] px-4 text-[1.05rem] text-[#555333] placeholder:text-[#8a8877] focus:border-[#b8b39f] focus:ring-2 focus:ring-[#c8c3af]/35"
           />
 
           {/* Password Input */}
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-1.5">
             <div className="relative flex items-center">
               <input
                 type={showPassword ? "text" : "password"}
@@ -217,12 +104,12 @@ export default function LoginPage() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
-                className="w-full rounded-md border border-neutral-200 bg-white px-3 py-2 text-sm transition-colors focus:outline-none focus:border-telisik focus:ring-2 focus:ring-telisik/10"
+                className="h-[50px] w-full rounded-md border border-[#d9d5c7] bg-[#f9f8f3] px-4 py-2 pr-12 text-[1.05rem] text-[#555333] placeholder:text-[#8a8877] transition-colors focus:outline-none focus:border-[#b8b39f] focus:ring-2 focus:ring-[#c8c3af]/35"
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 text-gray-500 hover:text-gray-700 transition-colors p-1"
+                className="absolute right-3 text-[#6f7280] hover:text-[#555333] transition-colors p-1"
                 aria-label={
                   showPassword ? "Sembunyikan password" : "Tampilkan password"
                 }
@@ -258,7 +145,7 @@ export default function LoginPage() {
             </div>
             <Link
               to="/forgot-password"
-              className="text-xs text-cyan-600 hover:text-cyan-700 transition-colors text-right"
+              className="text-[0.94rem] italic text-[#555333]/80 hover:text-[#555333] transition-colors text-left"
             >
               Lupa?{" "}
               <span style={{ color: "#0088FF" }}>Atur ulang kata sandi</span>
@@ -268,58 +155,51 @@ export default function LoginPage() {
           {/* Terms Switch */}
           <label
             htmlFor="agreeTerms"
-            className="flex items-start gap-3 pt-1 cursor-pointer"
+            className="login-terms-block block w-full cursor-pointer pt-1.5"
           >
-            <span className="relative mt-0.5 inline-flex h-5 w-10 flex-shrink-0">
+            <span className="login-terms-row">
               <input
                 type="checkbox"
                 id="agreeTerms"
                 checked={agreed}
                 onChange={(e) => setAgreed(e.target.checked)}
-                className="peer sr-only"
+                className="right-find-master-toggle login-terms-switch login-terms-switch--login mt-[2px] shrink-0"
                 aria-checked={agreed}
               />
-              <span className="absolute inset-0 rounded-full bg-neutral-100 border border-neutral-300 transition-colors duration-200 peer-checked:bg-telisik/20 peer-checked:border-telisik" />
-              <span className="absolute left-0.5 top-0.5 h-4 w-4 rounded-full bg-white border border-neutral-200 shadow transition-transform duration-200 peer-checked:translate-x-5 peer-checked:bg-white peer-checked:border-telisik" />
-            </span>
-
-            <span className="text-xs text-neutral-600 leading-relaxed">
-              Saya sudah membaca, memahami, dan menyetujui{" "}
-              <Link
-                to="/pages/terms-and-conditions"
-                className="hover:underline"
-                onClick={(e) => e.stopPropagation()}
-                style={{ color: "#0088FF" }}
-              >
-                Syarat & Ketentuan
-              </Link>{" "}
-              serta{" "}
-              <Link
-                to="/pages/privacy-policy"
-                className="hover:underline"
-                onClick={(e) => e.stopPropagation()}
-                style={{ color: "#0088FF" }}
-              >
-                Kebijakan Privasi
-              </Link>{" "}
-              Telisik.
+              <span className="login-terms-copy text-[0.95rem] leading-[1.45] text-[#555333]/90">
+                Saya sudah membaca, memahami, dan menyetujui{" "}
+                <Link
+                  to="/pages/terms-and-conditions"
+                  className="hover:underline"
+                  onClick={(e) => e.stopPropagation()}
+                  style={{ color: "#0088FF" }}
+                >
+                  Syarat & Ketentuan
+                </Link>{" "}
+                serta{" "}
+                <Link
+                  to="/pages/privacy-policy"
+                  className="hover:underline"
+                  onClick={(e) => e.stopPropagation()}
+                  style={{ color: "#0088FF" }}
+                >
+                  Kebijakan Privasi
+                </Link>{" "}
+                Telisik.
+              </span>
             </span>
           </label>
 
           {/* Submit Button */}
           <div className="pt-2">
-            <Button
+            <button
               type="submit"
-              fullWidth
-              size="sm"
-              variant="secondary"
-              disabled={!agreed}
-              loading={loading}
-              onClick={handleFakeLogin}
-              className="rounded-full shadow-sm bg-[#dedacb] text-[#6b6b6b] hover:bg-[#dedacb] active:bg-[#dedacb]"
+              disabled={!agreed || loading}
+              className="h-[54px] min-w-[150px] rounded-full border border-[#cbc7b8] bg-[#bebaa6] px-7 text-[2rem] font-semibold tracking-tight text-[#F9F6EF] shadow-[0_0_0_2px_#e8e3d2,0_0_0_6px_#d9d3bf,inset_0_1px_0_rgba(255,255,255,0.45)] hover:bg-[#b5b198] active:bg-[#aba68d] disabled:opacity-100 disabled:bg-[#bebaa6] disabled:border-[#cbc7b8] disabled:text-[#F9F6EF]"
+              style={{ borderRadius: "9999px" }}
             >
-              Masuk Log
-            </Button>
+              {loading ? "Memuat..." : "Masuk Log"}
+            </button>
 
             {/* <Button
               type="button"

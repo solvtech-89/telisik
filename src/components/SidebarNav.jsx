@@ -222,9 +222,8 @@ export default function SidebarNav({
         {isLoggedIn ? (
           <div className="text-left mb-4">
             <div
-              className={`mb-2 flex cursor-pointer items-center justify-center overflow-hidden rounded-full bg-[#eef6c9] transition-all duration-300 ${
-                focusArticleSubnav ? "w-full max-w-none" : "max-w-[112px]"
-              }`}
+              className={`mb-2 flex cursor-pointer items-center justify-center overflow-hidden rounded-full bg-[#eef6c9] transition-all duration-300 ${focusArticleSubnav ? "w-full max-w-none" : "max-w-[112px]"
+                }`}
               onClick={() => setShowPhotoModal(true)}
               style={{ cursor: "pointer" }}
             >
@@ -644,21 +643,22 @@ export default function SidebarNav({
         )}
         {!focusArticleSubnav && !collapsed && (
           <div
-            className="feed-section mt-4 w-full text-left"
+            className="feed-section mt-4 mb-4 w-full text-left"
             style={{ paddingLeft: 0, paddingRight: 0 }}
           >
-            <hr className="mb-4 h-px border-3 bg-[#d9d6c7]" />
             <h2
-              className="font-semibold mb-2"
+              className="font-bold"
               style={{
-                fontSize: "1.15rem",
+                fontSize: "1.5rem",
                 color: "#f97316",
                 textAlign: "left",
+                marginBottom: "10px",
+                marginTop: "30px"
               }}
             >
               (Feed Tanggapan)
             </h2>
-            {loading ? (
+            <hr style={{ width: "100%", border: "none", borderTop: "1px solid #6b7280", margin: "8px 0 16px 0" }} />            {loading ? (
               <div className="text-center py-4">
                 <div
                   className="inline-block w-4 h-4 border-2 border-gray-300 border-t-transparent rounded-full animate-spin"
@@ -672,11 +672,11 @@ export default function SidebarNav({
                 {feedItems.map((item, index) => (
                   <div
                     key={`${item.article_id}-${item.paragraph_id}-${index}`}
-                    className="mb-2 border-b border-gray-200 pb-2"
+                    className="mb-6 border-b border-[#d9d6c7] pb-6"
                   >
                     <div
-                      className="mb-2"
-                      style={{ fontSize: "0.78rem", color: "#9ca3af" }}
+                      className="mb-0.5"
+                      style={{ fontSize: "0.95rem", color: "#6b7280", marginBottom: "4px" }}
                     >
                       Merespons{" "}
                       <Link
@@ -684,32 +684,34 @@ export default function SidebarNav({
                         className="no-underline text-[#0088FF]"
                         style={{ color: "#0088FF" }}
                       >
-                        {truncateText(item.paragraph_id, 40)}
+                        {truncateText(item.paragraph_id, 40) || "#000000-000"}
                       </Link>
                     </div>
 
-                    <UserBadge
-                      name={item.created_by.display_name || "Display Name"}
-                      avatar={
-                        item.created_by.avatar
-                          ? item.created_by.avatar.startsWith("/static/")
-                            ? `${mediaBase}${item.created_by.avatar}`
-                            : item.created_by.avatar
-                          : ""
-                      }
-                      time={timeAgo(item.created_at) || "0m"}
-                      size={22}
-                      nameSize="0.78rem"
-                      timeSize="0.65rem"
-                      nameColor="#1f2937"
-                    />
+                    <div className="mb-1">
+                      <UserBadge
+                        name={item.created_by?.display_name || "Display Name"}
+                        avatar={
+                          item.created_by?.avatar
+                            ? item.created_by.avatar.startsWith("/static/")
+                              ? `${mediaBase}${item.created_by.avatar}`
+                              : item.created_by.avatar
+                            : ""
+                        }
+                        time={timeAgo(item.created_at) || "0m"}
+                        size={20}
+                        nameSize="0.90rem"
+                        timeSize="0.60rem"
+                        nameColor="#4b5563"
+                      />
+                    </div>
                     <div>
                       <div>
                         <h6
-                          className="mb-2 font-bold"
+                          className="mb-1 font-bold"
                           style={{
-                            fontSize: "0.9rem",
-                            lineHeight: "1.2",
+                            fontSize: "1.1rem",
+                            lineHeight: "1.3",
                           }}
                         >
                           <Link
@@ -717,7 +719,7 @@ export default function SidebarNav({
                             className="no-underline"
                             style={{ color: "#f97316" }}
                           >
-                            {truncateText(item.article_title, 60)}
+                            {truncateText(item.article_title, 60) || "Heading (Opsional)"}
                           </Link>
                         </h6>
                       </div>
@@ -725,27 +727,26 @@ export default function SidebarNav({
                     <div>
                       <div>
                         <p
-                          className="mb-1"
+                          className="mb-4"
                           style={{
-                            fontSize: "0.78rem",
-                            lineHeight: "1.4",
-                            color: "#6b6b6b",
+                            fontSize: "1.05rem",
+                            lineHeight: "1.5",
+                            color: "#4b5563",
                           }}
                         >
-                          {truncateText(item.comment, 150)}
+                          {truncateText(item.comment, 150) || "Feed default ipsum dolor sit amet"}
                         </p>
                       </div>
                     </div>
 
                     {item.images && item.images.length > 0 && (
-                      <div className="flex gap-2 mb-2">
+                      <div className="flex gap-2 mb-4">
                         {item.images.map((thumb) => (
                           <div
                             key={thumb.id}
-                            className="rounded-none overflow-hidden"
+                            className="rounded-sm overflow-hidden flex-1"
                             style={{
-                              width: "48px",
-                              height: "48px",
+                              aspectRatio: "1",
                               backgroundImage:
                                 thumb && thumb.url
                                   ? `url(${thumb.url.startsWith("/static/") ? `${mediaBase}${thumb.url}` : thumb.url})`
@@ -760,13 +761,13 @@ export default function SidebarNav({
                     )}
 
                     {item.image && (
-                      <div className="mb-2">
+                      <div className="mb-4">
                         <img
                           src={item.image}
                           alt="preview"
-                          className="w-full rounded-none"
+                          className="w-full rounded-sm"
                           style={{
-                            maxHeight: "120px",
+                            maxHeight: "160px",
                             objectFit: "cover",
                             width: "100%",
                           }}
@@ -774,71 +775,72 @@ export default function SidebarNav({
                       </div>
                     )}
 
-                    <div className="flex items-center justify-between">
+                    <div className="flex items-center justify-between mt-2 pb-1">
                       <div
-                        className="flex gap-3"
-                        style={{ fontSize: "0.78rem", color: "#9ca3af" }}
+                        className="flex gap-4 items-center"
+                        style={{ fontSize: "1.05rem", color: "#6b7280" }}
                       >
-                        <span style={{ display: "flex" }}>
+                        <span style={{ display: "flex", alignItems: "center", gap: "6px" }}>
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
-                            width="14"
-                            height="14"
+                            width="18"
+                            height="18"
                             viewBox="0 0 16 16"
                             fill="none"
-                            className="mr-1"
                           >
                             <path
                               d="M14.3438 7.99988C14.3438 11.5034 11.5035 14.3436 7.99997 14.3436C6.75253 14.3436 5.58919 13.9836 4.6082 13.3617L1.65619 14.3436L2.80682 11.6442C2.08183 10.6131 1.65619 9.35618 1.65619 7.99988C1.65619 4.49632 4.4964 1.65613 7.99997 1.65613C11.5035 1.65613 14.3438 4.49632 14.3438 7.99988Z"
                               stroke="currentColor"
+                              strokeWidth="1.2"
                               strokeLinejoin="round"
                             />
                             <ellipse
                               cx="7.25095"
                               cy="8"
-                              rx="1"
-                              ry="1"
+                              rx="1.2"
+                              ry="1.2"
                               fill="currentColor"
                             />
                             <ellipse
                               cx="10.8437"
                               cy="8"
-                              rx="1"
-                              ry="1"
+                              rx="1.2"
+                              ry="1.2"
                               fill="currentColor"
                             />
-                          </svg>{" "}
-                          {item.article_comments_count || 0}
+                          </svg>
+                          <span>{item.article_comments_count || 0}</span>
                         </span>
-                        <span style={{ display: "flex" }}>
+                        <span style={{ display: "flex", alignItems: "center", gap: "6px" }}>
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
-                            width="14"
-                            height="14"
+                            width="18"
+                            height="18"
                             viewBox="0 0 16 16"
                             fill="none"
-                            className="mr-1"
                           >
                             <path
                               d="M4.03769 5.87315L7.99993 1.91089M7.99993 1.91089L11.9622 5.87315M7.99993 1.91089V11.0702"
                               stroke="currentColor"
+                              strokeWidth="1.2"
                               strokeLinecap="round"
                               strokeLinejoin="round"
                             />
                             <path
                               d="M1.87497 9.27661V12.3391C1.87497 13.3056 2.65847 14.0891 3.62497 14.0891H12.375C13.3415 14.0891 14.125 13.3056 14.125 12.3391V9.27661"
                               stroke="currentColor"
+                              strokeWidth="1.2"
                               strokeLinecap="round"
                               strokeLinejoin="round"
                             />
                           </svg>
-                          {item.article_share_count || 0}
+                          <span>{item.article_share_count || 0}</span>
                         </span>
                       </div>
                       <Link
                         to={getArticleUrl(item)}
-                        className="inline-flex items-center px-3 py-1 text-sm border rounded-full border-gray-300"
-                        style={{ fontSize: "0.8rem", borderRadius: "20px" }}
+                        className="inline-flex items-center px-4 py-1.5 text-base border border-gray-600 rounded-full text-gray-700 bg-transparent hover:bg-gray-50 no-underline"
+                        style={{ borderRadius: "20px" }}
                       >
                         Tanggapi
                       </Link>
