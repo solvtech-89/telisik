@@ -107,26 +107,28 @@ export default function HomePage() {
         </aside>
 
         {/* Center - Main Content */}
-        <main className="home-main-panel flex-1 border-x border-[#e2e0d8] bg-[#faf8f1] lg:h-full lg:overflow-y-auto lg:overscroll-contain">
-          <div className="home-main-inner mx-auto w-full max-w-none space-y-4 px-4 py-4 lg:space-y-5 lg:px-4 xl:px-4">
-            {/* Map Section */}
-            <div>
-              <MapContainer
-                markers={markers}
-                activeCategories={activeCategories}
-                onCategoryToggle={handleCategoryToggle}
-                className="rounded-none shadow-none"
-              />
-            </div>
+        <main className="home-main-panel flex-1 bg-[#faf8f1] lg:h-full lg:overflow-y-auto lg:overscroll-contain lg:border-x lg:border-[#e2e0d8]">
+          <div className="home-main-inner mx-auto w-full max-w-none space-y-4 px-3 py-3 sm:px-4 sm:py-4 lg:space-y-5 lg:px-4 xl:px-4">
+            <div className="space-y-1 lg:space-y-2">
+              {/* Map Section */}
+              <div>
+                <MapContainer
+                  markers={markers}
+                  activeCategories={activeCategories}
+                  onCategoryToggle={handleCategoryToggle}
+                  className="rounded-none shadow-none"
+                />
+              </div>
 
-            {/* Kredo Box */}
-            {kredo.heading && (
-              <KredoBox
-                heading={kredo.heading}
-                lead={kredo.lead}
-                body={kredo.body}
-              />
-            )}
+              {/* Kredo Box */}
+              {kredo.heading && (
+                <KredoBox
+                  heading={kredo.heading}
+                  lead={kredo.lead}
+                  body={kredo.body}
+                />
+              )}
+            </div>
 
             {/* Diskursus Section */}
             <div className="home-kredo-cards-wrap space-y-4">

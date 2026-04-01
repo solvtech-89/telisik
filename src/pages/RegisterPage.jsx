@@ -4,6 +4,7 @@ import { GoogleLogin } from "@react-oauth/google";
 import { API_BASE } from "../config";
 import { useAuth } from "../AuthContext";
 import Alert from "../components/ui/Alert";
+import iconDate from "../assets/Icon-date.svg";
 
 const MONTH_NAMES = [
   "Januari",
@@ -247,7 +248,7 @@ export default function RegisterPage() {
             type="button"
             aria-label="Kembali"
             onClick={handleCancel}
-            className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-neutral-200 bg-white/40 text-neutral-600 hover:bg-white/70"
+            className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-transparent text-neutral-600 hover:bg-white/30"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -377,15 +378,21 @@ export default function RegisterPage() {
               <button
                 type="button"
                 onClick={openBirthPicker}
-                className="flex h-[46px] w-full items-center justify-between border border-[#82b7ff] bg-[#f9f8f3] px-3.5 text-left text-[0.98rem] text-[#0088FF]"
+                className="flex h-[46px] w-full items-center justify-between border border-[#dfe1dd] bg-[#f9f8f3] px-3.5 text-left text-[0.98rem] text-[#555333] focus:outline-none focus:border-[#b8b39f] focus:ring-2 focus:ring-[#c8c3af]/25"
               >
-                <span>
+                <span
+                  className={birthDate ? "text-[#555333]" : "text-[#9a9888]"}
+                >
                   {birthDate
                     ? `${birthDate.split("-")[2]}/${birthDate.split("-")[1]}/${birthDate.split("-")[0]}`
                     : "Tetapkan tanggal lahir"}
                 </span>
-                <span className="text-[#0088FF]">
-                  {isBirthPickerOpen ? "⌃" : "⌄"}
+                <span className="inline-flex h-5 w-5 items-center justify-center">
+                  <img
+                    src={iconDate}
+                    alt="Tanggal"
+                    className={`h-4 w-4 object-contain transition-transform ${isBirthPickerOpen ? "rotate-180" : "rotate-0"}`}
+                  />
                 </span>
               </button>
               <p className="text-[0.78rem] text-[#7f7d6f] italic">
@@ -393,7 +400,7 @@ export default function RegisterPage() {
               </p>
 
               {isBirthPickerOpen && (
-                <div className="absolute right-0 top-[74px] z-30 w-[460px] max-w-[calc(100vw-2rem)] border border-[#dedede] bg-[#f9f8f3] p-4 shadow-lg">
+                <div className="absolute left-0 right-0 top-[74px] z-30 w-full max-w-full overflow-hidden border border-[#dedede] bg-[#f9f8f3] p-3 shadow-lg sm:left-auto sm:right-0 sm:w-[460px] sm:max-w-[calc(100vw-2rem)] sm:p-4">
                   <div className="mb-2 text-center text-[1rem] font-semibold text-[#ff3f6e]">
                     Usia minimal 17 tahun saat mendaftar
                   </div>
@@ -407,9 +414,10 @@ export default function RegisterPage() {
                       style={{ height: `${WHEEL_ROW_HEIGHT}px` }}
                     />
                     <div
-                      className="relative z-10 grid gap-0"
+                      className="relative z-10 grid w-full gap-0"
                       style={{
-                        gridTemplateColumns: "88px minmax(160px,1fr) 104px",
+                        gridTemplateColumns:
+                          "minmax(64px,0.8fr) minmax(150px,1.6fr) minmax(90px,1fr)",
                       }}
                     >
                       <div
@@ -417,7 +425,7 @@ export default function RegisterPage() {
                         onScroll={(e) =>
                           handleWheelScroll(e, dayOptions, setTempDay)
                         }
-                        className="min-w-0 overflow-x-hidden overflow-y-auto"
+                        className="min-w-0 overflow-y-auto"
                         style={{
                           height: `${WHEEL_VISIBLE_ROWS * WHEEL_ROW_HEIGHT}px`,
                           scrollbarWidth: "none",
@@ -431,7 +439,7 @@ export default function RegisterPage() {
                             key={`day-${day}`}
                             type="button"
                             onClick={() => setTempDay(day)}
-                            className={`block w-full border-b border-[#ece9df] px-2 text-center text-[1rem] leading-[1.25] ${day === tempDay ? "font-semibold text-[#0088FF]" : "text-[#6b684f]"}`}
+                            className={`block w-full border-b border-[#ece9df] px-1 text-center text-[0.95rem] leading-[1.25] sm:px-2 sm:text-[1rem] ${day === tempDay ? "font-semibold text-[#0088FF]" : "text-[#6b684f]"}`}
                             style={{
                               height: `${WHEEL_ROW_HEIGHT}px`,
                               scrollSnapAlign: "start",
@@ -450,7 +458,7 @@ export default function RegisterPage() {
                             setTempMonth(opt.value),
                           )
                         }
-                        className="min-w-0 overflow-x-hidden overflow-y-auto"
+                        className="min-w-0 overflow-y-auto"
                         style={{
                           height: `${WHEEL_VISIBLE_ROWS * WHEEL_ROW_HEIGHT}px`,
                           scrollbarWidth: "none",
@@ -464,7 +472,7 @@ export default function RegisterPage() {
                             key={`month-${month.value}`}
                             type="button"
                             onClick={() => setTempMonth(month.value)}
-                            className={`block w-full border-b border-[#ece9df] px-2 text-center text-[1rem] leading-[1.25] whitespace-nowrap ${month.value === tempMonth ? "font-semibold text-[#0088FF]" : "text-[#6b684f]"}`}
+                            className={`block w-full border-b border-[#ece9df] px-1 text-center text-[0.95rem] leading-[1.25] whitespace-nowrap sm:px-2 sm:text-[1rem] ${month.value === tempMonth ? "font-semibold text-[#0088FF]" : "text-[#6b684f]"}`}
                             style={{
                               height: `${WHEEL_ROW_HEIGHT}px`,
                               scrollSnapAlign: "start",
@@ -481,7 +489,7 @@ export default function RegisterPage() {
                         onScroll={(e) =>
                           handleWheelScroll(e, yearOptions, setTempYear)
                         }
-                        className="min-w-0 overflow-x-hidden overflow-y-auto"
+                        className="min-w-0 overflow-y-auto"
                         style={{
                           height: `${WHEEL_VISIBLE_ROWS * WHEEL_ROW_HEIGHT}px`,
                           scrollbarWidth: "none",
@@ -495,7 +503,7 @@ export default function RegisterPage() {
                             key={`year-${year}`}
                             type="button"
                             onClick={() => setTempYear(year)}
-                            className={`block w-full border-b border-[#ece9df] px-2 text-center text-[1rem] leading-[1.25] whitespace-nowrap ${year === tempYear ? "font-semibold text-[#0088FF]" : "text-[#6b684f]"}`}
+                            className={`block w-full border-b border-[#ece9df] px-1 text-center text-[0.95rem] leading-[1.25] whitespace-nowrap sm:px-2 sm:text-[1rem] ${year === tempYear ? "font-semibold text-[#0088FF]" : "text-[#6b684f]"}`}
                             style={{
                               height: `${WHEEL_ROW_HEIGHT}px`,
                               scrollSnapAlign: "start",
@@ -687,11 +695,11 @@ export default function RegisterPage() {
           </div>
 
           {/* Submit Button */}
-          <div className="pt-2">
+          <div className="">
             <button
               type="submit"
               disabled={!agreed || !passwordsMatch || loading}
-              className="h-[48px] min-w-[188px] rounded-full border border-[#cbc7b8] bg-[#bebaa6] px-9 text-[1.08rem] font-semibold tracking-tight text-[#F9F6EF] shadow-[0_0_0_2px_#e8e3d2,0_0_0_6px_#d9d3bf,inset_0_1px_0_rgba(255,255,255,0.45)] transition-all duration-150 hover:bg-[#b5b198] active:bg-[#aba68d] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#9ea58d]/50 disabled:opacity-100 disabled:bg-[#bebaa6] disabled:border-[#cbc7b8] disabled:text-[#F9F6EF]"
+              className="h-[35px] min-w-[140px] rounded-full border border-[#cbc7b8] bg-[#bebaa6] px-9 text-[1.08rem] font-semibold tracking-tight text-[#F9F6EF] shadow-[0_0_0_2px_#e8e3d2,0_0_0_6px_#d9d3bf,inset_0_1px_0_rgba(255,255,255,0.45)] transition-all duration-150 hover:bg-[#b5b198] active:bg-[#aba68d] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#9ea58d]/50 disabled:opacity-100 disabled:bg-[#bebaa6] disabled:border-[#cbc7b8] disabled:text-[#F9F6EF]"
               style={{ borderRadius: "9999px" }}
             >
               {loading ? "Memuat..." : "Daftar Sekarang"}

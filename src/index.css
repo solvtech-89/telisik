@@ -35,6 +35,12 @@
   --feed-card-tag-text: #5b6577;
   --feed-card-placeholder-start: #efcc89;
   --feed-card-placeholder-end: #e4b963;
+  --site-top-nav-height-mobile: 64px;
+  --site-top-nav-height-desktop: 72px;
+  --mobile-bottom-nav-content-height: 58px;
+  --mobile-top-nav-side-width: 98px;
+  --mobile-top-logo-nudge-x: -14px;
+  --mobile-top-logo-nudge-y: -3px;
 }
 
 .reactEasyCrop_Container {
@@ -357,7 +363,7 @@ button:focus-visible {
   width: 82px;
   height: 40px;
   border-radius: 9999px;
-  display: inline-flex;
+  /* display controlled by responsive utilities; avoid forcing display here */
   align-items: center;
   justify-content: space-between;
   background: transparent;
@@ -370,6 +376,12 @@ button:focus-visible {
     background 180ms ease,
     border-color 180ms ease,
     box-shadow 180ms ease;
+}
+
+@media (min-width: 640px) {
+  .theme-toggle-switch {
+    display: inline-flex;
+  }
 }
 
 /* Light mode: make the toggle track neutral so the whole control reads gray */
@@ -654,6 +666,58 @@ button:focus-visible {
 
 :root[data-bs-theme="dark"] .login-terms-switch--login:checked::after {
   transform: translateX(14px);
+}
+
+/* Mobile search panel checkboxes - light mode */
+:root:not([data-bs-theme="dark"]) input[type="checkbox"].h-3\.5,
+:root:not([data-bs-theme="dark"]) input[type="checkbox"].h-4 {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  width: 1rem;
+  height: 1rem;
+  border: 2px solid #e5e5e5;
+  border-radius: 3px;
+  background: #ffffff;
+  cursor: pointer;
+  position: relative;
+  transition: all 150ms ease;
+}
+
+:root:not([data-bs-theme="dark"]) input[type="checkbox"].h-3\.5:checked,
+:root:not([data-bs-theme="dark"]) input[type="checkbox"].h-4:checked {
+  background: #3dbc59;
+  border-color: #3dbc59;
+  background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 20 20' fill='white' xmlns='http://www.w3.org/2000/svg'%3e%3cpath d='M4.5 10.2L8.3 14L15.5 6.8' stroke='white' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 100% 100%;
+}
+
+/* Mobile search panel checkboxes - dark mode */
+:root[data-bs-theme="dark"] input[type="checkbox"].h-3\.5,
+:root[data-bs-theme="dark"] input[type="checkbox"].h-4 {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  width: 1rem;
+  height: 1rem;
+  border: 2px solid #555555;
+  border-radius: 3px;
+  background: #333333;
+  cursor: pointer;
+  position: relative;
+  transition: all 150ms ease;
+}
+
+:root[data-bs-theme="dark"] input[type="checkbox"].h-3\.5:checked,
+:root[data-bs-theme="dark"] input[type="checkbox"].h-4:checked {
+  background: #3dbc59;
+  border-color: #3dbc59;
+  background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 20 20' fill='white' xmlns='http://www.w3.org/2000/svg'%3e%3cpath d='M4.5 10.2L8.3 14L15.5 6.8' stroke='white' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 100% 100%;
 }
 
 /* Login terms layout hardening: keep switch + text aligned and avoid narrow text column */
@@ -1391,9 +1455,58 @@ button:focus-visible {
 }
 
 /* Mobile bottom navigation styles */
+.site-top-nav {
+  min-height: var(--site-top-nav-height-mobile);
+}
+
+.mobile-top-nav {
+  display: grid;
+  grid-template-columns: var(--mobile-top-nav-side-width) minmax(0, 1fr) var(
+      --mobile-top-nav-side-width
+    );
+  align-items: center;
+  width: 100%;
+  min-height: 40px;
+}
+
+.mobile-top-nav__left {
+  display: inline-flex;
+  width: var(--mobile-top-nav-side-width);
+  height: 40px;
+  align-items: center;
+  justify-content: flex-start;
+  z-index: 2;
+}
+
+.mobile-top-nav__center {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  justify-self: center;
+  transform: translate(
+    var(--mobile-top-logo-nudge-x),
+    var(--mobile-top-logo-nudge-y)
+  );
+  z-index: 2;
+}
+
+.mobile-top-nav__right {
+  display: inline-flex;
+  width: var(--mobile-top-nav-side-width);
+  align-items: center;
+  justify-content: flex-end;
+  gap: 6px;
+  z-index: 2;
+}
+
 .mobile-bottom-nav {
-  height: calc(56px + env(safe-area-inset-bottom));
+  height: calc(
+    var(--mobile-bottom-nav-content-height) + env(safe-area-inset-bottom)
+  );
   padding-bottom: env(safe-area-inset-bottom);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }
 
 .mobile-bottom-nav a,
@@ -1412,6 +1525,38 @@ button:focus-visible {
 .mobile-bottom-nav--active,
 .mobile-bottom-nav a.mobile-bottom-nav--active {
   color: var(--telisik-active) !important;
+}
+
+@media (max-width: 1023px) {
+  .app-route-shell {
+    min-height: calc(100vh - var(--site-top-nav-height-mobile));
+    padding-bottom: calc(
+      var(--mobile-bottom-nav-content-height) + env(safe-area-inset-bottom)
+    );
+  }
+
+  .home-main-panel {
+    border-left: 0 !important;
+    border-right: 0 !important;
+  }
+
+  .home-main-inner {
+    padding-bottom: calc(1rem + env(safe-area-inset-bottom));
+  }
+}
+
+@media (min-width: 1024px) {
+  .site-top-nav {
+    min-height: var(--site-top-nav-height-desktop);
+  }
+
+  .mobile-top-nav {
+    display: none !important;
+  }
+
+  .app-route-shell {
+    padding-bottom: 0;
+  }
 }
 
 :root[data-bs-theme="dark"] .mobile-bottom-nav {
@@ -2142,13 +2287,13 @@ html body .article-list-main {
 
 @media (max-width: 767px) {
   .kredo-heading {
-    font-size: 2rem !important;
-    line-height: 1.2 !important;
+    font-size: 1.9rem !important;
+    line-height: 1.04 !important;
   }
 
   .kredo-lead {
-    font-size: 1.05rem !important;
-    line-height: 1.6 !important;
+    font-size: 1.125rem !important;
+    line-height: 1.3334 !important;
   }
 }
 

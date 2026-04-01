@@ -18,6 +18,18 @@ export default function LoginPage() {
   const redirectAfterLogin =
     location.state?.from?.pathname || "/urun-daya/kronik";
 
+  const handleCancel = () => {
+    navigate("/", { replace: true });
+  };
+
+  const handleThemeToggle = () => {
+    const currentTheme =
+      document.documentElement.getAttribute("data-bs-theme") || "light";
+    const newTheme = currentTheme === "light" ? "dark" : "light";
+    document.documentElement.setAttribute("data-bs-theme", newTheme);
+    localStorage.setItem("theme", newTheme);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!agreed) {
@@ -55,6 +67,91 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen px-4" style={{ background: "inherit" }}>
+      <div className="mx-auto w-full max-w-[620px] pb-4">
+        <div className="flex items-center justify-between pt-4 md:pt-5">
+          <button
+            type="button"
+            aria-label="Kembali"
+            onClick={() => navigate(-1)}
+            className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-transparent text-neutral-600 hover:bg-white/30"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M15 18l-6-6 6-6" />
+            </svg>
+          </button>
+
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={handleCancel}
+              className="register-cancel-btn register-cancel-btn--top"
+            >
+              Batalkan
+            </button>
+
+            <button
+              type="button"
+              className="theme-toggle-switch hidden sm:inline-flex"
+              onClick={handleThemeToggle}
+              aria-label="Toggle theme"
+            >
+              <div className="theme-toggle-indicator" aria-hidden></div>
+              <span className="theme-toggle-icon icon-sun">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  aria-hidden="true"
+                >
+                  <circle cx="12" cy="12" r="5" />
+                  <path d="M12 1v2" />
+                  <path d="M12 21v2" />
+                  <path d="M4.22 4.22l1.42 1.42" />
+                  <path d="M18.36 18.36l1.42 1.42" />
+                  <path d="M1 12h2" />
+                  <path d="M21 12h2" />
+                  <path d="M4.22 19.78l1.42-1.42" />
+                  <path d="M18.36 5.64l1.42-1.42" />
+                </svg>
+              </span>
+              <span className="theme-toggle-icon icon-moon">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" />
+                </svg>
+              </span>
+            </button>
+          </div>
+        </div>
+      </div>
+
       <div className="mx-auto w-full max-w-[340px] pb-10 pt-7">
         {/* Header */}
         <div className="pb-3">
@@ -92,7 +189,7 @@ export default function LoginPage() {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
-            className="h-[50px] rounded-md border border-[#d9d5c7] bg-[#f9f8f3] px-4 text-[1.05rem] text-[#555333] placeholder:text-[#8a8877] focus:border-[#b8b39f] focus:ring-2 focus:ring-[#c8c3af]/35"
+            className="h-[50px] rounded-md border border-[#d9d5c7] bg-[#ffffff] px-4 text-[1.05rem] text-[#555333] placeholder:text-[#8a8877] focus:border-[#b8b39f] focus:ring-2 focus:ring-[#c8c3af]/35"
           />
 
           {/* Password Input */}
@@ -104,7 +201,7 @@ export default function LoginPage() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
-                className="h-[50px] w-full rounded-md border border-[#d9d5c7] bg-[#f9f8f3] px-4 py-2 pr-12 text-[1.05rem] text-[#555333] placeholder:text-[#8a8877] transition-colors focus:outline-none focus:border-[#b8b39f] focus:ring-2 focus:ring-[#c8c3af]/35"
+                className="h-[50px] w-full rounded-md border border-[#d9d5c7] bg-[#ffffff] px-4 py-2 pr-12 text-[1.05rem] text-[#555333] placeholder:text-[#8a8877] transition-colors focus:outline-none focus:border-[#b8b39f] focus:ring-2 focus:ring-[#c8c3af]/35"
               />
               <button
                 type="button"
@@ -191,11 +288,11 @@ export default function LoginPage() {
           </label>
 
           {/* Submit Button */}
-          <div className="pt-2">
+          <div className="pt-2 pl-[44px]">
             <button
               type="submit"
               disabled={!agreed || loading}
-              className="h-[54px] min-w-[150px] rounded-full border border-[#cbc7b8] bg-[#bebaa6] px-7 text-[2rem] font-semibold tracking-tight text-[#F9F6EF] shadow-[0_0_0_2px_#e8e3d2,0_0_0_6px_#d9d3bf,inset_0_1px_0_rgba(255,255,255,0.45)] hover:bg-[#b5b198] active:bg-[#aba68d] disabled:opacity-100 disabled:bg-[#bebaa6] disabled:border-[#cbc7b8] disabled:text-[#F9F6EF]"
+              className="h-[40px] min-w-[150px] rounded-full border border-[#cbc7b8] bg-[#bebaa6] px-7 text-[2rem] font-semibold tracking-tight text-[#F9F6EF] shadow-[0_0_0_2px_#e8e3d2,0_0_0_6px_#d9d3bf,inset_0_1px_0_rgba(255,255,255,0.45)] hover:bg-[#b5b198] active:bg-[#aba68d] disabled:opacity-100 disabled:bg-[#bebaa6] disabled:border-[#cbc7b8] disabled:text-[#F9F6EF]"
               style={{ borderRadius: "9999px" }}
             >
               {loading ? "Memuat..." : "Masuk Log"}
