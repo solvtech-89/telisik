@@ -1,8 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { ICONS } from "../config";
+import { API_BASE } from "../config";
 import UserBadge from "./UserBadge";
 import { useAuth } from "../AuthContext";
+import loginButtonIcon from "../assets/Login Button.svg";
+import topNav1Icon from "../assets/s-TopNav-1.svg";
+import topNavIcon from "../assets/s-TopNav.svg";
+import gButtonIcon from "../assets/g-Button.svg";
+import telisikLogoIcon from "../assets/telisik-logo.svg";
 
 const renderNavIcon = (type, className = "") => {
   switch (type) {
@@ -262,6 +268,44 @@ export default function Navbar() {
   const [akunExpanded, setAkunExpanded] = useState(false);
   const [sumbangsihExpanded, setSumbangsihExpanded] = useState(false);
   const [urunDayaExpanded, setUrunDayaExpanded] = useState(false);
+  const [showMobileSearch, setShowMobileSearch] = useState(false);
+  const [mobileSearchQuery, setMobileSearchQuery] = useState("");
+  const [mobileAdvancedSearch, setMobileAdvancedSearch] = useState(true);
+  const [mobileFilters, setMobileFilters] = useState({
+    lokasi: true,
+    jenisKonflik: true,
+    kronik: true,
+    tilik: true,
+    diskursus: true,
+    tanggapan: true,
+  });
+  const [mobileProvinces, setMobileProvinces] = useState([]);
+  const [mobileRegencies, setMobileRegencies] = useState([]);
+  const [mobileSelectedProvince, setMobileSelectedProvince] = useState("");
+  const [mobileSelectedRegency, setMobileSelectedRegency] = useState("");
+  const [mobileConflictTypes, setMobileConflictTypes] = useState([]);
+
+  const normalizeLocationList = (payload) => {
+    if (Array.isArray(payload)) return payload;
+    if (Array.isArray(payload?.results)) return payload.results;
+    if (Array.isArray(payload?.data)) return payload.data;
+    if (Array.isArray(payload?.items)) return payload.items;
+    if (Array.isArray(payload?.provinces)) return payload.provinces;
+    if (Array.isArray(payload?.regencies)) return payload.regencies;
+    if (payload && typeof payload === "object") {
+      const firstArrayValue = Object.values(payload).find((value) =>
+        Array.isArray(value),
+      );
+      if (Array.isArray(firstArrayValue)) return firstArrayValue;
+    }
+    return [];
+  };
+
+  const mobileConflictOptions = [
+    { id: "sda", label: "Pemanfaatan SDA" },
+    { id: "agraria", label: "Agraria/pemanfaatan lahan" },
+    { id: "ekonomi", label: "Ekonomi, sosial, politik, SARA" },
+  ];
 
   const isLoggedIn = !!user;
 
@@ -281,7 +325,73 @@ export default function Navbar() {
   // Close offcanvas when route changes to avoid leaving it open on other pages
   useEffect(() => {
     setShowOffcanvas(false);
+    setShowMobileSearch(false);
   }, [location.pathname]);
+
+  useEffect(() => {
+    if (!showMobileSearch || !mobileAdvancedSearch || !mobileFilters.lokasi)
+      return;
+    if (mobileProvinces.length > 0) return;
+
+    const fetchProvinces = async () => {
+      try {
+        let resp = await fetch(`${API_BASE}/api/locations/provinces/`);
+        if (!resp.ok) {
+          resp = await fetch(`${API_BASE}/api/locations/provinces`);
+        }
+        if (!resp.ok) return;
+        const data = await resp.json();
+        setMobileProvinces(normalizeLocationList(data));
+      } catch (err) {
+        console.error("Failed to load provinces", err);
+      }
+    };
+
+    fetchProvinces();
+  }, [
+    showMobileSearch,
+    mobileAdvancedSearch,
+    mobileFilters.lokasi,
+    mobileProvinces.length,
+  ]);
+
+  useEffect(() => {
+    if (!mobileSelectedProvince) {
+      setMobileRegencies([]);
+      setMobileSelectedRegency("");
+      return;
+    }
+
+    const fetchRegencies = async () => {
+      try {
+        const provinceValue = encodeURIComponent(mobileSelectedProvince);
+
+        let resp = await fetch(
+          `${API_BASE}/api/locations/regencies/?province=${provinceValue}`,
+        );
+
+        if (!resp.ok) {
+          resp = await fetch(
+            `${API_BASE}/api/locations/regencies/?province_id=${provinceValue}`,
+          );
+        }
+
+        if (!resp.ok) {
+          resp = await fetch(
+            `${API_BASE}/api/locations/regencies/?province_code=${provinceValue}`,
+          );
+        }
+
+        if (!resp.ok) return;
+        const data = await resp.json();
+        setMobileRegencies(normalizeLocationList(data));
+      } catch (err) {
+        console.error("Failed to load regencies", err);
+      }
+    };
+
+    fetchRegencies();
+  }, [mobileSelectedProvince]);
 
   const handleThemeToggle = (e) => {
     e.preventDefault();
@@ -341,11 +451,98 @@ export default function Navbar() {
     setShowOffcanvas(false);
   };
 
+  const handleMobileSearch = () => {
+    const searchParams = new URLSearchParams();
+    if (mobileSearchQuery) searchParams.append("q", mobileSearchQuery);
+    if (mobileFilters.lokasi) searchParams.append("lokasi", "1");
+    if (mobileSelectedProvince)
+      searchParams.append("province", mobileSelectedProvince);
+    if (mobileSelectedRegency)
+      searchParams.append("regency", mobileSelectedRegency);
+    if (mobileFilters.jenisKonflik && mobileConflictTypes.length) {
+      searchParams.set("jenis_konflik", mobileConflictTypes.join(","));
+    }
+
+    const types = [];
+    if (mobileFilters.kronik) types.push("kronik");
+    if (mobileFilters.tilik) types.push("tilik");
+    if (mobileFilters.diskursus) types.push("diskursus");
+    if (mobileFilters.tanggapan) types.push("tanggapan");
+    if (types.length > 0) searchParams.append("types", types.join(","));
+
+    setShowMobileSearch(false);
+    navigate(`/search?${searchParams.toString()}`);
+  };
+
   return (
     <>
       <nav className="site-top-nav sticky top-0 z-50 border-b border-[#dfddd4] bg-[#f6f3eb]/95 backdrop-blur">
-        <div className="mx-auto flex h-[72px] w-full max-w-[1760px] items-center justify-between px-4 md:px-6 xl:px-7 lg:grid lg:grid-cols-[auto_1fr_auto]">
-          <div className="flex items-center flex-none lg:justify-self-start">
+        <div className="mx-auto flex h-16 w-full max-w-[1760px] items-center justify-between px-4 md:px-6 xl:px-7 lg:grid lg:h-[72px] lg:grid-cols-[auto_1fr_auto]">
+          <div className="mobile-top-nav lg:hidden">
+            <Link
+              to="/login"
+              aria-label="Login"
+              className="mobile-top-nav__left"
+            >
+              <img
+                src={loginButtonIcon}
+                alt="Login"
+                className="h-9 w-9 object-contain"
+              />
+            </Link>
+
+            <Link
+              to="/"
+              aria-label="Telisik"
+              className="mobile-top-nav__center"
+            >
+              <img
+                src={telisikLogoIcon}
+                alt="Telisik"
+                className="h-8 w-[92px] object-contain"
+              />
+            </Link>
+
+            <div className="mobile-top-nav__right">
+              <button
+                type="button"
+                aria-label="Notifikasi"
+                className="inline-flex h-7 w-7 items-center justify-center"
+              >
+                <img
+                  src={topNav1Icon}
+                  alt="Notifikasi"
+                  className="h-[17px] w-[17px] object-contain"
+                />
+              </button>
+              <button
+                type="button"
+                aria-label="Cari"
+                className="inline-flex h-7 w-7 items-center justify-center"
+                onClick={() => setShowMobileSearch((prev) => !prev)}
+                aria-pressed={showMobileSearch}
+              >
+                <img
+                  src={topNavIcon}
+                  alt="Cari"
+                  className="h-[17px] w-[17px] object-contain"
+                />
+              </button>
+              <button
+                type="button"
+                aria-label="G Button"
+                className="inline-flex h-8 w-8 items-center justify-center"
+              >
+                <img
+                  src={gButtonIcon}
+                  alt="G Button"
+                  className="h-8 w-8 object-contain"
+                />
+              </button>
+            </div>
+          </div>
+
+          <div className="hidden flex-none items-center lg:flex lg:justify-self-start">
             <Link className="inline-block mr-6 site-logo" to="/">
               <svg
                 width="60"
@@ -574,53 +771,263 @@ export default function Navbar() {
         </div>
       </nav>
 
+      <div
+        className={`fixed inset-x-0 top-16 bottom-[calc(58px+env(safe-area-inset-bottom))] z-40 overflow-y-auto bg-[#f6f3eb] px-4 py-4 transition-all duration-200 ease-out lg:hidden ${showMobileSearch ? "pointer-events-auto translate-y-0 opacity-100" : "pointer-events-none -translate-y-2 opacity-0"}`}
+      >
+        <div className="mx-auto w-full max-w-[680px] space-y-4">
+          <div className="relative">
+            <input
+              type="text"
+              className="w-full rounded-full border-2 border-[#6fa8ff] bg-white px-4 py-2.5 pr-10 text-sm text-[#555333] placeholder-[#999999] transition-colors focus:border-[#4a8dd6] focus:outline-none"
+              placeholder="Lorem ipsum search"
+              value={mobileSearchQuery}
+              onChange={(e) => setMobileSearchQuery(e.target.value)}
+              onKeyDown={(e) => e.key === "Enter" && handleMobileSearch()}
+            />
+            {mobileSearchQuery && (
+              <button
+                type="button"
+                onClick={() => setMobileSearchQuery("")}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-lg text-[#ff3f6e] transition-colors hover:text-[#ff1f4a]"
+                aria-label="Clear"
+              >
+                ×
+              </button>
+            )}
+          </div>
+
+          <label className="flex items-center gap-3 text-sm font-medium text-[#4c4a3a]">
+            <input
+              type="checkbox"
+              className="right-find-master-toggle border-[#8bcf9f]"
+              checked={mobileAdvancedSearch}
+              onChange={(e) => setMobileAdvancedSearch(e.target.checked)}
+            />
+            <span>Perincikan pencarian</span>
+          </label>
+
+          {mobileAdvancedSearch && (
+            <div className="space-y-4 pl-4">
+              <label className="flex items-center gap-3 text-[#4c4a3a]">
+                <input
+                  type="checkbox"
+                  className="right-find-switch border-[#8bcf9f]"
+                  checked={mobileFilters.lokasi}
+                  onChange={(e) =>
+                    setMobileFilters((s) => ({
+                      ...s,
+                      lokasi: e.target.checked,
+                    }))
+                  }
+                />
+                <span className="font-medium text-sm">Lokasi</span>
+              </label>
+
+              {mobileFilters.lokasi && (
+                <div className="space-y-2 pl-8 pt-2">
+                  <select
+                    className="block h-10 w-full rounded border-2 border-[#82b7ff] bg-white px-3 text-sm text-[#0088ff] transition-colors focus:border-[#4a8dd6] focus:outline-none"
+                    value={mobileSelectedProvince}
+                    onChange={(e) => {
+                      setMobileSelectedProvince(e.target.value);
+                      setMobileSelectedRegency("");
+                      setMobileRegencies([]);
+                    }}
+                  >
+                    <option value="">Pilih provinsi...</option>
+                    {mobileProvinces.map((p) => (
+                      <option
+                        key={p.id || p.code || p.name}
+                        value={
+                          p.code ||
+                          p.name ||
+                          p.province_name ||
+                          p.title ||
+                          p.id ||
+                          ""
+                        }
+                      >
+                        {p.name || p.province_name || p.title}
+                      </option>
+                    ))}
+                  </select>
+
+                  <select
+                    className="block h-10 w-full rounded border-2 border-[#82b7ff] bg-white px-3 text-sm text-[#0088ff] transition-colors focus:border-[#4a8dd6] focus:outline-none"
+                    value={mobileSelectedRegency}
+                    onChange={(e) => setMobileSelectedRegency(e.target.value)}
+                    disabled={!mobileRegencies.length}
+                  >
+                    <option value="">Pilih kabupaten / kota...</option>
+                    {mobileRegencies.map((r) => (
+                      <option
+                        key={r.id || r.code || r.name}
+                        value={
+                          r.code ||
+                          r.name ||
+                          r.regency_name ||
+                          r.title ||
+                          r.id ||
+                          ""
+                        }
+                      >
+                        {r.name || r.regency_name || r.title}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              )}
+
+              <label className="flex items-center gap-3 text-[#4c4a3a]">
+                <input
+                  type="checkbox"
+                  className="right-find-switch border-[#8bcf9f]"
+                  checked={mobileFilters.jenisKonflik}
+                  onChange={(e) =>
+                    setMobileFilters((s) => ({
+                      ...s,
+                      jenisKonflik: e.target.checked,
+                    }))
+                  }
+                />
+                <span className="font-medium text-sm">Jenis Konflik</span>
+              </label>
+
+              {mobileFilters.jenisKonflik && (
+                <div className="space-y-1.5 pl-8 pt-1.5">
+                  {mobileConflictOptions.map((opt) => (
+                    <label key={opt.id} className="flex items-center gap-2.5">
+                      <input
+                        type="checkbox"
+                        className="h-3.5 w-3.5 cursor-pointer rounded border-2 border-[#e5e5e5] accent-[#3dbc59] transition-colors"
+                        checked={mobileConflictTypes.includes(opt.id)}
+                        onChange={(e) => {
+                          if (e.target.checked) {
+                            setMobileConflictTypes((s) => [...s, opt.id]);
+                          } else {
+                            setMobileConflictTypes((s) =>
+                              s.filter((x) => x !== opt.id),
+                            );
+                          }
+                        }}
+                      />
+                      <span className="text-sm text-[#666666]">
+                        {opt.label}
+                      </span>
+                    </label>
+                  ))}
+                </div>
+              )}
+
+              <div className="border-t border-[#dfddd4] pt-4">
+                <div className="mb-2.5 text-sm font-medium italic text-[#8a8b7a]">
+                  Area pencarian:
+                </div>
+                <div className="flex flex-wrap gap-x-5 gap-y-2">
+                  {[
+                    ["kronik", "Kronik"],
+                    ["tilik", "Tilik"],
+                    ["diskursus", "Diskursus"],
+                    ["tanggapan", "Tanggapan"],
+                  ].map(([key, label]) => (
+                    <label key={key} className="flex items-center gap-1.5">
+                      <input
+                        type="checkbox"
+                        className="h-3.5 w-3.5 cursor-pointer rounded-[2px] border-2 accent-[#3dbc59] transition-colors"
+                        style={{
+                          borderColor: mobileFilters[key]
+                            ? "#3dbc59"
+                            : "#e5e5e5",
+                        }}
+                        checked={mobileFilters[key]}
+                        onChange={(e) =>
+                          setMobileFilters((s) => ({
+                            ...s,
+                            [key]: e.target.checked,
+                          }))
+                        }
+                      />
+                      <span className="text-sm text-[#4c4a3a]">{label}</span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+
+          <div className="flex justify-end pt-3">
+            <button
+              type="button"
+              onClick={handleMobileSearch}
+              className="inline-flex h-11 items-center gap-2 bg-[#6f6c45] px-6 text-sm font-semibold text-white transition-all hover:bg-[#5a5a38] active:scale-95"
+              style={{ borderRadius: "9999px" }}
+            >
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="h-4 w-4"
+                aria-hidden="true"
+              >
+                <circle cx="11" cy="11" r="8" />
+                <path d="m21 21-4.35-4.35" />
+              </svg>
+              Temukan
+            </button>
+          </div>
+        </div>
+      </div>
+
       {/* Mobile bottom navigation: visible on small screens, hidden on md+ */}
       <nav className="mobile-bottom-nav fixed bottom-0 left-0 right-0 z-50 border-t border-[#dfddd4] bg-[#f6f3eb]/95 backdrop-blur lg:hidden">
-        <div className="mx-auto flex h-14 w-full max-w-[1760px] items-center px-4 md:px-6 xl:px-7">
+        <div className="mx-auto flex h-[58px] w-full max-w-[1760px] items-center px-3 md:px-6 xl:px-7">
           <div className="flex w-full gap-1">
             <Link
               to="/"
               onClick={handleLinkClick}
-              className={`flex-1 flex flex-col items-center justify-center text-[11px] py-2 ${isActive("/") ? "mobile-bottom-nav--active" : ""}`}
+              className={`flex-1 flex flex-col items-center justify-center text-[11px] py-1.5 ${isActive("/") ? "mobile-bottom-nav--active" : ""}`}
             >
               {renderNavIcon("beranda", "h-5 w-5")}
-              <span className="mt-1">Beranda</span>
+              <span className="mt-0.5">Beranda</span>
             </Link>
 
             <Link
               to="/article/kronik"
               onClick={handleLinkClick}
-              className={`flex-1 flex flex-col items-center justify-center text-[11px] py-2 ${isActive("/article/kronik") ? "mobile-bottom-nav--active" : ""}`}
+              className={`flex-1 flex flex-col items-center justify-center text-[11px] py-1.5 ${isActive("/article/kronik") ? "mobile-bottom-nav--active" : ""}`}
             >
               {renderNavIcon("kronik", "h-5 w-5")}
-              <span className="mt-1">Kronik</span>
+              <span className="mt-0.5">Kronik</span>
             </Link>
 
             <Link
               to="/article/tilik"
               onClick={handleLinkClick}
-              className={`flex-1 flex flex-col items-center justify-center text-[11px] py-2 ${isActive("/article/tilik") ? "mobile-bottom-nav--active" : ""}`}
+              className={`flex-1 flex flex-col items-center justify-center text-[11px] py-1.5 ${isActive("/article/tilik") ? "mobile-bottom-nav--active" : ""}`}
             >
               {renderNavIcon("tilik", "h-5 w-5")}
-              <span className="mt-1">Tilik</span>
+              <span className="mt-0.5">Tilik</span>
             </Link>
 
             <Link
               to="/article/diskursus"
               onClick={handleLinkClick}
-              className={`flex-1 flex flex-col items-center justify-center text-[11px] py-2 ${isActive("/article/diskursus") ? "mobile-bottom-nav--active" : ""}`}
+              className={`flex-1 flex flex-col items-center justify-center text-[11px] py-1.5 ${isActive("/article/diskursus") ? "mobile-bottom-nav--active" : ""}`}
             >
               {renderNavIcon("diskursus", "h-5 w-5")}
-              <span className="mt-1">Diskursus</span>
+              <span className="mt-0.5">Diskursus</span>
             </Link>
 
             <Link
               to="/profil"
               onClick={handleLinkClick}
-              className={`flex-1 flex flex-col items-center justify-center text-[11px] py-2 ${isActive("/profil") ? "mobile-bottom-nav--active" : ""}`}
+              className={`flex-1 flex flex-col items-center justify-center text-[11px] py-1.5 ${isActive("/profil") ? "mobile-bottom-nav--active" : ""}`}
             >
               {renderNavIcon("profil", "h-5 w-5")}
-              <span className="mt-1">Profil</span>
+              <span className="mt-0.5">Profil</span>
             </Link>
           </div>
         </div>
