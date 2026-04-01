@@ -344,8 +344,8 @@ export default function Navbar() {
   return (
     <>
       <nav className="site-top-nav sticky top-0 z-50 border-b border-[#dfddd4] bg-[#f6f3eb]/95 backdrop-blur">
-        <div className="mx-auto flex h-[72px] w-full max-w-[1760px] items-center px-4 md:px-6 xl:px-7">
-          <div className="flex items-center flex-none">
+        <div className="mx-auto flex h-[72px] w-full max-w-[1760px] items-center justify-between px-4 md:px-6 xl:px-7 lg:grid lg:grid-cols-[auto_1fr_auto]">
+          <div className="flex items-center flex-none lg:justify-self-start">
             <Link className="inline-block mr-6 site-logo" to="/">
               <svg
                 width="60"
@@ -408,8 +408,8 @@ export default function Navbar() {
             </Link>
           </div>
 
-          <div className="hidden flex-1 items-center justify-center lg:flex">
-            <div id="navbar-menu" className="w-full">
+          <div className="hidden items-center justify-center lg:flex lg:justify-self-center lg:mt-[18px]">
+            <div id="navbar-menu" className="w-full lg:w-auto">
               <ul className="flex items-center justify-center gap-7">
                 <li>
                   <Link
@@ -468,7 +468,7 @@ export default function Navbar() {
             {/* mobile burger removed in favor of bottom nav */}
           </div>
 
-          <div className="hidden flex-none justify-end lg:flex">
+          <div className="hidden flex-none justify-end lg:flex lg:justify-self-end">
             <div className="flex items-center justify-end gap-2">
               <div className="urun-daya-container relative">
                 <button

@@ -482,6 +482,233 @@ button:focus-visible {
   box-shadow: none !important;
 }
 
+/* Make right-find switch styles available globally (e.g. Login page) */
+:root:not([data-bs-theme="dark"]) .right-find-master-toggle,
+:root:not([data-bs-theme="dark"]) .right-find-switch {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 36px;
+  height: 22px;
+  border-radius: 999px;
+  border: 1px solid #d9d2bf;
+  background: #f0efe9;
+  position: relative;
+  cursor: pointer;
+  transition:
+    background 160ms ease,
+    border-color 160ms ease;
+}
+
+:root:not([data-bs-theme="dark"]) .right-find-master-toggle::after,
+:root:not([data-bs-theme="dark"]) .right-find-switch::after {
+  content: "";
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #ffffff;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
+  transition:
+    transform 180ms ease,
+    background 160ms ease;
+}
+
+:root:not([data-bs-theme="dark"]) .right-find-master-toggle:checked,
+:root:not([data-bs-theme="dark"]) .right-find-switch:checked {
+  background: var(--telisik-success);
+  border-color: var(--telisik-success);
+}
+
+:root:not([data-bs-theme="dark"]) .right-find-master-toggle:checked::after,
+:root:not([data-bs-theme="dark"]) .right-find-switch:checked::after {
+  transform: translateX(12px);
+  background: #ffffff;
+}
+
+:root:not([data-bs-theme="dark"]) .login-terms-switch {
+  width: 30px;
+  height: 18px;
+  border-color: #bcb8a8;
+  background: #e8e5d8;
+}
+
+:root:not([data-bs-theme="dark"]) .login-terms-switch::after {
+  top: 2px;
+  left: 2px;
+  width: 12px;
+  height: 12px;
+}
+
+:root:not([data-bs-theme="dark"]) .login-terms-switch:checked {
+  background: #7ccf6d;
+  border-color: #7ccf6d;
+}
+
+:root:not([data-bs-theme="dark"]) .login-terms-switch:checked::after {
+  transform: translateX(12px);
+}
+
+/* Login page-specific terms switch tuning */
+:root:not([data-bs-theme="dark"]) .login-terms-switch--login {
+  width: 34px;
+  height: 20px;
+  border-color: #bdb9a8;
+  background: #e9e6da;
+}
+
+:root:not([data-bs-theme="dark"]) .login-terms-switch--login::after {
+  top: 2px;
+  left: 2px;
+  width: 14px;
+  height: 14px;
+}
+
+:root:not([data-bs-theme="dark"]) .login-terms-switch--login:checked::after {
+  transform: translateX(14px);
+}
+
+/* Dark mode equivalent for global right-find switches (Login/Register terms) */
+:root[data-bs-theme="dark"] .right-find-master-toggle,
+:root[data-bs-theme="dark"] .right-find-switch {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 36px;
+  height: 22px;
+  border-radius: 999px;
+  border: 1px solid #5c606a;
+  background: #2e323a;
+  position: relative;
+  cursor: pointer;
+  transition:
+    background 160ms ease,
+    border-color 160ms ease;
+}
+
+:root[data-bs-theme="dark"] .right-find-master-toggle::after,
+:root[data-bs-theme="dark"] .right-find-switch::after {
+  content: "";
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #f5f6f8;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  transition:
+    transform 180ms ease,
+    background 160ms ease;
+}
+
+:root[data-bs-theme="dark"] .right-find-master-toggle:checked,
+:root[data-bs-theme="dark"] .right-find-switch:checked {
+  background: #3ecf7b;
+  border-color: #3ecf7b;
+}
+
+:root[data-bs-theme="dark"] .right-find-master-toggle:checked::after,
+:root[data-bs-theme="dark"] .right-find-switch:checked::after {
+  transform: translateX(12px);
+  background: #ffffff;
+}
+
+:root[data-bs-theme="dark"] .login-terms-switch {
+  width: 30px;
+  height: 18px;
+  border-color: #666a73;
+  background: #3a3e47;
+}
+
+:root[data-bs-theme="dark"] .login-terms-switch::after {
+  top: 2px;
+  left: 2px;
+  width: 12px;
+  height: 12px;
+}
+
+:root[data-bs-theme="dark"] .login-terms-switch:checked {
+  background: #3ecf7b;
+  border-color: #3ecf7b;
+}
+
+:root[data-bs-theme="dark"] .login-terms-switch:checked::after {
+  transform: translateX(12px);
+}
+
+:root[data-bs-theme="dark"] .login-terms-switch--login {
+  width: 34px;
+  height: 20px;
+  border-color: #656a73;
+  background: #3a3f48;
+}
+
+:root[data-bs-theme="dark"] .login-terms-switch--login::after {
+  top: 2px;
+  left: 2px;
+  width: 14px;
+  height: 14px;
+}
+
+:root[data-bs-theme="dark"] .login-terms-switch--login:checked::after {
+  transform: translateX(14px);
+}
+
+/* Login terms layout hardening: keep switch + text aligned and avoid narrow text column */
+.login-terms-block {
+  width: 100%;
+}
+
+.login-terms-row {
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr);
+  column-gap: 10px;
+  align-items: start;
+  width: 100%;
+}
+
+.login-terms-copy {
+  display: block;
+  min-width: 0;
+  max-width: 100%;
+  white-space: normal;
+  overflow-wrap: break-word;
+  word-break: normal;
+}
+
+/* Register cancel buttons: enforce pill outline style consistently */
+.register-cancel-btn {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border-radius: 9999px !important;
+  border: 1px solid #ff3f6e !important;
+  background: transparent !important;
+  color: #ff3f6e !important;
+  font-weight: 600 !important;
+  line-height: 1 !important;
+  transition: background-color 150ms ease !important;
+}
+
+.register-cancel-btn:hover {
+  background: rgba(255, 63, 110, 0.08) !important;
+}
+
+.register-cancel-btn--top {
+  height: 32px !important;
+  min-width: 102px !important;
+  padding: 0 16px !important;
+  font-size: 0.98rem !important;
+}
+
+.register-cancel-btn--picker {
+  height: 40px !important;
+  min-width: 122px !important;
+  padding: 0 20px !important;
+  font-size: 1rem !important;
+}
+
 /* Light mode: keep 'Area pencarian' aligned like Home reference */
 :root:not([data-bs-theme="dark"]) .home-right-rail .right-find-area-grid--home,
 :root:not([data-bs-theme="dark"])
