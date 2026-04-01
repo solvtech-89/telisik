@@ -193,7 +193,7 @@ function ParagraphEditor({
             <div key={idx} className="relative mb-4">
               <p dangerouslySetInnerHTML={{ __html: p.innerHTML }} />
               <span
-                className={`pointer-events-none absolute right-2 top-1 rounded border border-gray-200 bg-white/95 px-1.5 py-0.5 text-xs font-semibold ${colorClass}`}
+                className={`pointer-events-none absolute right-2 top-1 rounded border border-gray-200 bg-[#F9F6EF]/95 px-1.5 py-0.5 text-xs font-semibold ${colorClass}`}
               >
                 {remaining}
               </span>
@@ -280,7 +280,7 @@ function DateTimePicker({ value, onChange, selectedTimezone }) {
         ref={inputRef}
         type="text"
         placeholder="Pilih tanggal dan waktu"
-        className="datetime-input h-10 w-full min-w-[220px] rounded-md border border-gray-300 bg-white px-3 text-sm text-gray-700 focus:border-[#0088ff] focus:outline-none focus:ring-2 focus:ring-[#0088ff]/15"
+        className="datetime-input h-10 w-full min-w-[220px] rounded-md border border-gray-300 bg-[#F9F6EF] px-3 text-sm text-gray-700 focus:border-[#0088ff] focus:outline-none focus:ring-2 focus:ring-[#0088ff]/15"
       />
       <span className="timezone-badge ml-2">{selectedTimezone}</span>
     </div>
@@ -481,7 +481,7 @@ function TimelineEditor({
             <div key={idx} className="relative mb-4">
               <p dangerouslySetInnerHTML={{ __html: p.innerHTML }} />
               <span
-                className={`pointer-events-none absolute right-2 top-1 rounded border border-gray-200 bg-white/95 px-1.5 py-0.5 text-xs font-semibold ${colorClass}`}
+                className={`pointer-events-none absolute right-2 top-1 rounded border border-gray-200 bg-[#F9F6EF]/95 px-1.5 py-0.5 text-xs font-semibold ${colorClass}`}
               >
                 {remaining}
               </span>

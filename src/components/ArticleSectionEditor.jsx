@@ -133,7 +133,7 @@ export default function ArticleSectionEditor({
                 }}
               />
               <span
-                className={`pointer-events-none absolute right-2 top-1 rounded border border-gray-200 bg-white/95 px-1.5 py-0.5 text-xs font-semibold ${colorClass}`}
+                className={`pointer-events-none absolute right-2 top-1 rounded border border-gray-200 bg-[#F9F6EF]/95 px-1.5 py-0.5 text-xs font-semibold ${colorClass}`}
               >
                 {remaining}
               </span>
@@ -164,7 +164,7 @@ export default function ArticleSectionEditor({
       ) : editor && !editor.isEmpty ? (
         <div className="editor-content-preview">{renderUnfocusedContent()}</div>
       ) : (
-        <p className="min-h-[120px] cursor-pointer rounded-md border border-dashed border-gray-300 bg-white px-4 py-4 italic text-gray-400">
+        <p className="min-h-[120px] cursor-pointer rounded-md border border-dashed border-gray-300 bg-[#F9F6EF] px-4 py-4 italic text-gray-400">
           Tulis paparan {section.title}
         </p>
       )}

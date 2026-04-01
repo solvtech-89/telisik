@@ -261,14 +261,14 @@ export default function ArticlePage() {
   }
 
   return (
-    <div className="article-page-shell flex min-h-screen flex-col bg-[#f7f5ef] xl:h-[calc(100vh-60px)] xl:min-h-0 xl:overflow-hidden">
+    <div className="article-page-shell dashboard-article-shell flex min-h-screen flex-col bg-[#F9F6EF] xl:h-[calc(100vh-60px)] xl:min-h-0 xl:overflow-hidden">
       <ArticleEditModeModal
         show={showModal}
         onConfirm={handleConfirmEditMode}
         onCancel={handleCancelEditMode}
       />
 
-      <div className="w-[98%] mx-auto mt-2">
+      <div className="w-[96%] mx-auto mt-2">
         <Alert
           type={alert.type}
           message={alert.message}
@@ -283,8 +283,8 @@ export default function ArticlePage() {
             <div
               className={
                 collapsed
-                  ? "article-left-rail hidden h-full overflow-y-scroll overflow-x-hidden border-r border-[#dfddd4] bg-[#f7f5ef] transition-[width] duration-200 lg:col-span-1 lg:block lg:w-[52px]"
-                  : "article-left-rail hidden h-full overflow-y-scroll overflow-x-hidden border-r border-[#dfddd4] bg-[#f7f5ef] pb-5 transition-[width] duration-200 lg:col-span-3 lg:block"
+                  ? "article-left-rail dashboard-article-left hidden h-full overflow-y-scroll overflow-x-hidden border-r border-[#dfddd4] bg-[#F9F6EF] transition-[width] duration-200 lg:col-span-1 lg:block lg:w-[56px]"
+                  : "article-left-rail dashboard-article-left hidden h-full overflow-y-scroll overflow-x-hidden border-r border-[#dfddd4] bg-[#F9F6EF] pb-5 transition-[width] duration-200 lg:col-span-2 lg:block"
               }
             >
               <SidebarNav
@@ -297,8 +297,8 @@ export default function ArticlePage() {
 
             <div
               id="middle-col-scroll"
-              className={`article-main-panel h-full min-h-0 min-w-0 overflow-x-hidden overflow-y-auto border-x border-[#e2e0d8] bg-[#faf8f1] pb-5 transition-[width] duration-200 lg:overflow-y-scroll lg:max-h-none ${
-                collapsed ? "lg:col-span-8" : "lg:col-span-6"
+              className={`article-main-panel dashboard-article-main h-full min-h-0 min-w-0 overflow-x-hidden overflow-y-auto border-x border-[#e2e0d8] bg-[#F9F6EF] pb-5 transition-[width] duration-200 lg:overflow-y-scroll lg:max-h-none ${
+                collapsed ? "lg:col-span-8" : "lg:col-span-7"
               }`}
             >
               <div className="p-3">
@@ -367,13 +367,25 @@ export default function ArticlePage() {
                 ))
               )}
               <div className="px-3 pb-3">
+                <div className="dashboard-revision-wrap mb-5">
+                  <h2 className="dashboard-revision-title">
+                    Riwayat Penyuntingan & Kontributor
+                  </h2>
+                  <p className="dashboard-revision-copy">
+                    Pantau jejak perubahan naskah dari waktu ke waktu untuk
+                    menjaga akurasi serta transparansi kontribusi.
+                  </p>
+                  <div className="dashboard-callout-cta">
+                    Seruan/ajakan/lainnya
+                  </div>
+                </div>
                 <CommentsSection articleSlug={slug} tipe={tipe} />
               </div>
             </div>
 
-            <div className="article-right-rail h-full min-h-0 min-w-0 overflow-x-hidden overflow-y-auto border-l border-[#dfddd4] bg-[#f7f5ef] px-3 pb-5 lg:col-span-3 lg:overflow-y-scroll lg:max-h-none">
-              <div className="right-sidebar-shell px-1 py-1">
-                <div className="right-find-shell mb-4">
+            <div className="article-right-rail dashboard-article-right h-full min-h-0 min-w-0 overflow-x-hidden overflow-y-auto border-l border-[#dfddd4] bg-[#F9F6EF] px-3 pb-5 lg:col-span-3 lg:overflow-y-scroll lg:max-h-none">
+              <div className="right-sidebar-shell dashboard-right-sidebar px-1 py-1">
+                <div className="right-find-shell dashboard-find-shell mb-4">
                   <div className="mb-3">
                     <h3
                       className="right-find-title mb-0 text-[2rem] font-bold text-[#FC6736]"
@@ -387,7 +399,7 @@ export default function ArticlePage() {
                     <div className="relative flex-1">
                       <input
                         type="text"
-                        className="right-find-input w-full rounded-full border border-[#ddd9ce] bg-[#FFFFFF] px-4 py-2 pr-12 text-[0.95rem] text-[#555333] focus:outline-none focus:ring-2 focus:ring-[#9ab1d3]"
+                        className="right-find-input w-full rounded-full border border-[#ddd9ce] bg-[#F9F6EF] px-4 py-2 pr-12 text-[0.95rem] text-[#555333] focus:outline-none focus:ring-2 focus:ring-[#9ab1d3]"
                         placeholder="Temukan..."
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
@@ -555,40 +567,88 @@ export default function ArticlePage() {
                 </div>
               </div>
 
-              {canEdit && (
+              {/* Panel Tanggapi/Sunting — tampil untuk semua user yang login */}
+              {user && (
                 <div
-                  className={`admin-edit-panel mb-4 rounded-2xl border-2 border-blue-300 bg-blue-50 p-4 shadow-sm shadow-blue-100 ${
-                    isEditMode ? "admin-edit-panel-active" : ""
+                  id="edit-mode-panel"
+                  className={`edit-mode-panel mb-4 overflow-hidden rounded-lg border transition-all duration-200 ${
+                    isEditMode
+                      ? "border-[#b8d4a8] bg-[#f3f8ef]"
+                      : "border-[#d4c9b0] bg-[#f5f1e8]"
                   }`}
+                  style={{ cursor: "pointer" }}
+                  onClick={() => {
+                    if (!isEditMode) {
+                      setShowModal(true);
+                    } else {
+                      setIsEditMode(false);
+                    }
+                  }}
                 >
-                  <div className="flex items-center gap-3 mb-3">
-                    <label className="flex items-center mb-0">
-                      <input
-                        className="admin-edit-toggle mr-2 h-4 w-4 rounded border-neutral-300 text-green-600 focus:ring-green-200"
-                        type="checkbox"
-                        id="editModeToggle"
-                        checked={isEditMode}
-                        onChange={handleEditModeToggle}
+                  {/* Hidden checkbox untuk accessibility / backward compat */}
+                  <input
+                    type="checkbox"
+                    id="editModeToggle"
+                    className="sr-only"
+                    checked={isEditMode}
+                    onChange={handleEditModeToggle}
+                    tabIndex={-1}
+                    onClick={(e) => e.stopPropagation()}
+                  />
+
+                  {/* ── Header row ─────────────────────────── */}
+                  <div className="flex items-center gap-2.5 px-3 py-2.5">
+                    {/* iOS-style toggle switch */}
+                    <span
+                      className="relative inline-flex flex-shrink-0 items-center rounded-full transition-colors duration-200"
+                      style={{
+                        width: "34px",
+                        height: "20px",
+                        background: isEditMode ? "#4a9a2e" : "#c8c4b4",
+                      }}
+                    >
+                      <span
+                        className="absolute rounded-full bg-white shadow transition-transform duration-200"
+                        style={{
+                          width: "14px",
+                          height: "14px",
+                          left: "3px",
+                          transform: isEditMode ? "translateX(14px)" : "translateX(0)",
+                        }}
                       />
-                    </label>
-                    <h3 className="admin-edit-title mb-0 text-xl font-bold text-neutral-700">
+                    </span>
+                    <h3
+                      className="m-0 flex-1 text-[0.88rem] font-bold leading-tight"
+                      style={{ color: isEditMode ? "#4a7a2e" : "#ef5f2f" }}
+                    >
                       Tanggapi/Sunting Sekarang
                     </h3>
-                    <span
-                      className={`admin-edit-status ml-auto rounded-full px-3 py-1 text-xs font-semibold ${
-                        isEditMode ? "admin-edit-status-active" : ""
-                      }`}
-                    >
-                      {isEditMode ? "Mode Aktif" : "Mode Nonaktif"}
-                    </span>
+                    {isEditMode && (
+                      <span
+                        className="rounded-full px-2 py-0.5 text-[0.7rem] font-semibold"
+                        style={{
+                          background: "rgba(90,138,58,0.12)",
+                          color: "#4a7a2e",
+                        }}
+                      >
+                        Aktif
+                      </span>
+                    )}
                   </div>
 
-                  <div className="admin-edit-actions mb-3 flex items-center gap-3 text-[0.95rem] text-neutral-600">
-                    <span className="flex items-center gap-2">
+                  {/* ── Tab icons row ───────────────────────── */}
+                  <div
+                    className="flex items-center gap-4 border-t px-3 py-2"
+                    style={{ borderTopColor: isEditMode ? "#c8dfc0" : "#e0d7c4" }}
+                  >
+                    <span
+                      className="flex items-center gap-1.5 text-[0.8rem]"
+                      style={{ color: "#6b7260" }}
+                    >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
-                        width="20"
-                        height="20"
+                        width="15"
+                        height="15"
                         viewBox="0 0 24 24"
                         fill="none"
                         stroke="currentColor"
@@ -596,15 +656,18 @@ export default function ArticlePage() {
                         strokeLinecap="round"
                         strokeLinejoin="round"
                       >
-                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
                       </svg>
                       <span className="italic">Tanggapi</span>
                     </span>
-                    <span className="flex items-center gap-2">
+                    <span
+                      className="flex items-center gap-1.5 text-[0.8rem]"
+                      style={{ color: "#6b7260" }}
+                    >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
-                        width="20"
-                        height="20"
+                        width="15"
+                        height="15"
                         viewBox="0 0 24 24"
                         fill="none"
                         stroke="currentColor"
@@ -612,23 +675,29 @@ export default function ArticlePage() {
                         strokeLinecap="round"
                         strokeLinejoin="round"
                       >
-                        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
-                        <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+                        <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
                       </svg>
                       <span className="italic">Sunting</span>
                     </span>
                   </div>
 
-                  <p className="admin-edit-description mb-0 text-sm leading-6 text-neutral-600">
-                    <span className="admin-edit-highlight font-medium text-blue-600">
+                  {/* ── Deskripsi ───────────────────────────── */}
+                  <p
+                    className="px-3 pb-3 pt-1 text-[0.8rem] leading-[1.55]"
+                    style={{ color: isEditMode ? "#4a7a2e" : "#ef5f2f" }}
+                  >
+                    <span className="font-medium">
                       {isDiskursus
-                        ? 'Klik tombol "Tanggapi" atau "Sunting" di bawah konten.'
-                        : 'Klik tombol "Tanggapi" atau "Sunting" di bawah paragraf sasaran.'}
+                        ? 'Klik "Tanggapi" atau "Sunting" di bawah konten.'
+                        : "Aktifkan mode sunting & komentar per bagian."}
                     </span>{" "}
-                    <span className="admin-edit-subtext italic text-neutral-500">
+                    <span className="italic" style={{ color: "#9a7040" }}>
                       {isDiskursus
                         ? "Jadikan Diskursus ini makin bermutu."
-                        : "Jadikan Kronik ini makin perinci terdokumentasi."}
+                        : `Tanggapi atau sunting agar ${
+                            tipe === "tilik" ? "Tilik" : "Kronik"
+                          } ini makin perinci terdokumentasi.`}
                     </span>
                   </p>
                 </div>

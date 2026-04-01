@@ -232,17 +232,17 @@ export default function CommentsSection({ articleSlug, tipe }) {
 
   if (loading) {
     return (
-      <div className="w-full">
-        <h2 className="mb-2 text-2xl text-[#ff6b35]">Tanggapan</h2>
+      <div className="dashboard-comments w-full">
+        <h2 className="dashboard-comments-title">Tanggapan</h2>
         <div className="p-8 text-center text-gray-400">Loading comments...</div>
       </div>
     );
   }
 
   return (
-    <div className="w-full">
-      <h2 className="mb-2 text-2xl text-[#ff6b35]">Tanggapan</h2>
-      <hr className="mb-6 mt-1 border-gray-300" />
+    <div className="dashboard-comments w-full">
+      <h2 className="dashboard-comments-title">Tanggapan</h2>
+      <hr className="dashboard-comments-divider" />
       {comments.length === 0 ? (
         <p className="p-8 text-center text-gray-400">Belum ada tanggapan</p>
       ) : (

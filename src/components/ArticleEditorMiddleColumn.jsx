@@ -9,6 +9,22 @@ import TimelineEditor from "./TimelineEditor";
 import TitleEditor from "./TitleEditor";
 import { Alert } from "./ui";
 
+/* Ikon dekoratif untuk section header */
+const SectionDot = () => (
+  <span
+    style={{
+      display: "inline-block",
+      width: 8,
+      height: 8,
+      borderRadius: "50%",
+      background: "#ef5f2f",
+      marginRight: "0.45rem",
+      verticalAlign: "middle",
+      flexShrink: 0,
+    }}
+  />
+);
+
 export default function ArticleEditorMiddleColumn({
   articleType,
   collapsed,
@@ -48,24 +64,30 @@ export default function ArticleEditorMiddleColumn({
           : collapsed
             ? "md:col-span-8"
             : "md:col-span-7"
-      } lg:col-span-1 lg:col-start-2 h-full min-h-0 border-x border-[#e2e0d8] bg-[#faf8f1] px-5 py-5 ${
+      } lg:col-span-1 lg:col-start-2 h-full min-h-0 border-x border-[#e2dfd4] bg-[#F9F6EF] px-5 py-5 ${
         !isMobile ? "overflow-y-scroll" : ""
       }`}
     >
-      <div className="mt-2 mb-3">
+      {/* Alert */}
+      <div className="mt-1 mb-3">
         <Alert
           type={alert.type}
           message={alert.message}
           onClose={() => setAlert({ type: "", message: "" })}
         />
       </div>
+
+      {/* Judul artikel */}
       <TitleEditor
         value={title}
         onChange={setTitle}
         articleType={articleType}
       />
 
+      {/* Lead / Excerpt */}
       <ExcerptEditor value={excerpt} onChange={setExcerpt} />
+
+      {/* Hint lead */}
       <EditorHintBox>
         Lead sebaiknya berupa{" "}
         <span className="text-blue-600">
@@ -74,6 +96,8 @@ export default function ArticleEditorMiddleColumn({
         agar pembaca lanjut menelaah paparan—maksimal 155 karakter termasuk
         spasi.
       </EditorHintBox>
+
+      {/* ── Konten Diskursus ─────────────────────────────── */}
       {isDiskursus ? (
         <>
           <DiskursusContentEditor
@@ -93,6 +117,7 @@ export default function ArticleEditorMiddleColumn({
           </EditorHintBox>
         </>
       ) : (
+        /* ── Sections (Kronik / Tilik) ─────────────────── */
         sections.map((section) =>
           isTimelineSection(section.key) ? (
             <TimelineEditor
@@ -106,12 +131,23 @@ export default function ArticleEditorMiddleColumn({
             />
           ) : (
             <React.Fragment key={section.id}>
-              <div id={section.key}>
-                <h2 className="mb-2 text-2xl font-semibold text-telisik">
+              <div id={section.key} className="section-block">
+                {/* Section heading — sesuai gaya artikel published */}
+                <h2
+                  className="editor-section-heading flex items-center gap-1 mb-2"
+                  style={{
+                    color: "#ef5f2f",
+                    fontWeight: 700,
+                    fontSize: "1.7rem",
+                    lineHeight: 1.2,
+                    letterSpacing: "-0.01em",
+                  }}
+                >
+                  <SectionDot />
                   {section.title}
                 </h2>
 
-                <EditorHintBox className="mt-2">
+                <EditorHintBox className="mt-1 mb-2">
                   Manfaatkan{" "}
                   <span className="text-blue-600">styling tools</span> (bold,
                   italic, numbering, footnote, dsb.) Tiap paragraf maksimal 560
@@ -130,14 +166,27 @@ export default function ArticleEditorMiddleColumn({
                   footnoteMap={footnoteMap}
                 />
               </div>
-              <hr className="my-5 border-gray-200" />
+
+              {/* Divider antar section — sesuai gambar referensi */}
+              <hr
+                className="section-divider"
+                style={{
+                  border: "none",
+                  borderTop: "1px solid #dfd7c7",
+                  margin: "1.25rem 0",
+                }}
+              />
             </React.Fragment>
           ),
         )
       )}
+
+      {/* ── Actor Interest Manager ────────────────────────── */}
       {!isDiskursus && (
         <ActorInterestManager actors={actors} setActors={setActors} />
       )}
+
+      {/* ── Footnotes ─────────────────────────────────────── */}
       <FootnotesList footnotes={orderedFootnotes} />
     </div>
   );

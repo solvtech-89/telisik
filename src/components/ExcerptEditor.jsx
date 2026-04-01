@@ -84,8 +84,8 @@ export default function ExcerptEditor({ value, onChange, maxLength = 155 }) {
         onPaste={handlePaste}
         onFocus={handleFocus}
         onBlur={handleBlur}
-        className={`mt-4 min-h-[60px] w-full rounded border-none bg-transparent px-3 pr-[70px] text-[22px] font-semibold leading-tight outline-none [overflow-wrap:anywhere] ${
-          isPlaceholder ? "text-[#CECB9C]" : "text-[#555333]"
+        className={`editor-article-excerpt mt-4 min-h-[60px] w-full rounded border-none bg-transparent px-3 pr-[70px] text-[22px] font-semibold leading-tight outline-none [overflow-wrap:anywhere] ${
+          isPlaceholder ? "text-[#CECB9C]" : "text-[#FC6736]"
         }`}
       >
         {placeholderText}

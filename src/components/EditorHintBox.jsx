@@ -3,7 +3,7 @@ import React from "react";
 export default function EditorHintBox({ children, className = "" }) {
   return (
     <div
-      className={`flex items-start gap-3 rounded border border-yellow-200 bg-yellow-50 p-3 text-sm text-yellow-800 ${className}`}
+      className={`editor-hint-box flex items-start gap-3 rounded border p-3 text-sm ${className}`}
     >
       <svg
         width="16"
