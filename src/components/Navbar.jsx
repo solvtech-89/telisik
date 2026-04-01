@@ -487,7 +487,7 @@ export default function Navbar() {
               <img
                 src={loginButtonIcon}
                 alt="Login"
-                className="h-9 w-9 object-contain"
+                className="h-7 object-contain"
               />
             </Link>
 
@@ -499,7 +499,7 @@ export default function Navbar() {
               <img
                 src={telisikLogoIcon}
                 alt="Telisik"
-                className="h-8 w-[92px] object-contain"
+                className="h-7 object-contain"
               />
             </Link>
 
@@ -536,7 +536,7 @@ export default function Navbar() {
                 <img
                   src={gButtonIcon}
                   alt="G Button"
-                  className="h-8 w-8 object-contain"
+                  className="h-4 w-4 object-contain"
                 />
               </button>
             </div>
@@ -990,7 +990,7 @@ export default function Navbar() {
               onClick={handleLinkClick}
               className={`flex-1 flex flex-col items-center justify-center text-[11px] py-1.5 ${isActive("/") ? "mobile-bottom-nav--active" : ""}`}
             >
-              {renderNavIcon("beranda", "h-5 w-5")}
+              {renderNavIcon("beranda", "h-3 w-3")}
               <span className="mt-0.5">Beranda</span>
             </Link>
 
@@ -999,7 +999,7 @@ export default function Navbar() {
               onClick={handleLinkClick}
               className={`flex-1 flex flex-col items-center justify-center text-[11px] py-1.5 ${isActive("/article/kronik") ? "mobile-bottom-nav--active" : ""}`}
             >
-              {renderNavIcon("kronik", "h-5 w-5")}
+              {renderNavIcon("kronik", "h-3 w-3")}
               <span className="mt-0.5">Kronik</span>
             </Link>
 
@@ -1008,7 +1008,7 @@ export default function Navbar() {
               onClick={handleLinkClick}
               className={`flex-1 flex flex-col items-center justify-center text-[11px] py-1.5 ${isActive("/article/tilik") ? "mobile-bottom-nav--active" : ""}`}
             >
-              {renderNavIcon("tilik", "h-5 w-5")}
+              {renderNavIcon("tilik", "h-3 w-3")}
               <span className="mt-0.5">Tilik</span>
             </Link>
 
@@ -1017,7 +1017,7 @@ export default function Navbar() {
               onClick={handleLinkClick}
               className={`flex-1 flex flex-col items-center justify-center text-[11px] py-1.5 ${isActive("/article/diskursus") ? "mobile-bottom-nav--active" : ""}`}
             >
-              {renderNavIcon("diskursus", "h-5 w-5")}
+              {renderNavIcon("diskursus", "h-3 w-3")}
               <span className="mt-0.5">Diskursus</span>
             </Link>
 
@@ -1026,7 +1026,7 @@ export default function Navbar() {
               onClick={handleLinkClick}
               className={`flex-1 flex flex-col items-center justify-center text-[11px] py-1.5 ${isActive("/profil") ? "mobile-bottom-nav--active" : ""}`}
             >
-              {renderNavIcon("profil", "h-5 w-5")}
+              {renderNavIcon("profil", "h-3 w-3")}
               <span className="mt-0.5">Profil</span>
             </Link>
           </div>

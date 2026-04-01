@@ -242,7 +242,7 @@ export default function RegisterPage() {
 
   return (
     <div className="min-h-screen px-4" style={{ background: "inherit" }}>
-      <div className="mx-auto w-full max-w-[620px] pb-12">
+      <div className="mx-auto w-full max-w-full pb-12">
         <div className="flex items-center justify-between pt-4 md:pt-5">
           <button
             type="button"
@@ -325,7 +325,8 @@ export default function RegisterPage() {
             </button>
           </div>
         </div>
-
+      </div>
+      <div className="mx-auto w-full max-w-[620px] pb-12">
         {/* Header */}
         <div className="pt-9 pb-6 md:pt-10 md:pb-7">
           <h1 className="text-[2.5rem] font-semibold leading-[1.02] tracking-[-0.01em] text-[#555333]">
@@ -353,7 +354,10 @@ export default function RegisterPage() {
         )}
 
         {/* Registration Form */}
-        <form onSubmit={handleSubmit} className="w-full space-y-5 md:space-y-6">
+        <form
+          onSubmit={handleSubmit}
+          className="w-full space-y-4 md:-space-y-5"
+        >
           <div className="flex w-full flex-col gap-4 sm:flex-row sm:gap-5">
             {/* Email Input */}
             <div className="w-full min-w-0 flex-1 sm:w-1/2">
@@ -658,7 +662,7 @@ export default function RegisterPage() {
           </div>
 
           {/* Terms Checkbox */}
-          <div className="flex w-full items-start gap-3 pt-2">
+          <div className="flex w-full items-start gap-3 pt-2 mt-3">
             <span className="inline-flex h-[1.55rem] w-[34px] flex-shrink-0 items-center">
               <input
                 type="checkbox"
@@ -695,7 +699,7 @@ export default function RegisterPage() {
           </div>
 
           {/* Submit Button */}
-          <div className="">
+          <div className="mt-5">
             <button
               type="submit"
               disabled={!agreed || !passwordsMatch || loading}

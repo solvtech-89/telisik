@@ -116,9 +116,9 @@ export default function ActorInterestManager({ actors, setActors }) {
         </div>
 
         {actors.length > 0 ? (
-          <div className="overflow-x-auto rounded-lg border border-gray-200 bg-white">
+          <div className="editor-actor-table-wrap overflow-x-auto rounded-lg border border-gray-200 bg-[#F9F6EF]">
             <table className="min-w-full text-sm">
-              <thead className="sticky top-0 bg-gray-50">
+              <thead className="editor-actor-table-head sticky top-0 bg-[#f4f1e8]">
                 <tr>
                   <th className="px-3 py-3 text-left font-semibold text-gray-700">
                     Nama
@@ -167,7 +167,7 @@ export default function ActorInterestManager({ actors, setActors }) {
             </table>
           </div>
         ) : (
-          <p className="mt-3 italic text-gray-400">
+          <p className="editor-actor-empty mt-3 italic text-gray-400">
             Belum ada aktor yang ditambahkan
           </p>
         )}
@@ -183,7 +183,10 @@ export default function ActorInterestManager({ actors, setActors }) {
             <Button variant="outline" onClick={closeModal}>
               Batal
             </Button>
-            <Button className="bg-blue-600 hover:bg-blue-700" onClick={handleAddActor}>
+            <Button
+              className="bg-blue-600 hover:bg-blue-700"
+              onClick={handleAddActor}
+            >
               {editingIndex !== null ? "Simpan" : "Tambah"}
             </Button>
           </>
@@ -260,7 +263,7 @@ export default function ActorInterestManager({ actors, setActors }) {
               Catatan
             </label>
             <textarea
-              className="w-full rounded-lg border-2 border-gray-300 px-3 py-2 text-sm placeholder:text-gray-400 focus:border-telisik focus:outline-none focus:ring-2 focus:ring-telisik/10"
+              className="editor-actor-note w-full rounded-lg border-2 border-gray-300 bg-[#F9F6EF] px-3 py-2 text-sm placeholder:text-gray-400 focus:border-telisik focus:outline-none focus:ring-2 focus:ring-telisik/10"
               rows="3"
               value={currentActor.note}
               onChange={(e) =>

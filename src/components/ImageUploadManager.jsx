@@ -71,9 +71,6 @@ function ImageUploadManager({
     const [mainImage] = reordered.splice(index, 1);
     reordered.unshift(mainImage);
     setImages(reordered);
-    if (onImagesChange) {
-      onImagesChange(reordered);
-    }
     setCurrentIndex(0);
   };
 
@@ -116,15 +113,8 @@ function ImageUploadManager({
   });
 
   return (
-    <div>
-      <h3
-        style={{
-          fontSize: "20px",
-          fontWeight: "600",
-          color: "#ef4444",
-          marginBottom: "16px",
-        }}
-      >
+    <div className="editor-side-card editor-image-card">
+      <h3 className="editor-side-title" style={{ marginBottom: "16px" }}>
         Gambar{" "}
         {images.length > 0 && (
           <span className="inline-flex items-center bg-red-600 text-white text-xs rounded-full px-2 py-0.5 ml-2">
@@ -144,15 +134,15 @@ function ImageUploadManager({
             textAlign: "center",
             cursor: "pointer",
             transition: "all 0.2s",
-            backgroundColor: "#fafafa",
+            backgroundColor: "#f9f6ef",
           }}
           onMouseEnter={(e) => {
             e.currentTarget.style.borderColor = "#3b82f6";
-            e.currentTarget.style.backgroundColor = "#eff6ff";
+            e.currentTarget.style.backgroundColor = "#edf6ff";
           }}
           onMouseLeave={(e) => {
             e.currentTarget.style.borderColor = "#e5e7eb";
-            e.currentTarget.style.backgroundColor = "#fafafa";
+            e.currentTarget.style.backgroundColor = "#f9f6ef";
           }}
         >
           <Upload size={32} color="#9ca3af" style={{ marginBottom: "8px" }} />
@@ -220,7 +210,7 @@ function ImageUploadManager({
               alignItems: "center",
               marginBottom: "12px",
               padding: "8px 12px",
-              backgroundColor: "#f8f9fa",
+              backgroundColor: "#f9f6ef",
               borderRadius: "6px",
             }}
           >
@@ -252,7 +242,7 @@ function ImageUploadManager({
                   padding: "4px 8px",
                   border: "1px solid #dee2e6",
                   borderRadius: "4px",
-                  backgroundColor: currentIndex === 0 ? "#e9ecef" : "white",
+                  backgroundColor: currentIndex === 0 ? "#ece9dd" : "#f9f6ef",
                   cursor: currentIndex === 0 ? "not-allowed" : "pointer",
                   opacity: currentIndex === 0 ? 0.5 : 1,
                 }}
@@ -268,7 +258,7 @@ function ImageUploadManager({
                   border: "1px solid #dee2e6",
                   borderRadius: "4px",
                   backgroundColor:
-                    currentIndex === images.length - 1 ? "#e9ecef" : "white",
+                    currentIndex === images.length - 1 ? "#ece9dd" : "#f9f6ef",
                   cursor:
                     currentIndex === images.length - 1
                       ? "not-allowed"
@@ -292,7 +282,7 @@ function ImageUploadManager({
               overflow: "hidden",
               border: "2px solid #e5e7eb",
               marginBottom: "16px",
-              backgroundColor: "#f8f9fa",
+              backgroundColor: "#f9f6ef",
             }}
           >
             <img
@@ -320,7 +310,7 @@ function ImageUploadManager({
                   onClick={() => handleSetAsMain(currentIndex)}
                   style={{
                     padding: "6px 10px",
-                    backgroundColor: "rgba(255, 255, 255, 0.95)",
+                    backgroundColor: "rgba(249, 246, 239, 0.95)",
                     border: "1px solid #e5e7eb",
                     borderRadius: "4px",
                     cursor: "pointer",
@@ -472,7 +462,7 @@ function ImageUploadManager({
               padding: "8px",
               border: "1px dashed #3b82f6",
               borderRadius: "6px",
-              backgroundColor: "#eff6ff",
+              backgroundColor: "#edf6ff",
               cursor: "pointer",
               fontSize: "13px",
               fontWeight: "500",
@@ -508,7 +498,7 @@ function ImageUploadManager({
             gap: "6px",
             marginTop: "16px",
             padding: "12px",
-            backgroundColor: "#f8f9fa",
+            backgroundColor: "#f9f6ef",
             borderRadius: "6px",
           }}
         >

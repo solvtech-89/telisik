@@ -4,6 +4,7 @@ import { API_BASE } from "../config";
 import { useAuth } from "../AuthContext";
 import Input from "../components/ui/Input";
 import Alert from "../components/ui/Alert";
+import { Button } from "../components/ui";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -28,6 +29,17 @@ export default function LoginPage() {
     const newTheme = currentTheme === "light" ? "dark" : "light";
     document.documentElement.setAttribute("data-bs-theme", newTheme);
     localStorage.setItem("theme", newTheme);
+  };
+
+  const handleFakeLogin = () => {
+    // Simulate a successful login with dummy data
+    const dummyUser = {
+      id: 1,
+      name: "Demo User",
+      email: "test",
+    };
+    login("dummy_access_token", dummyUser);
+    navigate(redirectAfterLogin, { replace: true });
   };
 
   const handleSubmit = async (e) => {
@@ -67,7 +79,7 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen px-4" style={{ background: "inherit" }}>
-      <div className="mx-auto w-full max-w-[620px] pb-4">
+      <div className="mx-auto w-full max-w-full pb-4">
         <div className="flex items-center justify-between pt-4 md:pt-5">
           <button
             type="button"
@@ -289,16 +301,16 @@ export default function LoginPage() {
 
           {/* Submit Button */}
           <div className="pt-2 pl-[44px]">
-            <button
+            {/* <button
               type="submit"
               disabled={!agreed || loading}
               className="h-[40px] min-w-[150px] rounded-full border border-[#cbc7b8] bg-[#bebaa6] px-7 text-[2rem] font-semibold tracking-tight text-[#F9F6EF] shadow-[0_0_0_2px_#e8e3d2,0_0_0_6px_#d9d3bf,inset_0_1px_0_rgba(255,255,255,0.45)] hover:bg-[#b5b198] active:bg-[#aba68d] disabled:opacity-100 disabled:bg-[#bebaa6] disabled:border-[#cbc7b8] disabled:text-[#F9F6EF]"
               style={{ borderRadius: "9999px" }}
             >
               {loading ? "Memuat..." : "Masuk Log"}
-            </button>
+            </button> */}
 
-            {/* <Button
+            <Button
               type="button"
               fullWidth
               size="sm"
@@ -307,7 +319,7 @@ export default function LoginPage() {
               onClick={handleFakeLogin}
             >
               Login Demo
-            </Button> */}
+            </Button>
           </div>
         </form>
       </div>

@@ -1738,6 +1738,147 @@ button:focus-visible {
   display: block;
 }
 
+/* Logged-in article dashboard refinement (desktop) */
+@media (min-width: 1024px) {
+  .dashboard-article-shell {
+    background: #f9f6ef;
+  }
+
+  .dashboard-article-left,
+  .dashboard-article-right {
+    background: #f9f6ef !important;
+  }
+
+  .dashboard-article-main {
+    background: #f9f6ef !important;
+  }
+
+  .dashboard-article-left .sidebar-nav-shell {
+    padding-left: 0.45rem;
+    padding-right: 0.5rem;
+  }
+
+  .dashboard-article-left .sidebar-nav-shell hr {
+    border-color: #d7d2c1 !important;
+    background: #d7d2c1 !important;
+  }
+
+  .dashboard-article-left .sidebar-nav-shell li {
+    font-size: 0.94rem;
+  }
+
+  .dashboard-right-sidebar {
+    gap: 0.75rem;
+  }
+
+  .dashboard-find-shell {
+    background: #f9f6ef;
+    border: 1px solid #cfe5fa;
+    border-radius: 2px;
+    padding: 0.9rem 0.8rem;
+  }
+
+  .dashboard-find-shell .right-find-title {
+    font-size: 2.15rem;
+    line-height: 1;
+    letter-spacing: -0.02em;
+    color: #ef5f2f !important;
+  }
+
+  .dashboard-find-shell .right-find-input {
+    border-color: #d2dde8;
+    border-radius: 4px;
+    background: #f9f6ef;
+    padding-top: 0.45rem;
+    padding-bottom: 0.45rem;
+  }
+
+  .dashboard-find-shell .right-find-label-text {
+    color: #5b626f;
+    font-size: 0.85rem;
+  }
+
+  .dashboard-widget-card {
+    border: 1px solid #b8d7e7;
+    background: #f9f6ef;
+  }
+
+  .dashboard-widget-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid #abd0e2;
+    padding: 0.3rem 0.55rem;
+    background: #f9f6ef;
+  }
+
+  .dashboard-widget-title {
+    margin: 0;
+    font-size: 1.45rem;
+    line-height: 1.15;
+    color: #ef5f2f;
+    font-weight: 700;
+  }
+
+  .dashboard-widget-body {
+    background: #f9f6ef;
+  }
+
+  .dashboard-article-shell .bg-white,
+  .dashboard-article-shell .right-sidebar-shell input,
+  .dashboard-article-shell .right-sidebar-shell textarea {
+    background: #f9f6ef !important;
+  }
+
+  .dashboard-revision-wrap {
+    border-top: 1px solid #d7d3c7;
+    margin-top: 0.2rem;
+    padding-top: 1.1rem;
+  }
+
+  .dashboard-revision-title {
+    color: #ea5f2f;
+    font-size: 1.65rem;
+    line-height: 1.2;
+    margin: 0 0 0.45rem;
+    font-weight: 700;
+  }
+
+  .dashboard-revision-copy {
+    color: #7a7768;
+    margin: 0 0 0.9rem;
+    line-height: 1.55;
+  }
+
+  .dashboard-callout-cta {
+    background: #67ad35;
+    color: #f9f8f3;
+    min-height: 108px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    text-align: center;
+    padding: 1.1rem;
+  }
+
+  .dashboard-comments-title {
+    margin: 0 0 0.4rem;
+    color: #f06433;
+    font-size: 1.65rem;
+    font-weight: 700;
+    line-height: 1.2;
+  }
+
+  .dashboard-comments-divider {
+    border: 0;
+    border-top: 1px solid #e6dfd3;
+    margin: 0.2rem 0 1.1rem;
+  }
+}
+
 .article-feed-tags span {
   background: var(--feed-card-tag-bg);
   color: var(--feed-card-tag-text);
@@ -2237,7 +2378,7 @@ html body .article-list-main {
 }
 
 .home-kredo-cards-grid {
-  grid-template-columns: repeat(1, minmax(0, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
 .home-kredo-scroll-area {

@@ -134,7 +134,7 @@ export default function HomePage() {
             <div className="home-kredo-cards-wrap space-y-4">
               {/* Loading State */}
               {loading ? (
-                <div className="home-kredo-cards-grid grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+                <div className="home-kredo-cards-grid grid grid-cols-2 gap-5 sm:grid-cols-2 lg:grid-cols-3">
                   {Array(6)
                     .fill(0)
                     .map((_, i) => (
@@ -145,7 +145,7 @@ export default function HomePage() {
                     ))}
                 </div>
               ) : displayedArticles.length > 0 ? (
-                <div className="home-kredo-cards-grid grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+                <div className="home-kredo-cards-grid grid grid-cols-2 gap-5 sm:grid-cols-2 lg:grid-cols-3">
                   {displayedArticles.map((article) => (
                     <ArticleCardGrid
                       key={article.id}

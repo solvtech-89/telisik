@@ -12,10 +12,8 @@ export default function ResensiFields({
   setBookYear,
 }) {
   return (
-    <div className="mb-4 rounded-lg border border-gray-200 bg-gray-50 p-3">
-      <h6 className="mb-3 text-sm font-semibold text-gray-700">
-        Detail Buku
-      </h6>
+    <div className="mb-4 rounded-lg border border-[#d9d2c2] bg-[#F9F6EF] p-3">
+      <h6 className="mb-3 text-sm font-semibold text-gray-700">Detail Buku</h6>
 
       <div className="mb-3">
         <Input

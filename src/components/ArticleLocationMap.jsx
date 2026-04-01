@@ -20,11 +20,14 @@ export default function ArticleLocationMap({ location }) {
   const position = [lat, lon];
 
   return (
-    <div className="mb-3">
-      <h5 className="font-bold mb-2 h3">LOKASI</h5>
+    <section className="dashboard-widget-card mb-4">
+      <div className="dashboard-widget-head">
+        <h5 className="dashboard-widget-title">Lokasi</h5>
+      </div>
       <div
+        className="dashboard-widget-body p-0"
         style={{
-          height: "300px",
+          height: "236px",
           overflow: "hidden",
         }}
       >
@@ -44,6 +47,6 @@ export default function ArticleLocationMap({ location }) {
           </Marker>
         </MapContainer>
       </div>
-    </div>
+    </section>
   );
 }

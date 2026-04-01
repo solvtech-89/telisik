@@ -131,7 +131,7 @@ export default function KronikTilikEditor() {
   });
 
   return (
-    <div className="editor-page-shell flex h-[calc(100vh-60px)] min-h-0 flex-col overflow-hidden bg-[#f7f5ef]">
+    <div className="editor-page-shell flex h-[calc(100vh-60px)] min-h-0 flex-col overflow-hidden bg-[#F9F6EF]">
       <ArticleEditorHeader
         currentEditor={currentEditor}
         onAddFootnote={handleAddFootnote}
@@ -147,8 +147,8 @@ export default function KronikTilikEditor() {
             <div
               className={
                 collapsed
-                  ? "editor-left-rail hidden h-full overflow-y-scroll overflow-x-hidden border-r border-[#dfddd4] bg-[#f7f5ef] md:col-auto md:block md:w-[52px] lg:col-span-1"
-                  : "editor-left-rail hidden h-full overflow-y-scroll overflow-x-hidden border-r border-[#dfddd4] bg-[#f7f5ef] pb-5 md:col-span-2 md:block lg:col-span-1"
+                  ? "editor-left-rail hidden h-full overflow-y-scroll overflow-x-hidden border-r border-[#dfddd4] bg-[#F9F6EF] md:col-auto md:block md:w-[52px] lg:col-span-1"
+                  : "editor-left-rail hidden h-full overflow-y-scroll overflow-x-hidden border-r border-[#dfddd4] bg-[#F9F6EF] pb-5 md:col-span-2 md:block lg:col-span-1"
               }
             >
               <SidebarNav

@@ -401,21 +401,19 @@ export default function SidebarNav({
                           strokeWidth="1.2"
                           strokeLinejoin="round"
                         />
-                        <circle
-                          cx="10.9287"
-                          cy="12"
-                          r="1.25"
-                          fill="currentColor"
-                        />
-                        <circle
-                          cx="16.0625"
-                          cy="12"
-                          r="1.25"
-                          fill="currentColor"
-                        />
+                        <circle cx="10.9287" cy="12" r="1.25" fill="currentColor" />
+                        <circle cx="16.0625" cy="12" r="1.25" fill="currentColor" />
                       </svg>
                     </span>
-                    <span>Tanggapan</span>
+                    <span className="flex-1">Tanggapan</span>
+                    {isLoggedIn && (
+                      <span
+                        className="ml-auto inline-flex items-center justify-center rounded-full px-1.5 py-0.5 text-[0.65rem] font-bold leading-none"
+                        style={{ background: "#e03e3e", color: "#fff", minWidth: "1.5rem" }}
+                      >
+                        99+
+                      </span>
+                    )}
                   </Link>
                 </li>
               </ul>
@@ -477,7 +475,7 @@ export default function SidebarNav({
                 <span dangerouslySetInnerHTML={{ __html: ICONS.user }} />
                 {!collapsed && <> Akunku</>}
               </div>
-            )}
+            )}            
 
             {isLoggedIn ? (
               <>
@@ -497,11 +495,20 @@ export default function SidebarNav({
                       dangerouslySetInnerHTML={{ __html: ICONS.edit }}
                     />
                     {!collapsed && (
-                      <span className="leading-none">Sumbangsih</span>
+                      <span className="flex items-center gap-1.5 leading-none">
+                        Sumbangsih
+                        <span
+                          className="inline-flex items-center justify-center rounded-full px-1.5 py-0.5 text-[0.65rem] font-bold leading-none"
+                          style={{ background: "#e03e3e", color: "#fff", minWidth: "1.5rem" }}
+                        >
+                          99+
+                        </span>
+                      </span>
                     )}
                   </span>
                   {!collapsed && <span>{sumbangsihExpanded ? "⌄" : "›"}</span>}
                 </div>
+
 
                 {sumbangsihExpanded && !collapsed && (
                   <div className="pl-6">
@@ -574,14 +581,30 @@ export default function SidebarNav({
 
         {!focusArticleSubnav &&
           (isLoggedIn ? (
-            <Link
-              to="#"
-              className={`${menuItemBase} text-[#4a4a4a] ${collapsed ? "block justify-center text-center" : ""}`}
-              onClick={logout}
-            >
-              <span dangerouslySetInnerHTML={{ __html: ICONS.logout }} />
-              {!collapsed && <> Keluar Log</>}
-            </Link>
+            <>
+              <Link
+                to="#"
+                className={`${menuItemBase} text-[#4a4a4a] ${collapsed ? "block justify-center text-center" : ""}`}
+                onClick={logout}
+              >
+                <span dangerouslySetInnerHTML={{ __html: ICONS.logout }} />
+                {!collapsed && <> Keluar Log</>}
+              </Link>
+              {onToggle && (
+                <Link
+                  to="#"
+                  className={`${menuItemBase} text-[#4a4a4a] ${collapsed ? "block justify-center text-center" : ""}`}
+                  onClick={(e) => { e.preventDefault(); onToggle(); }}
+                >
+                  <span
+                    dangerouslySetInnerHTML={{
+                      __html: collapsed ? ICONS.bukamenu : ICONS.tutupmenu,
+                    }}
+                  />
+                  {!collapsed && <> Tutup Menu</>}
+                </Link>
+              )}
+            </>
           ) : (
             <>
               <Link

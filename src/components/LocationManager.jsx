@@ -125,10 +125,8 @@ export default function LocationManager({ locationData, setLocationData }) {
   };
 
   return (
-    <div className="mb-4">
-      <h3 className="mb-4 text-xl font-semibold text-red-500">
-        Lokasi
-      </h3>
+    <div className="editor-side-card editor-location-card mb-4">
+      <h3 className="mb-4 text-xl font-semibold text-red-500">Lokasi</h3>
 
       <Alert
         type={searchAlert.type}
@@ -137,9 +135,7 @@ export default function LocationManager({ locationData, setLocationData }) {
       />
 
       <div className="mb-3">
-        <label className="mb-1 block text-xs text-gray-500">
-          Cari Lokasi
-        </label>
+        <label className="mb-1 block text-xs text-gray-500">Cari Lokasi</label>
         <div className="flex gap-2">
           <Input
             type="text"
@@ -160,7 +156,7 @@ export default function LocationManager({ locationData, setLocationData }) {
 
       <div
         id="location-map"
-        className="mb-3 h-[300px] overflow-hidden rounded-md border border-gray-200"
+        className="mb-3 h-[240px] overflow-hidden rounded-md border border-gray-200"
       />
 
       {locationData && (
@@ -170,7 +166,7 @@ export default function LocationManager({ locationData, setLocationData }) {
           </div>
           <div className="mb-1 text-green-700">{locationData.name}</div>
           <div className="text-[11px] text-green-700">
-            {locationData.coordinates[1].toFixed(6)}, {" "}
+            {locationData.coordinates[1].toFixed(6)},{" "}
             {locationData.coordinates[0].toFixed(6)}
           </div>
           <Button

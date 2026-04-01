@@ -365,27 +365,43 @@ export default function ParagraphEditor({
         )}
       </div>
 
-      {isEditMode && canEdit && !isEditing && (
-        <div className="mt-2 flex max-h-[50px] justify-end gap-2 border-t border-gray-200 pt-2 md:max-h-none md:gap-1 md:pt-1.5">
+      {isEditMode && !isEditing && (
+        <div
+          className="mt-1.5 flex items-center justify-end gap-3 border-t pt-1.5"
+          style={{ borderTopColor: "#e8e4d9" }}
+        >
           <button
-            className="admin-content-action-btn admin-content-action-history inline-flex items-center gap-1 rounded px-2 py-1 text-sm text-gray-600 hover:bg-gray-100 hover:text-gray-900"
+            className="inline-flex items-center gap-1 text-[0.78rem] text-[#8a876e] transition-colors hover:text-[#ef5f2f]"
             onClick={() => setShowHistoryModal(true)}
+            title="Lihat riwayat suntingan"
           >
-            <IconHistory size={16} />
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <polyline points="1 4 1 10 7 10" />
+              <path d="M3.51 15a9 9 0 1 0 .49-3.5" />
+            </svg>
             <span>Riwayat</span>
           </button>
+
           <button
-            className="admin-content-action-btn admin-content-action-edit inline-flex items-center gap-1 rounded px-2 py-1 text-sm text-gray-600 hover:bg-gray-100 hover:text-gray-900"
+            className="inline-flex items-center gap-1 text-[0.78rem] text-[#8a876e] transition-colors hover:text-[#ef5f2f]"
             onClick={() => setIsEditing(true)}
+            title="Sunting paragraf ini"
           >
-            <IconEdit size={16} />
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+              <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+            </svg>
             <span>Sunting</span>
           </button>
+
           <button
-            className="admin-content-action-btn admin-content-action-comment inline-flex items-center gap-1 rounded px-2 py-1 text-sm text-gray-600 hover:bg-gray-100 hover:text-gray-900"
+            className="inline-flex items-center gap-1 text-[0.78rem] text-[#8a876e] transition-colors hover:text-[#ef5f2f]"
             onClick={() => setShowCommentModal(true)}
+            title="Tambah tanggapan pada paragraf ini"
           >
-            <IconMessage size={16} />
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+            </svg>
             <span>Tanggapi</span>
           </button>
         </div>

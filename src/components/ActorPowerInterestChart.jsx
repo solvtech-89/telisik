@@ -60,20 +60,17 @@ export default function ActorPowerInterestChart({ slug, tipe }) {
     }
 
     fetchActors();
-  }, [slug]);
+  }, [slug, tipe]);
 
   const ticks = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
 
   return (
-    <div className="bg-transparent border-0">
-      <h5
-        className="font-semibold uppercase text-gray-500 mb-2"
-        style={{ color: "#555333" }}
-      >
-        PIHAK TERLIBAT
-      </h5>
-      <div className="bg-white p-3 rounded shadow-sm">
-        <ResponsiveContainer width="100%" height={320}>
+    <section className="dashboard-widget-card mb-3">
+      <div className="dashboard-widget-head">
+        <h5 className="dashboard-widget-title">Pihak Terlibat</h5>
+      </div>
+      <div className="dashboard-widget-body p-2">
+        <ResponsiveContainer width="100%" height={286}>
           <ScatterChart margin={{ top: 0, right: 0, bottom: 0, left: -20 }}>
             <CartesianGrid stroke="#d9d3bb" strokeDasharray="0" />
 
@@ -111,7 +108,7 @@ export default function ActorPowerInterestChart({ slug, tipe }) {
               <Label
                 value="POWER"
                 angle={-90}
-                position="insideLelft"
+                position="insideLeft"
                 style={{ fill: "#c46b00", fontWeight: 600 }}
               />
             </YAxis>
@@ -171,6 +168,6 @@ export default function ActorPowerInterestChart({ slug, tipe }) {
           </div>
         )}
       </div>
-    </div>
+    </section>
   );
 }
