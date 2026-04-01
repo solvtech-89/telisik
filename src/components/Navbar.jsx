@@ -344,7 +344,7 @@ export default function Navbar() {
   return (
     <>
       <nav className="site-top-nav sticky top-0 z-50 border-b border-[#dfddd4] bg-[#f6f3eb]/95 backdrop-blur">
-        <div className="mx-auto flex h-[60px] w-full max-w-[1760px] items-center px-4 md:px-6 xl:px-7">
+        <div className="mx-auto flex h-[72px] w-full max-w-[1760px] items-center px-4 md:px-6 xl:px-7">
           <div className="flex items-center flex-none">
             <Link className="inline-block mr-6 site-logo" to="/">
               <svg
