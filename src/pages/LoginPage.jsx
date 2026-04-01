@@ -67,7 +67,7 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen px-4" style={{ background: "inherit" }}>
-      <div className="mx-auto w-full max-w-[620px] pb-4">
+      <div className="mx-auto w-full max-w-full pb-4">
         <div className="flex items-center justify-between pt-4 md:pt-5">
           <button
             type="button"

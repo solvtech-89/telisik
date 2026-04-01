@@ -271,7 +271,7 @@ export default function MapContainer({
         ${
           isFullscreen
             ? "fixed inset-0 z-50 flex h-full w-full flex-col rounded-none border-none"
-            : ""
+            : "flex flex-col"
         }
         ${className}
       `}
@@ -286,7 +286,7 @@ export default function MapContainer({
           className={`home-map-stage relative w-full bg-[#F0FDFF] ${
             isFullscreen
               ? "min-h-0 flex-1"
-              : "h-[180px] sm:h-[220px] lg:h-[280px]"
+              : "h-[380px] sm:h-[220px] lg:h-[280px]"
           } ${stageClassName}`}
         >
           <div ref={mapRef} className="w-full h-full" />
@@ -416,16 +416,9 @@ export default function MapContainer({
             <button
               key={cat.key}
               onClick={() => onCategoryToggle(cat.key)}
-              className={`
-                flex items-center gap-2 rounded-md px-1 py-1 text-sm leading-none transition-colors
-                ${
-                  activeCategories.has(cat.key)
-                    ? "text-[#2f3a4f]"
-                    : "text-[#8f8b79] hover:text-[#565e6f]"
-                }
-              `}
+              className="flex items-center gap-2 rounded-md px-1 py-1 text-sm leading-none transition-colors hover:opacity-80"
             >
-              <span class="eye-icon">
+              <span className="eye-icon">
                 <svg
                   width="16"
                   height="18"
@@ -441,29 +434,49 @@ export default function MapContainer({
                       : "#8f8b79",
                   }}
                 >
+                  {/* Upper eyelid */}
                   <path
                     d="M1 10.6971C1.69435 7.46933 4.56464 5.04999 8 5.04999C11.4354 5.04999 14.3057 7.46933 15 10.6971"
-                    stroke="#878672"
-                    stroke-width="1.2"
-                    stroke-linecap="round"
-                  ></path>
+                    stroke="currentColor"
+                    strokeWidth="1.2"
+                    strokeLinecap="round"
+                  />
+                  {/* Iris / pupil */}
                   <ellipse
                     cx="7.99999"
                     cy="10.4295"
                     rx="2.52089"
                     ry="2.52088"
-                    stroke="#878672"
-                    stroke-width="1.2"
-                  ></ellipse>
-                  <path
-                    d="M14.2222 2.77783L1.77774 15.2223"
-                    stroke="#878672"
-                    stroke-width="1.2"
-                    stroke-linecap="round"
-                  ></path>
+                    stroke="currentColor"
+                    strokeWidth="1.2"
+                  />
+                  {activeCategories.has(cat.key) ? (
+                    /* Lower eyelid (open eye) */
+                    <path
+                      d="M1 10.6971C1.69435 13.9249 4.56464 16.3443 8 16.3443C11.4354 16.3443 14.3057 13.9249 15 10.6971"
+                      stroke="currentColor"
+                      strokeWidth="1.2"
+                      strokeLinecap="round"
+                    />
+                  ) : (
+                    /* Diagonal strike (closed eye) */
+                    <path
+                      d="M14.2222 2.77783L1.77774 15.2223"
+                      stroke="currentColor"
+                      strokeWidth="1.2"
+                      strokeLinecap="round"
+                    />
+                  )}
                 </svg>
               </span>
-              <span className="text-[0.62rem] font-medium uppercase tracking-[0.03em] sm:text-[0.7rem]">
+              <span
+                className="text-[0.62rem] font-medium uppercase tracking-[0.03em] sm:text-[0.7rem]"
+                style={{
+                  color: activeCategories.has(cat.key)
+                    ? categoryColors[cat.key]
+                    : "#8f8b79",
+                }}
+              >
                 {cat.label}
               </span>
             </button>
