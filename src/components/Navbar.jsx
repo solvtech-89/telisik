@@ -626,29 +626,6 @@ export default function Navbar() {
         </div>
       </nav>
 
-      {isListPage && (
-        <nav className="category-strip-nav sticky-top hidden md:block">
-          <div className="max-w-6xl mx-auto px-4">
-            <div className="flex justify-center items-center gap-3 py-2 w-full">
-              {categories.map((cat, index) => (
-                <React.Fragment key={cat.key}>
-                  <button
-                    className={`text-sm p-0 category-pill ${currentCategory === cat.key ? "category-pill--active" : ""}`}
-                    onClick={() => handleCategoryClick(cat.key)}
-                    style={{ fontSize: "1rem" }}
-                  >
-                    {cat.label}
-                  </button>
-                  {index < categories.length - 1 && (
-                    <span className="text-yellow-500 font-bold">•</span>
-                  )}
-                </React.Fragment>
-              ))}
-            </div>
-          </div>
-        </nav>
-      )}
-
       {showOffcanvas && (
         <>
           <div
@@ -841,7 +818,7 @@ export default function Navbar() {
                   {sumbangsihExpanded && (
                     <div className="mb-3 ml-4">
                       <Link
-                        to="/kronik"
+                        to="/article/kronik"
                         className="mb-2 block text-gray-800 no-underline hover:text-[#0068d6]"
                         onClick={handleLinkClick}
                       >
@@ -851,7 +828,7 @@ export default function Navbar() {
                         &nbsp; Kronik
                       </Link>
                       <Link
-                        to="/tilik"
+                        to="/article/tilik"
                         className="mb-2 block text-gray-800 no-underline hover:text-[#0068d6]"
                         onClick={handleLinkClick}
                       >
@@ -861,7 +838,7 @@ export default function Navbar() {
                         &nbsp; Tilik
                       </Link>
                       <Link
-                        to="/diskursus"
+                        to="/article/diskursus"
                         className="mb-2 block text-gray-800 no-underline hover:text-[#0068d6]"
                         onClick={handleLinkClick}
                       >

@@ -142,12 +142,7 @@ export default function KronikTilikEditor() {
       <div className="editor-body-shell min-h-0 flex-1 overflow-hidden">
         <div className="h-full min-h-0">
           <div
-            className={
-              "grid h-full min-h-0 grid-cols-1 md:grid-cols-12 lg:gap-0 " +
-              (collapsed
-                ? "lg:grid-cols-[52px_minmax(0,1fr)_345px] xl:grid-cols-[52px_minmax(0,1fr)_355px]"
-                : "lg:grid-cols-[295px_minmax(0,1fr)_345px] xl:grid-cols-[305px_minmax(0,1fr)_355px]")
-            }
+            className={`editor-layout-grid h-full min-h-0 ${collapsed ? "editor-layout-grid--collapsed" : ""}`}
           >
             <div
               className={

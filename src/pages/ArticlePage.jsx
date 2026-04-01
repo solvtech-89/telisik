@@ -459,7 +459,9 @@ export default function ArticlePage() {
                         type="checkbox"
                         className="right-find-master-toggle"
                         checked={showAdvancedSearch}
-                        onChange={(e) => setShowAdvancedSearch(e.target.checked)}
+                        onChange={(e) =>
+                          setShowAdvancedSearch(e.target.checked)
+                        }
                       />
                       <span className="right-find-label-text italic">
                         Perinci pencarian
@@ -476,7 +478,9 @@ export default function ArticlePage() {
                               checked={searchFilters.lokasi}
                               onChange={handleSearchFilterChange("lokasi")}
                             />
-                            <span className="right-find-label-text">Lokasi</span>
+                            <span className="right-find-label-text">
+                              Lokasi
+                            </span>
                           </label>
 
                           <label className="right-find-option flex items-center space-x-2">
@@ -484,7 +488,9 @@ export default function ArticlePage() {
                               type="checkbox"
                               className="right-find-switch"
                               checked={searchFilters.jenisKonflik}
-                              onChange={handleSearchFilterChange("jenisKonflik")}
+                              onChange={handleSearchFilterChange(
+                                "jenisKonflik",
+                              )}
                             />
                             <span className="right-find-label-text">
                               Jenis Konflik
@@ -508,7 +514,9 @@ export default function ArticlePage() {
                                   type="checkbox"
                                   className="right-find-checkbox"
                                   checked={searchFilters[option.key]}
-                                  onChange={handleSearchFilterChange(option.key)}
+                                  onChange={handleSearchFilterChange(
+                                    option.key,
+                                  )}
                                 />
                                 <span className="right-find-area-text">
                                   {option.label}

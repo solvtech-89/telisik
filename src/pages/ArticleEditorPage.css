@@ -298,6 +298,45 @@
   );
 }
 
+/*
+  Editor layout grid:
+  - Base: stack columns
+  - md: 12-column grid (uses existing md:col-span-* on rails)
+  - lg+: 3 fixed columns to match desktop editor layout
+  This avoids relying on dynamically-composed Tailwind `grid-cols-[...]` classes.
+*/
+.editor-layout-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 768px) {
+  .editor-layout-grid {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1024px) {
+  .editor-layout-grid {
+    grid-template-columns: 295px minmax(0, 1fr) 345px;
+    column-gap: 0;
+  }
+
+  .editor-layout-grid.editor-layout-grid--collapsed {
+    grid-template-columns: 52px minmax(0, 1fr) 345px;
+  }
+}
+
+@media (min-width: 1280px) {
+  .editor-layout-grid {
+    grid-template-columns: 305px minmax(0, 1fr) 355px;
+  }
+
+  .editor-layout-grid.editor-layout-grid--collapsed {
+    grid-template-columns: 52px minmax(0, 1fr) 355px;
+  }
+}
+
 .editor-left-rail {
   background: #ffffff;
   border-color: #e5e7eb;

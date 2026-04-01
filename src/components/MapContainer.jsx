@@ -117,6 +117,15 @@ export default function MapContainer({
 
       const svg = map.container.querySelector("svg");
       if (svg) {
+        // Make the SVG responsive and keep the full map visible (avoid cropping)
+        try {
+          // `meet` keeps the entire map visible in all sizes/fullscreen
+          svg.setAttribute("preserveAspectRatio", "xMidYMid meet");
+          svg.setAttribute("width", "100%");
+          svg.setAttribute("height", "100%");
+          svg.style.display = "block";
+        } catch (e) {}
+
         const observer = new MutationObserver(() => {
           updateCustomMarkers();
         });
@@ -258,15 +267,27 @@ export default function MapContainer({
     <div
       ref={mapSectionRef}
       className={`
-        home-map-shell overflow-hidden rounded-xl border border-[#ddd9ce] bg-[#F0FDFF] shadow-[0_2px_8px_rgba(30,41,59,0.06)]
-        ${isFullscreen ? "fixed inset-0 rounded-none border-none z-50" : ""}
+        home-map-shell w-full overflow-hidden rounded-xl border border-[#ddd9ce] bg-[#F0FDFF] shadow-[0_2px_8px_rgba(30,41,59,0.06)]
+        ${
+          isFullscreen
+            ? "fixed inset-0 z-50 flex h-full w-full flex-col rounded-none border-none"
+            : ""
+        }
         ${className}
       `}
     >
       {/* Map Container */}
-      <div className="map-inner-container mx-auto w-full max-w-[760px]">
+      <div
+        className={`map-inner-container w-full ${
+          isFullscreen ? "flex min-h-0 flex-1" : ""
+        }`}
+      >
         <div
-          className={`home-map-stage relative h-[180px] w-full bg-[#F0FDFF] sm:h-[220px] lg:h-[280px] ${stageClassName}`}
+          className={`home-map-stage relative w-full bg-[#F0FDFF] ${
+            isFullscreen
+              ? "min-h-0 flex-1"
+              : "h-[180px] sm:h-[220px] lg:h-[280px]"
+          } ${stageClassName}`}
         >
           <div ref={mapRef} className="w-full h-full" />
 
@@ -380,6 +401,7 @@ export default function MapContainer({
       {/* Category Legend */}
       <div
         className={`home-map-legend border-t border-[#dfddd4] px-4 py-1 ${legendClassName}`}
+        style={isFullscreen ? { display: "none" } : undefined}
       >
         <div className="flex flex-wrap items-center gap-x-6 gap-y-1">
           {[
@@ -403,46 +425,44 @@ export default function MapContainer({
                 }
               `}
             >
-              <svg
-                width="16"
-                height="16"
-                viewBox="0 0 16 16"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-                className={
-                  activeCategories.has(cat.key) ? "opacity-100" : "opacity-80"
-                }
-                style={{
-                  color: activeCategories.has(cat.key)
-                    ? categoryColors[cat.key]
-                    : "#8f8b79",
-                }}
-              >
-                <path
-                  d="M1.1 1.2L14.8 14.9"
-                  stroke="currentColor"
-                  strokeWidth="1.2"
-                  strokeLinecap="round"
-                />
-                <path
-                  d="M3.6 6.6C4.2 5.7 5.6 4 8 4C10.4 4 11.8 5.7 12.4 6.6"
-                  stroke="currentColor"
-                  strokeWidth="1.2"
-                  strokeLinecap="round"
-                />
-                <path
-                  d="M6.2 9.3C6.6 9.7 7.2 10 8 10C9.7 10 11 8.7 11 7"
-                  stroke="currentColor"
-                  strokeWidth="1.2"
-                  strokeLinecap="round"
-                />
-                <path
-                  d="M3.1 9.4C3.9 10.4 5.4 12 8 12C9.3 12 10.4 11.6 11.2 11"
-                  stroke="currentColor"
-                  strokeWidth="1.2"
-                  strokeLinecap="round"
-                />
-              </svg>
+              <span class="eye-icon">
+                <svg
+                  width="16"
+                  height="18"
+                  viewBox="0 0 16 18"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                  className={`${
+                    activeCategories.has(cat.key) ? "opacity-100" : "opacity-80"
+                  } shrink-0`}
+                  style={{
+                    color: activeCategories.has(cat.key)
+                      ? categoryColors[cat.key]
+                      : "#8f8b79",
+                  }}
+                >
+                  <path
+                    d="M1 10.6971C1.69435 7.46933 4.56464 5.04999 8 5.04999C11.4354 5.04999 14.3057 7.46933 15 10.6971"
+                    stroke="#878672"
+                    stroke-width="1.2"
+                    stroke-linecap="round"
+                  ></path>
+                  <ellipse
+                    cx="7.99999"
+                    cy="10.4295"
+                    rx="2.52089"
+                    ry="2.52088"
+                    stroke="#878672"
+                    stroke-width="1.2"
+                  ></ellipse>
+                  <path
+                    d="M14.2222 2.77783L1.77774 15.2223"
+                    stroke="#878672"
+                    stroke-width="1.2"
+                    stroke-linecap="round"
+                  ></path>
+                </svg>
+              </span>
               <span className="text-[0.62rem] font-medium uppercase tracking-[0.03em] sm:text-[0.7rem]">
                 {cat.label}
               </span>

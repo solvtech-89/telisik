@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { GoogleLogin } from "@react-oauth/google";
 import { API_BASE } from "../config";
 import { useAuth } from "../AuthContext";
 import Button from "../components/ui/Button";
@@ -21,6 +20,18 @@ export default function LoginPage() {
   const { login } = useAuth();
   const redirectAfterLogin =
     location.state?.from?.pathname || "/urun-daya/kronik";
+
+  const handleCancel = () => {
+    navigate("/", { replace: true });
+  };
+
+  const handleThemeToggle = () => {
+    const currentTheme =
+      document.documentElement.getAttribute("data-bs-theme") || "light";
+    const newTheme = currentTheme === "light" ? "dark" : "light";
+    document.documentElement.setAttribute("data-bs-theme", newTheme);
+    localStorage.setItem("theme", newTheme);
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -57,43 +68,6 @@ export default function LoginPage() {
     }
   };
 
-  const handleGoogleSuccess = async (credentialResponse) => {
-    try {
-      const response = await fetch(`${API_BASE}/auth/google/token/`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          credential: credentialResponse.credential,
-        }),
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        login(data.access_token, data.user);
-
-        if (!data.user.profile_completed) {
-          navigate("/complete-profile", {
-            state: { registrationMethod: "google" },
-          });
-        } else {
-          navigate("/");
-        }
-      } else {
-        const errorData = await response.json();
-        setError(`Google login gagal: ${errorData?.error || "Unknown error"}`);
-      }
-    } catch (error) {
-      console.error("Google login error:", error);
-      setError("Terjadi kesalahan saat login dengan Google");
-    }
-  };
-
-  const handleGoogleError = () => {
-    setError("Google login gagal. Silakan coba lagi.");
-  };
-
   const handleFakeLogin = () => {
     const demoUser = {
       id: "demo-user",
@@ -110,14 +84,98 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center px-4 py-8 bg-neutral-50">
-      <div className="w-full max-w-sm">
+    <div className="min-h-screen px-4" style={{ background: "inherit" }}>
+      <div className="mx-auto w-full max-w-sm">
+        {/* Top controls (auth header) */}
+        <div className="flex items-center justify-between pt-4">
+          <button
+            type="button"
+            aria-label="Kembali"
+            onClick={handleCancel}
+            className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-neutral-200 bg-white/40 text-neutral-600 hover:bg-white/70"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M15 18l-6-6 6-6" />
+            </svg>
+          </button>
+
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={handleCancel}
+              className="rounded-full border border-telisik/40 px-3 py-1.5 text-xs font-semibold text-telisik hover:bg-telisik/10"
+            >
+              Batalkan
+            </button>
+
+            <button
+              type="button"
+              className="theme-toggle-switch"
+              onClick={handleThemeToggle}
+              aria-label="Toggle theme"
+            >
+              <div className="theme-toggle-indicator" aria-hidden></div>
+              <span className="theme-toggle-icon icon-sun">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  aria-hidden="true"
+                >
+                  <circle cx="12" cy="12" r="5" />
+                  <path d="M12 1v2" />
+                  <path d="M12 21v2" />
+                  <path d="M4.22 4.22l1.42 1.42" />
+                  <path d="M18.36 18.36l1.42 1.42" />
+                  <path d="M1 12h2" />
+                  <path d="M21 12h2" />
+                  <path d="M4.22 19.78l1.42-1.42" />
+                  <path d="M18.36 5.64l1.42-1.42" />
+                </svg>
+              </span>
+              <span className="theme-toggle-icon icon-moon">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+                </svg>
+              </span>
+            </button>
+          </div>
+        </div>
+
         {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-neutral-800 mb-2">
+        <div className="pt-10 pb-6 text-center">
+          <h1 className="text-[1.35rem] font-semibold tracking-tight text-neutral-800">
             Masuk Log
           </h1>
-          <p className="text-neutral-600">
+          <p className="mt-1 text-sm text-neutral-600">
             Belum punya akun?{" "}
             <Link
               to="/register"
@@ -139,15 +197,15 @@ export default function LoginPage() {
         )}
 
         {/* Login Form */}
-        <form onSubmit={handleSubmit} className="space-y-5">
+        <form onSubmit={handleSubmit} className="space-y-4">
           {/* Email Input */}
           <Input
             type="email"
-            label="Email"
-            placeholder="pengguna@mail.mail"
+            placeholder="Surel"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
+            className="rounded-md border border-neutral-200 bg-white"
           />
 
           {/* Password Input */}
@@ -155,11 +213,11 @@ export default function LoginPage() {
             <div className="relative flex items-center">
               <input
                 type={showPassword ? "text" : "password"}
-                placeholder="••••••••••"
+                placeholder="Kata sandi"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
-                className="w-full px-3 py-2 text-sm border-2 border-gray-300 rounded-lg focus:outline-none focus:border-telisik focus:ring-2 focus:ring-telisik/10 transition-colors"
+                className="w-full rounded-md border border-neutral-200 bg-white px-3 py-2 text-sm transition-colors focus:outline-none focus:border-telisik focus:ring-2 focus:ring-telisik/10"
               />
               <button
                 type="button"
@@ -202,80 +260,77 @@ export default function LoginPage() {
               to="/forgot-password"
               className="text-xs text-cyan-600 hover:text-cyan-700 transition-colors text-right"
             >
-              Lupa? Atur ulang kata sandi
+              Lupa?{" "}
+              <span style={{ color: "#0088FF" }}>Atur ulang kata sandi</span>
             </Link>
           </div>
 
-          {/* Terms Checkbox */}
-          <div className="flex items-start gap-2">
-            <input
-              type="checkbox"
-              id="agreeTerms"
-              checked={agreed}
-              onChange={(e) => setAgreed(e.target.checked)}
-              className="mt-1 w-4 h-4 cursor-pointer accent-telisik rounded"
-            />
-            <label
-              htmlFor="agreeTerms"
-              className="text-xs text-neutral-600 cursor-pointer leading-relaxed"
-            >
+          {/* Terms Switch */}
+          <label
+            htmlFor="agreeTerms"
+            className="flex items-start gap-3 pt-1 cursor-pointer"
+          >
+            <span className="relative mt-0.5 inline-flex h-5 w-10 flex-shrink-0">
+              <input
+                type="checkbox"
+                id="agreeTerms"
+                checked={agreed}
+                onChange={(e) => setAgreed(e.target.checked)}
+                className="peer sr-only"
+                aria-checked={agreed}
+              />
+              <span className="absolute inset-0 rounded-full bg-neutral-100 border border-neutral-300 transition-colors duration-200 peer-checked:bg-telisik/20 peer-checked:border-telisik" />
+              <span className="absolute left-0.5 top-0.5 h-4 w-4 rounded-full bg-white border border-neutral-200 shadow transition-transform duration-200 peer-checked:translate-x-5 peer-checked:bg-white peer-checked:border-telisik" />
+            </span>
+
+            <span className="text-xs text-neutral-600 leading-relaxed">
               Saya sudah membaca, memahami, dan menyetujui{" "}
               <Link
                 to="/pages/terms-and-conditions"
-                className="text-cyan-600 hover:underline"
+                className="hover:underline"
+                onClick={(e) => e.stopPropagation()}
+                style={{ color: "#0088FF" }}
               >
                 Syarat & Ketentuan
               </Link>{" "}
               serta{" "}
               <Link
                 to="/pages/privacy-policy"
-                className="text-cyan-600 hover:underline"
+                className="hover:underline"
+                onClick={(e) => e.stopPropagation()}
+                style={{ color: "#0088FF" }}
               >
                 Kebijakan Privasi
               </Link>{" "}
               Telisik.
-            </label>
-          </div>
+            </span>
+          </label>
 
           {/* Submit Button */}
-          <Button
-            fullWidth
-            disabled={!agreed}
-            loading={loading}
-            className="rounded-full"
-          >
-            Masuk Log
-          </Button>
+          <div className="pt-2">
+            <Button
+              type="submit"
+              fullWidth
+              size="sm"
+              variant="secondary"
+              disabled={!agreed}
+              loading={loading}
+              onClick={handleFakeLogin}
+              className="rounded-full shadow-sm bg-[#dedacb] text-[#6b6b6b] hover:bg-[#dedacb] active:bg-[#dedacb]"
+            >
+              Masuk Log
+            </Button>
 
-          <Button
-            type="button"
-            fullWidth
-            variant="outline"
-            className="rounded-full"
-            onClick={handleFakeLogin}
-          >
-            Masuk Demo Sementara
-          </Button>
-
-          {/* Divider */}
-          <div className="flex items-center gap-3">
-            <div className="flex-1 h-px bg-gray-300" />
-            <span className="text-xs text-gray-500">atau</span>
-            <div className="flex-1 h-px bg-gray-300" />
-          </div>
-
-          {/* Google Login Button */}
-          <div className="flex justify-center">
-            <GoogleLogin
-              onSuccess={handleGoogleSuccess}
-              onError={handleGoogleError}
-              theme="outline"
-              size="large"
-              text="signin_with"
-              shape="pill"
-              logo_alignment="left"
-              width="100%"
-            />
+            {/* <Button
+              type="button"
+              fullWidth
+              size="sm"
+              variant="outline"
+              className="mt-3 rounded-full"
+              onClick={handleFakeLogin}
+            >
+              Login Demo
+            </Button> */}
           </div>
         </form>
       </div>

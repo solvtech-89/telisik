@@ -111,6 +111,13 @@ body {
   overflow-x: hidden;
 }
 
+/* Make jsvectormap always fill its parent container */
+.home-map-stage .jvm-container,
+.home-map-stage .jvm-container > svg {
+  width: 100%;
+  height: 100%;
+}
+
 @media (min-width: 1024px) {
   html.home-lock-page-scroll,
   body.home-lock-page-scroll {
@@ -222,58 +229,83 @@ button:focus-visible {
   background: #fc6736;
   color: #fff;
   border: 1px solid #fc6736;
-  border-radius: 9999px;
-  padding: 10px 26px;
-  font-size: 1.05rem;
+  border-radius: 16px;
+  padding: 8px 18px;
+  font-size: 0.95rem;
   font-weight: 700;
   line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
   box-shadow: 0 2px 0 rgba(201, 69, 23, 0.18);
   transition:
     transform 120ms ease,
     box-shadow 180ms ease,
     background-color 180ms ease;
+  position: relative;
+  z-index: 1002;
 }
 
 .nav-urun-btn:hover {
   background: #ef5f2f;
   transform: translateY(-1px);
-  box-shadow: 0 8px 18px rgba(252, 103, 54, 0.22);
+  box-shadow: 0 8px 18px rgba(252, 103, 54, 0.18);
 }
 
 .nav-urun-btn:focus-visible {
   outline: none;
   box-shadow:
-    0 0 0 3px rgba(252, 103, 54, 0.22),
-    0 8px 18px rgba(252, 103, 54, 0.22);
+    0 0 0 3px rgba(252, 103, 54, 0.18),
+    0 8px 18px rgba(252, 103, 54, 0.18);
 }
 
 .urun-daya-container {
   position: relative;
+  display: inline-block;
+  /* ensure the whole container stays above sticky/category strips */
+  z-index: 2000 !important;
 }
 
 .urun-daya-dropdown {
   position: absolute;
-  top: 100%;
-  right: 0;
+  top: calc(100% + 8px);
+  left: 50%;
+  right: auto;
   background: #fc6736;
-  border-radius: 0 0 14px 14px;
+  border-radius: 12px;
   overflow: hidden;
   max-height: 0;
   opacity: 0;
   pointer-events: none;
   transition:
-    max-height 0.3s ease-in-out,
-    opacity 0.3s ease-in-out;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  min-width: 210px;
-  width: 100%;
-  z-index: 2;
+    max-height 0.28s ease-in-out,
+    opacity 0.28s ease-in-out,
+    transform 200ms ease;
+  box-shadow: 0 12px 30px rgba(12, 18, 28, 0.16);
+  min-width: 180px;
+  width: max-content;
+  z-index: 2002 !important;
+  transform: translate(-50%, -8px) scale(0.98);
 }
 
 .urun-daya-dropdown.show {
-  max-height: 400px;
+  max-height: 420px;
   opacity: 1;
   pointer-events: auto;
+  transform: translate(-50%, 0) scale(1);
+}
+
+.urun-daya-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  color: #fff;
+  text-decoration: none;
+  font-weight: 700;
+  transition:
+    background-color 120ms ease,
+    color 120ms ease;
 }
 
 .urun-daya-item:first-child {
@@ -286,12 +318,17 @@ button:focus-visible {
 }
 
 .urun-daya-item:last-child {
-  border-radius: 0 0 16px 16px;
+  border-radius: 0 0 10px 10px;
 }
 
 .urun-daya-dropdown.show ~ .nav-urun-btn,
 .urun-daya-container:has(.urun-daya-dropdown.show) .nav-urun-btn {
   border-radius: 16px 16px 0 0;
+}
+
+.nav-urun-btn {
+  position: relative;
+  z-index: 2001 !important;
 }
 
 .category-pill {
@@ -413,8 +450,8 @@ button:focus-visible {
 :root[data-bs-theme="dark"] .theme-toggle-indicator {
   /* move indicator to the right and style the thumb for dark mode */
   transform: translateY(-50%) translateX(44px);
-  background: #ffffff;
-  border: 2px solid #cfcabf; /* subtle beige ring */
+  background: #686d76;
+  border: 2px solid #131d31; /* subtle beige ring */
   box-shadow: 0 6px 12px rgba(12, 18, 28, 0.32);
 }
 
@@ -680,7 +717,8 @@ button:focus-visible {
 
 /* Dark mode: moon icon placed on white thumb should be slightly darker for contrast */
 :root[data-bs-theme="dark"] .theme-toggle-switch .icon-moon {
-  color: #1f2329;
+  /* moon icon sits on the dark circular knob; make it white for contrast */
+  color: #ffffff;
 }
 
 /* Home dark mode alignment with design reference */
@@ -715,12 +753,12 @@ button:focus-visible {
 }
 
 :root[data-bs-theme="dark"] .home-map-stage {
-  background: #202329;
+  background: #242424;
 }
 
 :root[data-bs-theme="dark"] .home-map-legend {
-  background: #23262c;
-  border-color: #353a43;
+  background: #242424;
+  border-color: #242424;
 }
 
 :root[data-bs-theme="dark"] .home-map-legend p,
@@ -782,7 +820,7 @@ button:focus-visible {
 
 /* Dashboard / sidebar dark-mode overrides to fix inconsistent inline utility colors */
 :root[data-bs-theme="dark"] .sidebar-nav-shell .mb-2 {
-  background-color: #2b3136 !important;
+  background-color: #242424 !important;
 }
 
 :root[data-bs-theme="dark"] .sidebar-nav-shell hr {
@@ -1099,8 +1137,8 @@ button:focus-visible {
 }
 
 :root[data-bs-theme="dark"] .article-feed-thumb-placeholder {
-  background: linear-gradient(145deg, #2b3136 0%, #24272b 100%) !important;
-  border-color: #353a43 !important;
+  background: #242424 !important;
+  border-color: #242424 !important;
 }
 
 :root[data-bs-theme="dark"] .category-pill--active {
@@ -1434,8 +1472,8 @@ button:focus-visible {
 }
 
 :root[data-bs-theme="dark"] .article-feed-card {
-  background: #20252d !important;
-  border-color: #343b4a !important;
+  background: #242424 !important;
+  border-color: #242424 !important;
   box-shadow: 0 6px 20px rgba(5, 10, 22, 0.3);
 }
 
@@ -1869,7 +1907,7 @@ html body .article-list-main {
   color: #ff9b73;
 }
 
-:root[data-bs-theme="dark"] .kredo-shell p,
+:root[data-bs-theme="dark"] .kredo-shell p:not(.kredo-lead),
 :root[data-bs-theme="dark"] .kredo-shell div {
   color: #d8deeb;
 }
@@ -1881,8 +1919,8 @@ html body .article-list-main {
   }
 
   .kredo-lead {
-    font-size: 1.35rem !important;
-    line-height: 1.45 !important;
+    font-size: 1.05rem !important;
+    line-height: 1.6 !important;
   }
 }
 

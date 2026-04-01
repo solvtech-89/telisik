@@ -44,7 +44,7 @@ export default function ArticleCardGrid({ article, variant = "default" }) {
 
   return (
     <article
-      className={`article-feed-card overflow-hidden ${!showImage ? "article-feed-card--no-image" : ""}`}
+      className={`article-feed-card overflow-hidden w-full ${!showImage ? "article-feed-card--no-image" : ""}`}
       aria-label={article.title}
     >
       {showImage && imageUrl ? (
@@ -66,23 +66,15 @@ export default function ArticleCardGrid({ article, variant = "default" }) {
       <div
         className={
           isHomeVariant
-            ? "article-feed-body space-y-1 pt-2"
-            : "article-feed-body space-y-0 p-0"
+            ? "article-feed-body pt-2 px-0 w-full"
+            : "article-feed-body p-0 px-0 w-full"
         }
       >
-        {!isHomeVariant && locationName && (
-          <div className="article-feed-meta flex items-center gap-2">
-            <span className="article-feed-location text-xs text-gray-500">
-              {locationName}
-            </span>
-          </div>
-        )}
-
         <h3
           className={
             isHomeVariant
-              ? "article-feed-title text-sm font-bold leading-snug text-left"
-              : "article-feed-title text-lg font-semibold leading-tight text-left"
+              ? "article-feed-title text-sm font-bold leading-snug text-left mb-1"
+              : "article-feed-title text-lg font-semibold leading-tight text-left mt-2 mb-0"
           }
           style={{ textAlign: "left" }}
         >
@@ -90,8 +82,8 @@ export default function ArticleCardGrid({ article, variant = "default" }) {
             to={articleUrl}
             className={
               isHomeVariant
-                ? "transition-colors hover:opacity-90"
-                : "transition-colors hover:text-[#dc5b2b]"
+                ? "transition-colors hover:opacity-90 block w-full"
+                : "transition-colors hover:text-[#dc5b2b] block w-full"
             }
           >
             {article.title}
@@ -102,8 +94,8 @@ export default function ArticleCardGrid({ article, variant = "default" }) {
           <p
             className={
               isHomeVariant
-                ? "article-feed-excerpt text-xs leading-relaxed text-gray-600 line-clamp-3 overflow-hidden"
-                : "article-feed-excerpt text-sm leading-relaxed text-gray-600 line-clamp-3 overflow-hidden"
+                ? "article-feed-excerpt text-xs leading-relaxed text-gray-600 line-clamp-3 overflow-hidden mt-0"
+                : "article-feed-excerpt text-sm leading-relaxed text-gray-600 line-clamp-3 overflow-hidden mt-0"
             }
           >
             {excerptTextRaw}
@@ -112,28 +104,15 @@ export default function ArticleCardGrid({ article, variant = "default" }) {
 
         {!isHomeVariant && (
           <div className="article-feed-stats flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-gray-500">
-            {article.created_at && (
+            {/* {article.created_at && (
               <span>{formatDate(article.created_at)}</span>
-            )}
-            {article.views !== undefined && (
+            )} */}
+            {/* {article.views !== undefined && (
               <span>{formatCount(article.views)} dilihat</span>
             )}
             {article.comments_count !== undefined && (
               <span>{formatCount(article.comments_count)} komentar</span>
-            )}
-          </div>
-        )}
-
-        {!isHomeVariant && article.metadata?.tags?.length > 0 && (
-          <div className="article-feed-tags flex flex-wrap gap-1.5 pt-1">
-            {article.metadata.tags.slice(0, 3).map((tag, idx) => (
-              <span
-                key={idx}
-                className="rounded bg-gray-100 px-2 py-0.5 text-[11px] text-gray-700"
-              >
-                #{tag}
-              </span>
-            ))}
+            )} */}
           </div>
         )}
       </div>

@@ -217,9 +217,7 @@ export default function SidebarNav({
   return (
     <>
       <div
-        className={`sidebar-nav-shell hidden h-full bg-transparent pb-4 pt-4 md:block ${
-          focusArticleSubnav ? "px-3" : "px-4"
-        }`}
+        className={`sidebar-nav-shell hidden h-full bg-transparent pb-4 pt-4 md:block w-full px-0`}
       >
         {isLoggedIn ? (
           <div className="text-left mb-4">
@@ -230,7 +228,7 @@ export default function SidebarNav({
               onClick={() => setShowPhotoModal(true)}
               style={{ cursor: "pointer" }}
             >
-              {user.avatar ? (
+              {/* {user.avatar ? (
                 <img
                   src={user.avatar}
                   alt="Foto profil"
@@ -258,7 +256,7 @@ export default function SidebarNav({
                 >
                   <span dangerouslySetInnerHTML={{ __html: ICONS.user }} />
                 </div>
-              )}
+              )} */}
             </div>
             {!collapsed && (
               <>
@@ -266,7 +264,7 @@ export default function SidebarNav({
                   layout="stack"
                   name={user.display_name || "Display Name"}
                   avatar={user.avatar || ""}
-                  size={48}
+                  size={40}
                   nameSize="0.95rem"
                   subtitle={`@${user.username || "username"}`}
                   subtitleSize="0.8rem"
@@ -282,7 +280,7 @@ export default function SidebarNav({
             <img
               src="/login.svg"
               alt="Login"
-              className={collapsed ? "w-10 h-10" : "w-16 h-16 mb-2"}
+              className={collapsed ? "w-10 h-10" : "w-12 h-12 mb-2"}
               style={{ transition: "all 0.3s ease" }}
             />
             {!collapsed && (
@@ -301,10 +299,7 @@ export default function SidebarNav({
             <nav>
               <ul className="list-none pl-0 text-left">
                 {articleTOC.map((it) => (
-                  <li
-                    key={it.id}
-                    className="border-b border-[#CDCB9C] py-2"
-                  >
+                  <li key={it.id} className="border-b border-[#CDCB9C] py-2">
                     <button
                       type="button"
                       className="flex w-full items-center justify-start gap-2 p-0 text-left text-[#3f3e26] no-underline hover:text-[#1f1e12]"
@@ -432,200 +427,218 @@ export default function SidebarNav({
 
         {focusArticleSubnav && <div className="pb-2" />}
 
-        {!focusArticleSubnav && <nav>
-          {isLoggedIn ? (
-            <>
-              <div
-                className={`${menuTitleBase} ${collapsed ? "justify-center" : "justify-between"} ${!isAkunActive ? "text-gray-500" : ""}`}
-                onClick={() => !collapsed && setAkunExpanded(!akunExpanded)}
-                style={{
-                  cursor: collapsed ? "default" : "pointer",
-                  color: "inherit",
-                }}
-              >
-                <span>
-                  <span dangerouslySetInnerHTML={{ __html: ICONS.user }} />
-                  {!collapsed && <> &nbsp; Akunku</>}
-                </span>
-                {!collapsed && <span>{akunExpanded ? "⌄" : "›"}</span>}
-              </div>
-
-              {akunExpanded && !collapsed && (
-                <div className="pl-6">
-                  <Link
-                    to="/complete-profile"
-                    className={`${menuItemBase} ${!isActive("/complete-profile") ? "text-gray-500" : "text-[#4a4a4a]"}`}
-                  >
-                    <span dangerouslySetInnerHTML={{ __html: ICONS.user }} />
-                    Biodata
-                  </Link>
-
-                  <Link
-                    to="/settings"
-                    className={`${menuItemBase} ${!isActive("/settings") ? "text-gray-500" : "text-[#4a4a4a]"}`}
-                  >
+        {!focusArticleSubnav && (
+          <nav>
+            {isLoggedIn ? (
+              <>
+                <div
+                  className={`${menuTitleBase} ${collapsed ? "justify-center" : "justify-between"} ${!isAkunActive ? "text-gray-500" : ""}`}
+                  onClick={() => !collapsed && setAkunExpanded(!akunExpanded)}
+                  style={{
+                    cursor: collapsed ? "default" : "pointer",
+                    color: "inherit",
+                  }}
+                >
+                  <span className="flex items-center gap-2">
                     <span
-                      dangerouslySetInnerHTML={{ __html: ICONS.settings }}
+                      className="inline-flex shrink-0"
+                      dangerouslySetInnerHTML={{ __html: ICONS.user }}
                     />
-                    Pengaturan & Privasi
-                  </Link>
+                    {!collapsed && <span className="leading-none">Akunku</span>}
+                  </span>
+                  {!collapsed && <span>{akunExpanded ? "⌄" : "›"}</span>}
                 </div>
-              )}
-            </>
-          ) : (
-            <div
-              className={`${menuItemBase} mt-2 text-[#D1CFC3] ${collapsed ? "justify-center text-center" : ""}`}
-            >
-              <span dangerouslySetInnerHTML={{ __html: ICONS.user }} />
-              {!collapsed && <> Akunku</>}
-            </div>
-          )}
 
-          {isLoggedIn ? (
-            <>
+                {akunExpanded && !collapsed && (
+                  <div className="pl-6">
+                    <Link
+                      to="/complete-profile"
+                      className={`${menuItemBase} ${!isActive("/complete-profile") ? "text-gray-500" : "text-[#4a4a4a]"}`}
+                    >
+                      <span dangerouslySetInnerHTML={{ __html: ICONS.user }} />
+                      Biodata
+                    </Link>
+
+                    <Link
+                      to="/settings"
+                      className={`${menuItemBase} ${!isActive("/settings") ? "text-gray-500" : "text-[#4a4a4a]"}`}
+                    >
+                      <span
+                        dangerouslySetInnerHTML={{ __html: ICONS.settings }}
+                      />
+                      Pengaturan & Privasi
+                    </Link>
+                  </div>
+                )}
+              </>
+            ) : (
               <div
-                className={`${menuTitleBase} ${collapsed ? "justify-center" : "justify-between"} ${!isSumbangsihActive ? "text-gray-500" : ""}`}
-                onClick={() =>
-                  !collapsed && setsumbangsihExpanded(!sumbangsihExpanded)
-                }
-                style={{
-                  cursor: collapsed ? "default" : "pointer",
-                  color: "inherit",
-                }}
+                className={`${menuItemBase} mt-2 text-[#D1CFC3] ${collapsed ? "justify-center text-center" : ""}`}
               >
-                <span>
-                  <span dangerouslySetInnerHTML={{ __html: ICONS.edit }} />
-                  {!collapsed && <> &nbsp; Sumbangsih</>}
-                </span>
-                {!collapsed && <span>{sumbangsihExpanded ? "⌄" : "›"}</span>}
+                <span dangerouslySetInnerHTML={{ __html: ICONS.user }} />
+                {!collapsed && <> Akunku</>}
               </div>
+            )}
 
-              {sumbangsihExpanded && !collapsed && (
-                <div className="pl-6">
-                  <Link
-                    to="/kronik"
-                    className={`${menuItemBase} ${!isActive("/kronik") ? "text-gray-500" : "text-[#4a4a4a]"}`}
-                  >
-                    <span dangerouslySetInnerHTML={{ __html: ICONS.kronik }} />
-                    Kronik
-                  </Link>
-                  <Link
-                    to="/tilik"
-                    className={`${menuItemBase} ${!isActive("/tilik") ? "text-gray-500" : "text-[#4a4a4a]"}`}
-                  >
-                    <span dangerouslySetInnerHTML={{ __html: ICONS.tilik }} />
-                    Tilik
-                  </Link>
-                  <Link
-                    to="/diskursus"
-                    className={`${menuItemBase} ${!isActive("/diskursus") ? "text-gray-500" : "text-[#4a4a4a]"}`}
-                  >
+            {isLoggedIn ? (
+              <>
+                <div
+                  className={`${menuTitleBase} ${collapsed ? "justify-center" : "justify-between"} ${!isSumbangsihActive ? "text-gray-500" : ""}`}
+                  onClick={() =>
+                    !collapsed && setsumbangsihExpanded(!sumbangsihExpanded)
+                  }
+                  style={{
+                    cursor: collapsed ? "default" : "pointer",
+                    color: "inherit",
+                  }}
+                >
+                  <span className="flex items-center gap-2">
                     <span
-                      dangerouslySetInnerHTML={{ __html: ICONS.diskursus }}
+                      className="inline-flex shrink-0"
+                      dangerouslySetInnerHTML={{ __html: ICONS.edit }}
                     />
-                    Diskursus
-                  </Link>
-                  <Link
-                    to="/tanggapan"
-                    className={`${menuItemBase} ${!isActive("/tanggapan") ? "text-gray-500" : "text-[#4a4a4a]"}`}
-                  >
-                    <span
-                      dangerouslySetInnerHTML={{ __html: ICONS.tanggapan }}
-                    />
-                    Tanggapan
-                  </Link>
+                    {!collapsed && (
+                      <span className="leading-none">Sumbangsih</span>
+                    )}
+                  </span>
+                  {!collapsed && <span>{sumbangsihExpanded ? "⌄" : "›"}</span>}
                 </div>
-              )}
-            </>
-          ) : (
-            <div
-              className={`${menuItemBase} text-[#D1CFC3] ${collapsed ? "justify-center text-center" : ""}`}
+
+                {sumbangsihExpanded && !collapsed && (
+                  <div className="pl-6">
+                    <Link
+                      to="/kronik"
+                      className={`${menuItemBase} ${!isActive("/kronik") ? "text-gray-500" : "text-[#4a4a4a]"}`}
+                    >
+                      <span
+                        dangerouslySetInnerHTML={{ __html: ICONS.kronik }}
+                      />
+                      Kronik
+                    </Link>
+                    <Link
+                      to="/tilik"
+                      className={`${menuItemBase} ${!isActive("/tilik") ? "text-gray-500" : "text-[#4a4a4a]"}`}
+                    >
+                      <span dangerouslySetInnerHTML={{ __html: ICONS.tilik }} />
+                      Tilik
+                    </Link>
+                    <Link
+                      to="/diskursus"
+                      className={`${menuItemBase} ${!isActive("/diskursus") ? "text-gray-500" : "text-[#4a4a4a]"}`}
+                    >
+                      <span
+                        dangerouslySetInnerHTML={{ __html: ICONS.diskursus }}
+                      />
+                      Diskursus
+                    </Link>
+                    <Link
+                      to="/tanggapan"
+                      className={`${menuItemBase} ${!isActive("/tanggapan") ? "text-gray-500" : "text-[#4a4a4a]"}`}
+                    >
+                      <span
+                        dangerouslySetInnerHTML={{ __html: ICONS.tanggapan }}
+                      />
+                      Tanggapan
+                    </Link>
+                  </div>
+                )}
+              </>
+            ) : (
+              <div
+                className={`${menuItemBase} text-[#D1CFC3] ${collapsed ? "justify-center text-center" : ""}`}
+              >
+                <span dangerouslySetInnerHTML={{ __html: ICONS.edit }} />
+                {!collapsed && <> Sumbangsih</>}
+              </div>
+            )}
+            <Link
+              to="/tentang-telisik"
+              className={`${menuItemBase} ${!isActive("/tentang-telisik") ? "text-gray-500" : "text-[#4a4a4a]"} ${collapsed ? "block justify-center text-center" : ""}`}
             >
-              <span dangerouslySetInnerHTML={{ __html: ICONS.edit }} />
-              {!collapsed && <> Sumbangsih</>}
-            </div>
-          )}
-          <Link
-            to="/tentang-telisik"
-            className={`${menuItemBase} ${!isActive("/tentang-telisik") ? "text-gray-500" : "text-[#4a4a4a]"} ${collapsed ? "block justify-center text-center" : ""}`}
-          >
-            <span dangerouslySetInnerHTML={{ __html: ICONS.info }} />
-            {!collapsed && <> Tentang Telisik</>}
-          </Link>
+              <span dangerouslySetInnerHTML={{ __html: ICONS.info }} />
+              {!collapsed && <> Tentang Telisik</>}
+            </Link>
 
-          <Link
-            to="/bantuan"
-            className={`${menuItemBase} ${!isActive("/bantuan") ? "text-gray-500" : "text-[#4a4a4a]"} ${collapsed ? "block justify-center text-center" : ""}`}
-          >
-            <span dangerouslySetInnerHTML={{ __html: ICONS.help }} />
-            {!collapsed && <> Bantuan & Dukungan</>}
-          </Link>
-        </nav>}
+            <Link
+              to="/bantuan"
+              className={`${menuItemBase} ${!isActive("/bantuan") ? "text-gray-500" : "text-[#4a4a4a]"} ${collapsed ? "block justify-center text-center" : ""}`}
+            >
+              <span dangerouslySetInnerHTML={{ __html: ICONS.help }} />
+              {!collapsed && <> Bantuan & Dukungan</>}
+            </Link>
+          </nav>
+        )}
 
-        {!focusArticleSubnav && <hr className="mb-3 h-px border-3 bg-[#d9d6c7]" />}
+        {!focusArticleSubnav && (
+          <hr className="mb-3 h-px border-3 bg-[#d9d6c7]" />
+        )}
 
-        {!focusArticleSubnav && (isLoggedIn ? (
-          <Link
-            to="#"
-            className={`${menuItemBase} text-[#4a4a4a] ${collapsed ? "block justify-center text-center" : ""}`}
-            onClick={logout}
-          >
-            <span dangerouslySetInnerHTML={{ __html: ICONS.logout }} />
-            {!collapsed && <> Keluar Log</>}
-          </Link>
-        ) : (
-          <>
+        {!focusArticleSubnav &&
+          (isLoggedIn ? (
             <Link
               to="#"
-              className={`${menuItemBase} text-[#D1CFC3] ${collapsed ? "block" : ""}`}
+              className={`${menuItemBase} text-[#4a4a4a] ${collapsed ? "block justify-center text-center" : ""}`}
+              onClick={logout}
             >
               <span dangerouslySetInnerHTML={{ __html: ICONS.logout }} />
               {!collapsed && <> Keluar Log</>}
             </Link>
-            <Link
-              to="#"
-              className={`${menuItemBase} text-[#D1CFC3] ${collapsed ? "block justify-center text-center" : ""}`}
-              onClick={onToggle}
-            >
-              <span
-                dangerouslySetInnerHTML={{
-                  __html: collapsed ? ICONS.bukamenu : ICONS.tutupmenu,
-                }}
-              />
-              {!collapsed && <> Tutup Menu</>}
-            </Link>
-          </>
-        ))}
+          ) : (
+            <>
+              <Link
+                to="#"
+                className={`${menuItemBase} text-[#D1CFC3] ${collapsed ? "block" : ""}`}
+              >
+                <span dangerouslySetInnerHTML={{ __html: ICONS.logout }} />
+                {!collapsed && <> Keluar Log</>}
+              </Link>
+              <Link
+                to="#"
+                className={`${menuItemBase} text-[#D1CFC3] ${collapsed ? "block justify-center text-center" : ""}`}
+                onClick={onToggle}
+              >
+                <span
+                  dangerouslySetInnerHTML={{
+                    __html: collapsed ? ICONS.bukamenu : ICONS.tutupmenu,
+                  }}
+                />
+                {!collapsed && <> Tutup Menu</>}
+              </Link>
+            </>
+          ))}
 
         {!focusArticleSubnav && !collapsed && (
           <hr className="my-2 h-px border-3 bg-[#d9d6c7]" />
         )}
 
-        {/* Left Banner */}
+        {/* Left Banner - make square and full-width */}
         {!focusArticleSubnav && bannerLeft && bannerLeftImage && (
-          <div className="mb-3">
+          <div className="mb-3 w-full">
             {bannerLeftHref ? (
               <a
                 href={bannerLeftHref}
                 target="_blank"
                 rel="noopener noreferrer"
+                className="block w-full"
               >
+                <div className="relative w-full" style={{ paddingTop: "100%" }}>
+                  <img
+                    src={bannerLeftImage}
+                    alt={bannerLeft.title}
+                    className="absolute inset-0 w-full h-full rounded-sm border border-[#dedacb] shadow-sm object-cover"
+                    onError={hideBrokenImage}
+                  />
+                </div>
+              </a>
+            ) : (
+              <div className="relative w-full" style={{ paddingTop: "100%" }}>
                 <img
                   src={bannerLeftImage}
                   alt={bannerLeft.title}
-                  className="w-full rounded-sm border border-[#dedacb] shadow-sm"
-                  style={{ aspectRatio: "2/1", objectFit: "cover" }}
+                  className="absolute inset-0 w-full h-full rounded-sm border border-[#dedacb] shadow-sm object-cover"
                   onError={hideBrokenImage}
                 />
-              </a>
-            ) : (
-              <img
-                src={bannerLeftImage}
-                alt={bannerLeft.title}
-                className="w-full rounded-sm border border-[#dedacb] shadow-sm"
-                style={{ aspectRatio: "2/1", objectFit: "cover" }}
-                onError={hideBrokenImage}
-              />
+              </div>
             )}
           </div>
         )}
@@ -766,7 +779,7 @@ export default function SidebarNav({
                         className="flex gap-3"
                         style={{ fontSize: "0.78rem", color: "#9ca3af" }}
                       >
-                        <span>
+                        <span style={{ display: "flex" }}>
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
                             width="14"
@@ -797,7 +810,7 @@ export default function SidebarNav({
                           </svg>{" "}
                           {item.article_comments_count || 0}
                         </span>
-                        <span>
+                        <span style={{ display: "flex" }}>
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
                             width="14"
