@@ -28,7 +28,6 @@ const SectionDot = () => (
 export default function ArticleEditorMiddleColumn({
   articleType,
   collapsed,
-  isMobile,
   alert,
   setAlert,
   title,
@@ -64,9 +63,7 @@ export default function ArticleEditorMiddleColumn({
           : collapsed
             ? "md:col-span-8"
             : "md:col-span-7"
-      } lg:col-span-1 lg:col-start-2 h-full min-h-0 border-x border-[#e2dfd4] bg-[#F9F6EF] px-5 py-5 ${
-        !isMobile ? "overflow-y-scroll" : ""
-      }`}
+      } lg:col-span-1 lg:col-start-2 h-full min-h-0 overflow-y-auto border-x border-[#e2dfd4] bg-[#F9F6EF] px-5 py-5`}
     >
       {/* Alert */}
       <div className="mt-1 mb-3">
