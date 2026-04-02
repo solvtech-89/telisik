@@ -250,6 +250,31 @@
 /* ─── Page Shell ─────────────────────────────────────────── */
 .editor-page-shell {
   background: #f9f6ef;
+  /* Tinggi viewport − navbar atas (desktop) */
+  height: calc(100vh - var(--site-top-nav-height-desktop));
+  max-height: calc(100vh - var(--site-top-nav-height-desktop));
+}
+
+/* Mobile / tablet: tinggi viewport − navbar − bottom nav (selaras app-route-shell) */
+@media (max-width: 1023px) {
+  .editor-page-shell {
+    height: calc(
+      100vh - var(--site-top-nav-height-mobile) -
+        var(--mobile-bottom-nav-content-height) - env(safe-area-inset-bottom, 0px)
+    );
+    max-height: calc(
+      100vh - var(--site-top-nav-height-mobile) -
+        var(--mobile-bottom-nav-content-height) - env(safe-area-inset-bottom, 0px)
+    );
+    height: calc(
+      100dvh - var(--site-top-nav-height-mobile) -
+        var(--mobile-bottom-nav-content-height) - env(safe-area-inset-bottom, 0px)
+    );
+    max-height: calc(
+      100dvh - var(--site-top-nav-height-mobile) -
+        var(--mobile-bottom-nav-content-height) - env(safe-area-inset-bottom, 0px)
+    );
+  }
 }
 
 .editor-body-shell {
@@ -962,6 +987,74 @@
 
 :root[data-bs-theme="dark"] .editor-main-column h2 {
   color: #ef8055 !important;
+}
+
+/* ─── Mobile: flex column — grid 1fr sering gagal jika tinggi induk “auto” ─ */
+@media (max-width: 767px) {
+  .editor-body-shell {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+  }
+
+  .editor-body-inner {
+    flex: 1 1 0;
+    min-height: 0;
+    height: auto !important;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .editor-layout-grid {
+    display: flex !important;
+    flex-direction: column;
+    flex: 1 1 0;
+    min-height: 0;
+    height: auto !important;
+  }
+
+  /* Konten artikel mengambil sisa ruang; sidebar dibatasi max-height di bawah */
+  .editor-main-column {
+    flex: 1 1 0;
+    min-height: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+    scrollbar-width: thin;
+    scrollbar-color: #d5cfc0 #f9f6ef;
+    /* Rapatkan jarak ke sidebar yang di-stack di bawah (override py-5 bawah) */
+    padding-bottom: 0.5rem !important;
+  }
+
+  /* Sidebar stack: lebih pendek (~30% viewport) supaya editor tidak tertutup */
+  .editor-right-rail {
+    flex: 0 1 auto;
+    min-height: 0;
+    height: auto !important;
+    max-height: 32vh;
+    max-height: 32dvh;
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+    /* Rapatkan ke konten di atas (override pt-3) */
+    padding-top: 0.25rem !important;
+  }
+
+  /* Peta di sidebar mobile lebih rendah — isi Kategori/Lokasi/Foto di-scroll di dalam rail */
+  .editor-right-rail #location-map {
+    height: 150px !important;
+    min-height: 120px;
+  }
+
+  /* Jarak antar blok di sidebar (Kategori → Lokasi → Foto) lebih rapat di mobile */
+  .editor-right-rail > * + * {
+    margin-top: 0.4rem;
+  }
+
+  .editor-right-rail .editor-side-card + .editor-side-card {
+    margin-top: 0.35rem;
+  }
 }
 
 /* ─── Mobile Responsive ──────────────────────────────────── */
