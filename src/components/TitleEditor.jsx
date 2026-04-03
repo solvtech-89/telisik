@@ -10,24 +10,26 @@ export default function TitleEditor({
   const editorRef = useRef(null);
   const [isFocused, setIsFocused] = useState(false);
   const currentLength = value.length;
-  const placeholderText = `Judul ${articleType} Maksimal 60 Karakter Termasuk Spasi`;
+  const placeholderPrefix = "Judul ";
+  const placeholderSuffix = " Maksimal 60 Karakter Termasuk Spasi";
+  const placeholderPlain = `${placeholderPrefix}${articleType}${placeholderSuffix}`;
+  const placeholderHtml = `${placeholderPrefix}<span style="color:#ef5f2f;">${articleType}</span>${placeholderSuffix}`;
 
   useEffect(() => {
     if (editorRef.current) {
       if (!isFocused && !value) {
-        editorRef.current.textContent = placeholderText;
+        editorRef.current.innerHTML = placeholderHtml;
       } else if (editorRef.current.textContent !== value && value) {
         editorRef.current.textContent = value;
+      } else if (!value && isFocused) {
+        editorRef.current.textContent = "";
       }
     }
-  }, [value, isFocused]);
+  }, [value, isFocused, placeholderHtml]);
 
   const handleFocus = () => {
     setIsFocused(true);
-    if (
-      editorRef.current &&
-      editorRef.current.textContent === placeholderText
-    ) {
+    if (editorRef.current?.textContent?.trim() === placeholderPlain) {
       editorRef.current.textContent = "";
     }
   };
@@ -36,14 +38,13 @@ export default function TitleEditor({
     setIsFocused(false);
     const text = editorRef.current.textContent || "";
     if (!text.trim()) {
-      editorRef.current.textContent = placeholderText;
       onChange("");
     }
   };
 
   const handleInput = (e) => {
     const text = e.currentTarget.textContent || "";
-    if (text === placeholderText) return;
+    if (text.trim() === placeholderPlain) return;
 
     if (text.length <= maxLength) {
       onChange(text);
@@ -86,6 +87,7 @@ export default function TitleEditor({
     <div className="relative mb-1">
       <input type="hidden" value={value} name="title" />
       <TitleLeadCounter current={currentLength} max={maxLength} />
+
       <h1
         ref={editorRef}
         id="editor-title-input"
@@ -106,10 +108,9 @@ export default function TitleEditor({
           fontWeight: 800,
           fontFamily: "inherit",
           letterSpacing: "-0.025em",
+          caretColor: "#2d2b1e",
         }}
-      >
-        {placeholderText}
-      </h1>
+      />
 
       {/* Underline fokus subtle */}
       {isFocused && (

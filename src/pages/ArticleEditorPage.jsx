@@ -151,6 +151,7 @@ export default function KronikTilikEditor() {
               <SidebarNav
                 articleTOC={navItems}
                 collapsed={collapsed}
+                mode="editor"
                 onToggle={() => setCollapsed(!collapsed)}
               />
             </div>

@@ -10,7 +10,8 @@ import ArticleEditModeModal from "../components/ArticleEditModeModal";
 import { API_BASE, WS_BASE } from "../config";
 import { useAuth } from "../AuthContext";
 import CommentsSection from "../components/CommentsSection";
-import { Alert, Button, Skeleton } from "../components/ui";
+import { Alert, Skeleton } from "../components/ui";
+import { useIsMobile } from "../hooks/useIsMobile";
 
 function toTitleCase(str) {
   return str.replace(
@@ -40,8 +41,10 @@ export default function ArticlePage() {
     diskursus: true,
     tanggapan: true,
   });
+  const [activeSectionKey, setActiveSectionKey] = useState("");
 
   const isDiskursus = tipe === "diskursus";
+  const isMobileLayout = useIsMobile(1023);
   const searchAreaOptions = [
     { key: "kronik", label: "Kronik" },
     { key: "tilik", label: "Tilik" },
@@ -179,12 +182,11 @@ export default function ArticlePage() {
     }
   }, [slug, tipe, isDiskursus]);
 
-  if (!article) return <div>Loading…</div>;
-  if (!isDiskursus && !sections) return <div>Loading…</div>;
+  const safeSections = sections ?? [];
 
   const navItems = isDiskursus
     ? []
-    : sections.map((s) => ({
+    : safeSections.map((s) => ({
         id: s.id,
         key: s.section_type.key,
         title: s.section_type?.label || s.section_type?.key,
@@ -195,13 +197,13 @@ export default function ArticlePage() {
 
   const articleType = isDiskursus
     ? "Diskursus"
-    : toTitleCase(article.article_type || tipe);
+    : toTitleCase(article?.article_type || tipe);
 
-  const footnoteNumberMap = buildGlobalFootnoteMap(sections);
+  const footnoteNumberMap = buildGlobalFootnoteMap(safeSections);
 
   const handleParagraphUpdate = (updatedParagraph) => {
     setSections((prev) =>
-      prev.map((section) => ({
+      (prev || []).map((section) => ({
         ...section,
         paragraphs: (section.paragraphs || []).map((p) =>
           p.id === updatedParagraph.id ? updatedParagraph : p,
@@ -239,6 +241,37 @@ export default function ArticlePage() {
     fetchContributors();
   };
 
+  const handleSectionChipClick = (sectionKey) => {
+    setActiveSectionKey(sectionKey);
+    const target = document.getElementById(`section-${sectionKey}`);
+    if (target) {
+      target.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  };
+
+  useEffect(() => {
+    if (isDiskursus) {
+      setActiveSectionKey("");
+      return;
+    }
+
+    if (!Array.isArray(sections) || sections.length === 0) {
+      return;
+    }
+
+    const firstKey = sections[0]?.section_type?.key;
+    if (!firstKey) {
+      return;
+    }
+
+    setActiveSectionKey((prev) => {
+      if (prev && sections.some((s) => s.section_type?.key === prev)) {
+        return prev;
+      }
+      return firstKey;
+    });
+  }, [isDiskursus, sections]);
+
   if (!article || (!isDiskursus && !sections)) {
     return (
       <div className="min-h-screen bg-[#f7f5ef]">
@@ -268,7 +301,7 @@ export default function ArticlePage() {
         onCancel={handleCancelEditMode}
       />
 
-      <div className="w-[96%] mx-auto mt-2">
+      <div className="mx-auto mt-2 w-[98%]">
         <Alert
           type={alert.type}
           message={alert.message}
@@ -301,9 +334,9 @@ export default function ArticlePage() {
                 collapsed ? "lg:col-span-8" : "lg:col-span-7"
               }`}
             >
-              <div className="p-3">
+              <div className="px-3 pt-2">
                 <nav
-                  className="mb-2 text-sm text-neutral-600"
+                  className="mb-2 text-[0.72rem] uppercase tracking-[0.04em] text-[#8d8676]"
                   aria-label="breadcrumbs"
                 >
                   <ol className="flex items-center gap-2">
@@ -325,11 +358,43 @@ export default function ArticlePage() {
                       </Link>
                     </li>
                     <li className="text-neutral-400">/</li>
-                    <li className="line-clamp-1 text-neutral-700">
+                    <li className="line-clamp-1 text-[#6e6a5d]">
                       {article.title}
                     </li>
                   </ol>
                 </nav>
+
+                {!isDiskursus && navItems.length > 0 && (
+                  <div className="hide-scrollbar mb-3 flex gap-2 overflow-x-auto pb-1 lg:hidden">
+                    {navItems.map((item) => (
+                      <button
+                        key={item.id}
+                        type="button"
+                        style={{
+                          borderRadius: "20px",
+                          borderWidth: "1.5px",
+                          borderStyle: "solid",
+                          borderColor:
+                            activeSectionKey === item.key
+                              ? "#CECB9C"
+                              : "#555333",
+                          backgroundColor:
+                            activeSectionKey === item.key
+                              ? "#555333"
+                              : "#FFFFFF",
+                          color:
+                            activeSectionKey === item.key
+                              ? "#F9F6EF"
+                              : "#555333",
+                        }}
+                        onClick={() => handleSectionChipClick(item.key)}
+                        className="shrink-0 rounded-full px-3 py-1 text-[0.76rem] font-medium transition-colors"
+                      >
+                        {item.title}
+                      </button>
+                    ))}
+                  </div>
+                )}
               </div>
 
               <ArticleHeader
@@ -352,18 +417,29 @@ export default function ArticlePage() {
                   />
                 </div>
               ) : (
-                sections.map((s) => (
-                  <div key={s.id} className="px-3 pb-3">
-                    <SectionDisplay
-                      section={s}
-                      articleSlug={slug}
-                      tipe={tipe}
-                      canEdit={canEdit}
-                      isEditMode={isEditMode}
-                      footnoteNumberMap={footnoteNumberMap}
-                      onParagraphUpdate={handleParagraphUpdate}
-                    />
-                  </div>
+                safeSections.map((s, index) => (
+                  <React.Fragment key={s.id}>
+                    <div className="px-3 pb-3">
+                      <SectionDisplay
+                        section={s}
+                        articleSlug={slug}
+                        tipe={tipe}
+                        canEdit={canEdit}
+                        isEditMode={isEditMode}
+                        footnoteNumberMap={footnoteNumberMap}
+                        onParagraphUpdate={handleParagraphUpdate}
+                      />
+                    </div>
+
+                    {isMobileLayout && index === 0 && (
+                      <div className="px-3 pb-3 lg:hidden">
+                        <ArticleLocationMap
+                          location={article.location_geojson}
+                        />
+                        <ActorPowerInterestChart slug={slug} tipe={tipe} />
+                      </div>
+                    )}
+                  </React.Fragment>
                 ))
               )}
               <div className="px-3 pb-3">
@@ -383,7 +459,7 @@ export default function ArticlePage() {
               </div>
             </div>
 
-            <div className="article-right-rail dashboard-article-right h-full min-h-0 min-w-0 overflow-x-hidden overflow-y-auto border-l border-[#dfddd4] bg-[#F9F6EF] px-3 pb-5 lg:col-span-3 lg:overflow-y-scroll lg:max-h-none">
+            <div className="article-right-rail dashboard-article-right hidden h-full min-h-0 min-w-0 overflow-x-hidden overflow-y-auto border-l border-[#dfddd4] bg-[#F9F6EF] px-3 pb-5 lg:col-span-3 lg:block lg:overflow-y-scroll lg:max-h-none">
               <div className="right-sidebar-shell dashboard-right-sidebar px-1 py-1">
                 <div className="right-find-shell dashboard-find-shell mb-4">
                   <div className="mb-3">
@@ -613,7 +689,9 @@ export default function ArticlePage() {
                           width: "14px",
                           height: "14px",
                           left: "3px",
-                          transform: isEditMode ? "translateX(14px)" : "translateX(0)",
+                          transform: isEditMode
+                            ? "translateX(14px)"
+                            : "translateX(0)",
                         }}
                       />
                     </span>
@@ -639,7 +717,9 @@ export default function ArticlePage() {
                   {/* ── Tab icons row ───────────────────────── */}
                   <div
                     className="flex items-center gap-4 border-t px-3 py-2"
-                    style={{ borderTopColor: isEditMode ? "#c8dfc0" : "#e0d7c4" }}
+                    style={{
+                      borderTopColor: isEditMode ? "#c8dfc0" : "#e0d7c4",
+                    }}
                   >
                     <span
                       className="flex items-center gap-1.5 text-[0.8rem]"
@@ -711,9 +791,13 @@ export default function ArticlePage() {
                   <ActorPowerInterestChart slug={slug} tipe={tipe} />
                 )}
                 {article.summary && (
-                  <div className="mt-3">
-                    <h5 className="font-semibold text-lg">RANGKUMAN</h5>
-                    <p>{article.summary}</p>
+                  <div className="mt-3 border-t border-[#ddd3bf] pt-3">
+                    <h5 className="text-lg font-bold text-[#ef5f2f]">
+                      Rangkuman
+                    </h5>
+                    <p className="text-[0.95rem] leading-relaxed text-[#5c584f]">
+                      {article.summary}
+                    </p>
                   </div>
                 )}
               </div>

@@ -42,8 +42,12 @@ export default function SidebarNav({
   const isArticlePage = /^(\/article\/[^/]+\/[^/]+|\/urun-daya(\/.*)?)$/.test(
     location.pathname,
   );
-  const showTOC = isArticlePage && articleTOC.length > 0;
-  const focusArticleSubnav = mode === "article" && showTOC && !collapsed;
+  const useTOCLayout = mode === "article" || mode === "editor";
+  const showTOC = (isArticlePage || useTOCLayout) && articleTOC.length > 0;
+  const focusArticleSubnav = useTOCLayout && showTOC && !collapsed;
+  const isArticleDesktopSidebar = useTOCLayout && showTOC && !collapsed;
+  const showSidebarDividers = !isArticleDesktopSidebar;
+  const hideSubnavDividerInEditor = mode === "editor" && focusArticleSubnav;
 
   const fetchFeedItems = async (page = 1, append = false) => {
     if (page === 1) {
@@ -77,6 +81,13 @@ export default function SidebarNav({
   useEffect(() => {
     fetchFeedItems(1);
   }, []);
+
+  useEffect(() => {
+    if (isArticleDesktopSidebar) {
+      setAkunExpanded(false);
+      setsumbangsihExpanded(false);
+    }
+  }, [isArticleDesktopSidebar]);
 
   const handleLoadMore = () => {
     if (!loadingMore && hasMore) {
@@ -217,13 +228,14 @@ export default function SidebarNav({
   return (
     <>
       <div
-        className={`sidebar-nav-shell hidden h-full bg-transparent pb-4 pt-4 md:block w-full px-0`}
+        className={`sidebar-nav-shell hidden h-full bg-[#F9F6EF] pb-4 pt-4 md:block w-full px-0 ${isArticleDesktopSidebar ? "sidebar-nav-shell--article" : ""}`}
       >
         {isLoggedIn ? (
           <div className="text-left mb-4">
             <div
-              className={`mb-2 flex cursor-pointer items-center justify-center overflow-hidden rounded-full bg-[#eef6c9] transition-all duration-300 ${focusArticleSubnav ? "w-full max-w-none" : "max-w-[112px]"
-                }`}
+              className={`mb-2 flex cursor-pointer items-center justify-center overflow-hidden rounded-full bg-[#eef6c9] transition-all duration-300 ${
+                focusArticleSubnav ? "w-full max-w-none" : "max-w-[112px]"
+              }`}
               onClick={() => setShowPhotoModal(true)}
               style={{ cursor: "pointer" }}
             >
@@ -291,14 +303,19 @@ export default function SidebarNav({
           </div>
         )}
 
-        <hr className="mb-4 h-px border-3 bg-[#d9d6c7]" />
+        {showSidebarDividers && (
+          <hr className="mb-4 h-px border-3 bg-[#d9d6c7]" />
+        )}
 
         {showTOC && !collapsed && (
           <>
             <nav>
               <ul className="list-none pl-0 text-left">
                 {articleTOC.map((it) => (
-                  <li key={it.id} className="border-b border-[#CDCB9C] py-2">
+                  <li
+                    key={it.id}
+                    className={`py-2 ${hideSubnavDividerInEditor ? "border-b-0" : "border-b border-[#CDCB9C]"}`}
+                  >
                     <button
                       type="button"
                       className="flex w-full items-center justify-start gap-2 p-0 text-left text-[#3f3e26] no-underline hover:text-[#1f1e12]"
@@ -342,7 +359,13 @@ export default function SidebarNav({
                     </button>
                   </li>
                 ))}
-                <li className="border-b border-[#CDCB9C] py-2 text-[15px] text-[#4a4a4a]">
+                <li
+                  className={`py-2 text-[15px] text-[#4a4a4a] ${
+                    hideSubnavDividerInEditor
+                      ? "border-b-0"
+                      : "border-b border-[#CDCB9C]"
+                  }`}
+                >
                   <Link
                     className="flex w-full items-center justify-start gap-2 p-0 text-left text-[#3f3e26] no-underline hover:text-[#1f1e12]"
                     to="#riwayatsuntingan"
@@ -382,7 +405,13 @@ export default function SidebarNav({
                     <span>Riwayat Penyuntingan</span>
                   </Link>
                 </li>
-                <li className="border-b border-[#CDCB9C] py-2 text-[15px] text-[#4a4a4a]">
+                <li
+                  className={`py-2 text-[15px] text-[#4a4a4a] ${
+                    hideSubnavDividerInEditor
+                      ? "border-b-0"
+                      : "border-b border-[#CDCB9C]"
+                  }`}
+                >
                   <Link
                     className="flex w-full items-center justify-start gap-2 p-0 text-left text-[#3f3e26] no-underline hover:text-[#1f1e12]"
                     to="#tanggapan"
@@ -401,15 +430,29 @@ export default function SidebarNav({
                           strokeWidth="1.2"
                           strokeLinejoin="round"
                         />
-                        <circle cx="10.9287" cy="12" r="1.25" fill="currentColor" />
-                        <circle cx="16.0625" cy="12" r="1.25" fill="currentColor" />
+                        <circle
+                          cx="10.9287"
+                          cy="12"
+                          r="1.25"
+                          fill="currentColor"
+                        />
+                        <circle
+                          cx="16.0625"
+                          cy="12"
+                          r="1.25"
+                          fill="currentColor"
+                        />
                       </svg>
                     </span>
                     <span className="flex-1">Tanggapan</span>
                     {isLoggedIn && (
                       <span
                         className="ml-auto inline-flex items-center justify-center rounded-full px-1.5 py-0.5 text-[0.65rem] font-bold leading-none"
-                        style={{ background: "#e03e3e", color: "#fff", minWidth: "1.5rem" }}
+                        style={{
+                          background: "#e03e3e",
+                          color: "#fff",
+                          minWidth: "1.5rem",
+                        }}
                       >
                         99+
                       </span>
@@ -418,14 +461,15 @@ export default function SidebarNav({
                 </li>
               </ul>
             </nav>
-            <hr className="my-2 h-px border-3 bg-[#CDCB9C]" />
+            {showSidebarDividers && (
+              <hr className="my-2 h-px border-3 bg-[#CDCB9C]" />
+            )}
           </>
         )}
 
         {focusArticleSubnav && <div className="pb-2" />}
 
-        {!focusArticleSubnav && (
-          <nav>
+        <nav>
             {isLoggedIn ? (
               <>
                 <div
@@ -475,7 +519,7 @@ export default function SidebarNav({
                 <span dangerouslySetInnerHTML={{ __html: ICONS.user }} />
                 {!collapsed && <> Akunku</>}
               </div>
-            )}            
+            )}
 
             {isLoggedIn ? (
               <>
@@ -499,7 +543,11 @@ export default function SidebarNav({
                         Sumbangsih
                         <span
                           className="inline-flex items-center justify-center rounded-full px-1.5 py-0.5 text-[0.65rem] font-bold leading-none"
-                          style={{ background: "#e03e3e", color: "#fff", minWidth: "1.5rem" }}
+                          style={{
+                            background: "#e03e3e",
+                            color: "#fff",
+                            minWidth: "1.5rem",
+                          }}
                         >
                           99+
                         </span>
@@ -508,7 +556,6 @@ export default function SidebarNav({
                   </span>
                   {!collapsed && <span>{sumbangsihExpanded ? "⌄" : "›"}</span>}
                 </div>
-
 
                 {sumbangsihExpanded && !collapsed && (
                   <div className="pl-6">
@@ -573,51 +620,29 @@ export default function SidebarNav({
               {!collapsed && <> Bantuan & Dukungan</>}
             </Link>
           </nav>
-        )}
 
-        {!focusArticleSubnav && (
+        {!collapsed && showSidebarDividers && (
           <hr className="mb-3 h-px border-3 bg-[#d9d6c7]" />
         )}
 
-        {!focusArticleSubnav &&
-          (isLoggedIn ? (
-            <>
+        {isLoggedIn ? (
+          <>
+            <Link
+              to="#"
+              className={`${menuItemBase} text-[#4a4a4a] ${collapsed ? "block justify-center text-center" : ""}`}
+              onClick={logout}
+            >
+              <span dangerouslySetInnerHTML={{ __html: ICONS.logout }} />
+              {!collapsed && <> Keluar Log</>}
+            </Link>
+            {onToggle && (
               <Link
                 to="#"
                 className={`${menuItemBase} text-[#4a4a4a] ${collapsed ? "block justify-center text-center" : ""}`}
-                onClick={logout}
-              >
-                <span dangerouslySetInnerHTML={{ __html: ICONS.logout }} />
-                {!collapsed && <> Keluar Log</>}
-              </Link>
-              {onToggle && (
-                <Link
-                  to="#"
-                  className={`${menuItemBase} text-[#4a4a4a] ${collapsed ? "block justify-center text-center" : ""}`}
-                  onClick={(e) => { e.preventDefault(); onToggle(); }}
-                >
-                  <span
-                    dangerouslySetInnerHTML={{
-                      __html: collapsed ? ICONS.bukamenu : ICONS.tutupmenu,
-                    }}
-                  />
-                  {!collapsed && <> Tutup Menu</>}
-                </Link>
-              )}
-            </>
-          ) : (
-            <>
-              <Link
-                to="#"
-                className={`${menuItemBase} text-[#D1CFC3] ${collapsed ? "block" : ""}`}
-              >
-                <span dangerouslySetInnerHTML={{ __html: ICONS.logout }} />
-                {!collapsed && <> Keluar Log</>}
-              </Link>
-              <Link
-                to="#"
-                className={`${menuItemBase} text-[#D1CFC3] ${collapsed ? "block justify-center text-center" : ""}`}
-                onClick={onToggle}
+                onClick={(e) => {
+                  e.preventDefault();
+                  onToggle();
+                }}
               >
                 <span
                   dangerouslySetInnerHTML={{
@@ -626,8 +651,31 @@ export default function SidebarNav({
                 />
                 {!collapsed && <> Tutup Menu</>}
               </Link>
-            </>
-          ))}
+            )}
+          </>
+        ) : (
+          <>
+            <Link
+              to="#"
+              className={`${menuItemBase} text-[#D1CFC3] ${collapsed ? "block" : ""}`}
+            >
+              <span dangerouslySetInnerHTML={{ __html: ICONS.logout }} />
+              {!collapsed && <> Keluar Log</>}
+            </Link>
+            <Link
+              to="#"
+              className={`${menuItemBase} text-[#D1CFC3] ${collapsed ? "block justify-center text-center" : ""}`}
+              onClick={onToggle}
+            >
+              <span
+                dangerouslySetInnerHTML={{
+                  __html: collapsed ? ICONS.bukamenu : ICONS.tutupmenu,
+                }}
+              />
+              {!collapsed && <> Tutup Menu</>}
+            </Link>
+          </>
+        )}
 
         {!focusArticleSubnav && !collapsed && (
           <hr className="my-2 h-px border-3 bg-[#d9d6c7]" />
@@ -676,12 +724,20 @@ export default function SidebarNav({
                 color: "#f97316",
                 textAlign: "left",
                 marginBottom: "10px",
-                marginTop: "30px"
+                marginTop: "30px",
               }}
             >
               (Feed Tanggapan)
             </h2>
-            <hr style={{ width: "100%", border: "none", borderTop: "1px solid #6b7280", margin: "8px 0 16px 0" }} />            {loading ? (
+            <hr
+              style={{
+                width: "100%",
+                border: "none",
+                borderTop: "1px solid #6b7280",
+                margin: "8px 0 16px 0",
+              }}
+            />{" "}
+            {loading ? (
               <div className="text-center py-4">
                 <div
                   className="inline-block w-4 h-4 border-2 border-gray-300 border-t-transparent rounded-full animate-spin"
@@ -699,7 +755,11 @@ export default function SidebarNav({
                   >
                     <div
                       className="mb-0.5"
-                      style={{ fontSize: "0.95rem", color: "#6b7280", marginBottom: "4px" }}
+                      style={{
+                        fontSize: "0.95rem",
+                        color: "#6b7280",
+                        marginBottom: "4px",
+                      }}
                     >
                       Merespons{" "}
                       <Link
@@ -742,7 +802,8 @@ export default function SidebarNav({
                             className="no-underline"
                             style={{ color: "#f97316" }}
                           >
-                            {truncateText(item.article_title, 60) || "Heading (Opsional)"}
+                            {truncateText(item.article_title, 60) ||
+                              "Heading (Opsional)"}
                           </Link>
                         </h6>
                       </div>
@@ -757,7 +818,8 @@ export default function SidebarNav({
                             color: "#4b5563",
                           }}
                         >
-                          {truncateText(item.comment, 150) || "Feed default ipsum dolor sit amet"}
+                          {truncateText(item.comment, 150) ||
+                            "Feed default ipsum dolor sit amet"}
                         </p>
                       </div>
                     </div>
@@ -803,7 +865,13 @@ export default function SidebarNav({
                         className="flex gap-4 items-center"
                         style={{ fontSize: "1.05rem", color: "#6b7280" }}
                       >
-                        <span style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+                        <span
+                          style={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: "6px",
+                          }}
+                        >
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
                             width="18"
@@ -834,7 +902,13 @@ export default function SidebarNav({
                           </svg>
                           <span>{item.article_comments_count || 0}</span>
                         </span>
-                        <span style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+                        <span
+                          style={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: "6px",
+                          }}
+                        >
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
                             width="18"

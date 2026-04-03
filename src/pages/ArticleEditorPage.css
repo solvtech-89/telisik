@@ -15,7 +15,9 @@
   color: #3d3a2e;
   outline: none;
   font-size: 0.965rem;
-  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
 }
 
 #middle-col-scroll .ProseMirror:focus,
@@ -260,19 +262,23 @@
   .editor-page-shell {
     height: calc(
       100vh - var(--site-top-nav-height-mobile) -
-        var(--mobile-bottom-nav-content-height) - env(safe-area-inset-bottom, 0px)
+        var(--mobile-bottom-nav-content-height) -
+        env(safe-area-inset-bottom, 0px)
     );
     max-height: calc(
       100vh - var(--site-top-nav-height-mobile) -
-        var(--mobile-bottom-nav-content-height) - env(safe-area-inset-bottom, 0px)
+        var(--mobile-bottom-nav-content-height) -
+        env(safe-area-inset-bottom, 0px)
     );
     height: calc(
       100dvh - var(--site-top-nav-height-mobile) -
-        var(--mobile-bottom-nav-content-height) - env(safe-area-inset-bottom, 0px)
+        var(--mobile-bottom-nav-content-height) -
+        env(safe-area-inset-bottom, 0px)
     );
     max-height: calc(
       100dvh - var(--site-top-nav-height-mobile) -
-        var(--mobile-bottom-nav-content-height) - env(safe-area-inset-bottom, 0px)
+        var(--mobile-bottom-nav-content-height) -
+        env(safe-area-inset-bottom, 0px)
     );
   }
 }
@@ -583,7 +589,8 @@
 }
 
 /* Legacy: when padding is on card directly, keep content working */
-.editor-side-card > :not(.editor-side-title):not(h3):not(.editor-side-card-header) {
+.editor-side-card
+  > :not(.editor-side-title):not(h3):not(.editor-side-card-header) {
   padding-left: 0.75rem;
   padding-right: 0.75rem;
   padding-bottom: 0.1rem;
@@ -631,7 +638,8 @@
 }
 
 .editor-side-card .btn,
-.editor-side-card button:not(.leaflet-control-zoom-in):not(.leaflet-control-zoom-out) {
+.editor-side-card
+  button:not(.leaflet-control-zoom-in):not(.leaflet-control-zoom-out) {
   border-radius: 5px;
 }
 
